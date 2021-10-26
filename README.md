@@ -1,2 +1,1 @@
-# MyJob
-TP Final 2021
+Proyecto MyJob por Federico San Pedro y Juan Cruz Aldaya
