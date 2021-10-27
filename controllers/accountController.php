@@ -1,27 +1,29 @@
 <?php
 namespace controllers;
 
+use daos\DaoAccounts as daoAccounts;
+use models\Account as Account;
 use daos\DaoStudents;
-use models\Student as student;
+use models\Student as Student;
 use PDOException;
 
-class studentController{
-    private $daoStudent;
+class accountControllers{
+    private $daoAccount;
     private $statusController;
     private $loginController;
 
     function __construct(){
-        $this->daoStudent = daoStudents::getInstance();
+        $this->daoAccount = daoAccounts::GetInstance();
         $this->statusController = new StatusController();
         $this->loginController = new LoginController();
     }
 
-    public function verificar($email = "", $password = ""){
-        if($this->daoStudent->exist($email)){
-            $student = $this->daoStudent->getByEmail($email);
+    public function verify($email = "", $password = ""){
+        if($this->daoAccount->exist($email)){
+            $account = $this->daoAccount->getByEmail($email);
 
-            if($student->getPassword() == $password){
-                $_SESSION["student"] = $student;
+            if($account->getPassword() == $password){
+                $_SESSION["account"] = $account;
                 $this->statusController->typeSession();
             }
             else{
@@ -40,12 +42,12 @@ class studentController{
         include "views/signup.php";
     }
 
-    public function create( $email, $password, $rPassword, $dni){
-        $daoStudent = $daoStudents::getInstance();
+    public function create($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active, $password, $rPassword){
+        $daoStudent = $daoStudents::GetInstance();
 
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
-
-        $_SESSION['registerValidator']['dni'] = ($daoStudent->exist($dni)) ? 'is-invalid' : 'is-valid';
+        $_SESSION['registerValidator']['email'] = ($this->daoAccount->exist($email)) ? 'is-invalid' : 'is-valid';
+        
+        $_SESSION['registerValidator']['dni'] = ($daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
         
         $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
 
@@ -55,12 +57,14 @@ class studentController{
         else{
             unset($_SESSION['registerValidator']);
 
-            $student = new Student(0, $email, $password, 1);
+            $account = new Account(0, $email, $password, 1);
+
+            $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
 
             try{
-                $this->daoStudent->add($student);
+                $this->daoAccount->add($account);
 
-                $_SESSION['student'] = $student;
+                $_SESSION['account'] = $account;
 
                 $statusController = new StatusController();
                 $statusController->typeSession();
@@ -75,53 +79,54 @@ class studentController{
     public function logOff(){
         unset($_SESSION['access_token']);
         
-        unset($_SESSION['student']);
+        unset($_SESSION['account']);
         
         unset($_SESSION['loginValidator']);
 
         session_destroy();
+        
+        unset($_SESSION['loginValidator']); 
 
         $loginController = new LoginController();
         $loginController->init();
     }
 
-    public function viewStudent(){
-        if(isset($_SESSION['student'])){
+    public function viewPerfil(){
+        if(isset($_SESSION['account'])){
             include ROOT . VIEWS_PATH . "nav-bar.php";
-            include ROOT . VIEWS_PATH . "view-student.php";
+            include ROOT . VIEWS_PATH . "view-account.php";
         }else{
             require_once("views/login.php");
         }
     }
 
-    public function edit(){
-        include ROOT . VIEWS_PATH . "update-student.php";
+    public function editAccount(){
+        include ROOT . VIEWS_PATH . "update-account.php";
     }
 
     public function update($email, $password, $rPassword){
 
-        $daoStudent = $daoStudents::getInstance();
+        $daoPerfil = $daoPerfiles::getInstance();
 
-        $cuentaOriginal = $_SESSION['student'];
-
+        $accountOriginal = $_SESSION['account'];
         
         $_SESSION['updateValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
 
         if($_SESSION['updateValidator']['password'] == 'is-valid'){
-            $this->edit();
+            $this->editAccount();
         }
         else{
             unset($_SESSION['updateValidator']);
 
-            $cuentaOriginal->setPassword($password);
-            $cuentaOriginal->getStudent()->setEmail($email);
+            $accountOriginal->setEmail($email);
+            $accountOriginal->setPassword($password);
 
             try{
-                $this->daoStudent->update($student);
+                $this->daoAccount->update($account);
 
-                $_SESSION['student'] = $cuentaOriginal;
+                $_SESSION['account'] = $accountOriginal;
 
-                $this->viewStudent();
+                $this->viewPerfil();
 
             }
             catch(PDOException $p){
@@ -129,5 +134,5 @@ class studentController{
             }
         }
     }
+    
 }
-?>
