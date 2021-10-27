@@ -91,7 +91,7 @@ class accountControllers{
         $loginController->init();
     }
 
-    public function viewPerfil(){
+    public function viewAccount(){
         if(isset($_SESSION['account'])){
             include ROOT . VIEWS_PATH . "nav-bar.php";
             include ROOT . VIEWS_PATH . "view-account.php";
@@ -106,7 +106,7 @@ class accountControllers{
 
     public function update($email, $password, $rPassword){
 
-        $daoPerfil = $daoPerfiles::getInstance();
+        $daoStudent = $daoStudents::getInstance();
 
         $accountOriginal = $_SESSION['account'];
         
@@ -126,7 +126,7 @@ class accountControllers{
 
                 $_SESSION['account'] = $accountOriginal;
 
-                $this->viewPerfil();
+                $this->viewAccount();
 
             }
             catch(PDOException $p){
