@@ -7,7 +7,7 @@ class Career{
     private $description;
     private $active;
     
-    function __construct($carrerId = 0, $description = "",  $active = true){
+    function __construct($careerId = 0, $description = "",  $active = true){
         $this->careerId=$careerId;
         $this->description=$description;
         $this->active=$active;
