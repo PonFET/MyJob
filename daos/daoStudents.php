@@ -26,9 +26,6 @@ class DaoStudents implements Idao{
     /* este metodo no va a ser utilizado ya que no podemos modificar de la api
     public function update($student){
         try{
-            $sql = "UPDATE students set email = :email, password = :password where studentId = :studentId;";
-            $parameters['email'] = $student->getEmail();
-            $parameters['password'] = $student->getPassword();
 
             $this->connection = connection::GetInstance();
 
@@ -68,7 +65,6 @@ class DaoStudents implements Idao{
     
     //Devuelve un arreglo de Students que vienen de la API
     private function studentsFromApi(){
-        // Franco amaga que hay algo innecesario con el foreach
         $opciones = array(
             'http'=>array(
                 'method'=>"GET",
@@ -120,7 +116,7 @@ class DaoStudents implements Idao{
         }
     }
     
-    //este id seria de la cuenta, ya que en la bdConstruct students tiene un foreign key del id de cuentas, funcionara?
+    //este id seria de la cuenta, ya que en la bdConstruct students tiene un foreign key del id de cuentas
     public function getById(int $id){
         try{
             $sql = "SELECT * from students where id = :id;";
@@ -205,6 +201,7 @@ class DaoStudents implements Idao{
                 values (:id, :studentId, :careerId, :firstName, :lastName, :dni, :fileNumber, :gender, :birthDate, :email, :password, :phoneNumber, :active);";
 
                 $parameters['id'] = $account->getId();
+                // posiblemente borrar el toArray ya que el studentFromApi nos trae un arreglo del student
                 $parameters = $this->toArray($account->getStudent());
 
                 $this->connection = Connection::GetInstance();

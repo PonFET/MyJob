@@ -19,7 +19,7 @@ active varchar(30) not null,
 primary key (studentId),
 primary key (dni),
 constraint uniq_email unique (email),
-constraint fk_id foreign key (id) references cuentas(id),
+constraint fk_id foreign key (id) references accounts(id),
 constraint uniq_dni unique (dni)
 );
 #drop table  students;
