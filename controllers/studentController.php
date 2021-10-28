@@ -43,16 +43,14 @@ class studentController{
         include "views/signup.php";
     }
 
-    public function create( $email, $password, $rPassword, $dni){
+    public function create( $email, $password, $rPassword){
         $daoStudent = $daoStudents::getInstance();
 
         $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
-
-        $_SESSION['registerValidator']['dni'] = ($daoStudent->exist($dni)) ? 'is-invalid' : 'is-valid';
         
         $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
 
-        if($_SESSION['registerValidator']['email'] == 'is-valid' || $_SESSION['registerValidator']['dni'] == 'is-valid' || $_SESSION['registerValidator']['password'] == 'is-valid'){
+        if($_SESSION['registerValidator']['email'] == 'is-invalid' || $_SESSION['registerValidator']['password'] == 'is-invalid'){
             $this->register();
         }
         else{
