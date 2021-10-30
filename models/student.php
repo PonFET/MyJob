@@ -16,7 +16,7 @@ class Student{
     private $phoneNumber;
     private $active;
 
-    function __construct($studentId = 0, $careerId = 0,  $firstName = "", $lastName = "", $dni = 0, $fileNumber = "", $gender = "", $birthDate = "", $email = "", $password = "", $phoneNumber = "", $active = true){
+    function __construct($studentId = "", $careerId = "",  $firstName = "", $lastName = "", $dni = "", $fileNumber = "", $gender = "", $birthDate = "", $email = "", $phoneNumber = "", $active = ""){
         $this->studentId=$studentId;
         $this->careerId=$careerId;
         $this->firstName=$firstName;
@@ -26,7 +26,6 @@ class Student{
         $this->gender=$gender;
         $this->birthDate=$birthDate;
         $this->email=$email;
-        $this->password=$password;
         $this->phoneNumber=$phoneNumber;
         $this->active=$active;
     }
@@ -109,15 +108,6 @@ class Student{
 
     public function setEmail($email){
         $this->email = $email;
-        return $this;
-    }
-
-    public function getPassword(){
-        return $this->password;
-    }
-
-    public function setPassword($password){
-        $this->password = $password;
         return $this;
     }
 

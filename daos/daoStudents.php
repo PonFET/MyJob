@@ -53,6 +53,25 @@ class DaoStudents implements Idao{
         }
     }
 
+    //verifica si el mail ingresado esta en la API,
+    //modificar para que haga una vision a toda la API de students y compare uno por uno los mails
+    public function existAPI($email){
+        try{
+            $sql = "SELECT exists ( SELECT * from students where email = :email);";
+
+            $this->connection = connection::GetInstance();
+
+            $result = $this->Execute($sql);
+
+            $rta = ($result[0][0] != 1)? false : true;
+
+            return $rta;
+        }
+        catch(Exception $ex){
+            throw $ex;
+        }
+    }
+
     // Usar DaoStudents como recolector de la API
     public function updateFromApi(){
         $listStudent = $this->studentsFromApi();

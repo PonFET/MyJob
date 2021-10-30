@@ -45,15 +45,17 @@ class accountControllers{
     // Creo que no es necesario enviarle todos los parametros de Student, ya que este obtiene todos sus datos desde la API, recibiendo el email
     // podemos comparar con la API para saber cual student tiene el mismo email, si no existe deberiamos devolverlo al register()
     // Si hacemos esto modificar el metodo.
-    public function create($studentId = 0, $careerId = 0, $firstName = "", $lastName = "", $dni = 0, $fileNumber = 0, $gender = "", $birthDate = "", $email, $phoneNumber = 0, $active = "", $password, $rPassword){
+    public function create($email, $password, $rPassword){
         $daoStudent = $daoStudents::GetInstance();
 
-        // Supongo que esta linea hace la comparacion de los emails
+        // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
         $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
+
+        $_SESSION['registerValidator']['emailAPI'] = ($this->daoStudent->existAPI($email)) ? 'is-valid' : 'is-invalid';
         
         $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
 
-        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid'){
+        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid' || $_SESSION['registerValidator']['emailAPI'] == 'is-valid'){
             $this->register();
         }
         else{
@@ -61,7 +63,6 @@ class accountControllers{
 
             $account = new Account(0, $email, $password, 1);
 
-            // modificar?
             $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
 
             try{
