@@ -155,5 +155,25 @@ class DaoAccounts implements Idao{
         }
         return $parameters;
     }
+    
+    public function getAll(){
+        $sql = "SELECT * FROM accounts";
+        $accountList = array();
+        try{
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($sql);
+            
+            if(!empty($resultSet)){ 
+                foreach ($resultSet as $row) {
+                    $aux = $this->mapeo($row);
+                    array_push($accountList,$aux);
+                }  
+            }
+            } catch (PDOException $ex) { 
+                throw $ex; 
+            } 
+        return $accountList;
+    }
+
 }
 ?>

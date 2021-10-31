@@ -1,9 +1,14 @@
+<?php
+    include_once(VIEWS_PATH."nav-bar.php");
+    include_once(VIEWS_PATH."header.php");
+?>
+
 <div class="row justify-content-center">
     <div class="card" style="width: 35rem;">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">Datos</th>
                     <th scope="col">Informacion</th>
                 </tr>
             </thead>
@@ -45,3 +50,7 @@
     <a href="<?= FRONT_ROOT ?>AccountController/edit" type="button">Editar Cuenta</a>
     </div>
 </div>
+
+<?php
+    include_once(VIEWS_PATH."footer.php");
+?>
