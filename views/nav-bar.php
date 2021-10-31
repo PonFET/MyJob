@@ -69,7 +69,7 @@
                         </a>
             
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="<?= FRONT_ROOT ?>studentController/showList">Perfil</a>
+                          <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/viewAccount">Perfil</a>
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/logOff">Cerrar Sesion</a>
                         </div>
