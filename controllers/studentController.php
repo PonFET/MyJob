@@ -5,6 +5,9 @@ use daos\DaoStudents;
 use models\Student as student;
 use PDOException;
 
+//El studentController no tendra mucha utilidad ya que accountController tendra la mayoria de sus metodos haciendo su trabajo.
+//Aun asi lo dejaremos por ahora ya que podriamos crearle metodos que solo este pueda ejecutar.
+
 class studentController{
     private $daoStudent;
     private $statusController;
@@ -40,17 +43,14 @@ class studentController{
         include "views/signup.php";
     }
 
-    // utilizar dni como identificador de las cuentas student de la api
-    public function create( $email, $password, $rPassword, $dni){
+    public function create( $email, $password, $rPassword){
         $daoStudent = $daoStudents::getInstance();
 
         $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
-
-        $_SESSION['registerValidator']['dni'] = ($daoStudent->exist($dni)) ? 'is-invalid' : 'is-valid';
         
         $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
 
-        if($_SESSION['registerValidator']['email'] == 'is-valid' || $_SESSION['registerValidator']['dni'] == 'is-valid' || $_SESSION['registerValidator']['password'] == 'is-valid'){
+        if($_SESSION['registerValidator']['email'] == 'is-invalid' || $_SESSION['registerValidator']['password'] == 'is-invalid'){
             $this->register();
         }
         else{

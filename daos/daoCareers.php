@@ -8,7 +8,7 @@ use PDOExceptions;
 use models\Career as career;
 use daos\connection as connection;
 
-class daoCareers implements Idao{
+class DaoCareers implements Idao{
     private $connection;
     private static $instance = null;
 

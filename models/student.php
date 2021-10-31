@@ -15,9 +15,8 @@ class Student{
     private $password;
     private $phoneNumber;
     private $active;
-    private $privilegios;
 
-    function __construct($studentId = 0, $careerId = 0,  $firstName = "", $lastName = "", $dni = "", $fileNumber = "", $gender = "", $birthDate = "", $email = "", $password = "", $phoneNumber = "", $active = true, $privilegios = ""){
+    function __construct($studentId = "", $careerId = "",  $firstName = "", $lastName = "", $dni = "", $fileNumber = "", $gender = "", $birthDate = "", $email = "", $phoneNumber = "", $active = ""){
         $this->studentId=$studentId;
         $this->careerId=$careerId;
         $this->firstName=$firstName;
@@ -27,10 +26,8 @@ class Student{
         $this->gender=$gender;
         $this->birthDate=$birthDate;
         $this->email=$email;
-        $this->password=$password;
         $this->phoneNumber=$phoneNumber;
         $this->active=$active;
-        $this->privilegios=$privilegios;
     }
  
     public function getStudentId(){
@@ -114,15 +111,6 @@ class Student{
         return $this;
     }
 
-    public function getPassword(){
-        return $this->password;
-    }
-
-    public function setPassword($password){
-        $this->password = $password;
-        return $this;
-    }
-
     public function getPhoneNumber(){
         return $this->phoneNumber;
     }
@@ -138,15 +126,6 @@ class Student{
 
     public function setActive($active){
         $this->active = $active;
-        return $this;
-    }
-    
-    public function getPrivilegios(){
-        return $this->privilegios;
-    }
-
-    public function setPrivilegios($privilegios){
-        $this->privilegios = $privilegios;
         return $this;
     }
 }
