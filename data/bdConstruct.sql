@@ -1,27 +1,196 @@
-create database IF NOT EXISTS MyJob;
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 30-10-2021 a las 19:48:08
+-- Versión del servidor: 5.7.31
+-- Versión de PHP: 7.3.21
 
-use MyJob;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-#drop database  MyJob;
 
-create table  IF NOT EXISTS students(
-email varchar(50) not null,
-password varchar(50),
-privilegios varchar(30) default 'student',
-studentId int not null auto_increment ,
-careerId int not null,
-dni int not null,
-firstName varchar(30) not null,
-lastName varchar(30) not null,
-fileNumber int not null,
-phoneNumber int not null,
-gender varchar(30) not null,
-birthday varchar(30) not null,
-active varchar(30) not null,
-primary key (studentId),
-primary key (dni),
-constraint uniq_email unique (email),
-constraint uniq_dni unique (dni)
-);
-#drop table  students;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Base de datos: `myjob`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `accounts`
+--
+
+DROP TABLE IF EXISTS `accounts`;
+CREATE TABLE IF NOT EXISTS `accounts` (
+  `accountId` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `password` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`accountId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `careers`
+--
+
+DROP TABLE IF EXISTS `careers`;
+CREATE TABLE IF NOT EXISTS `careers` (
+  `careerId` int(11) NOT NULL,
+  `description` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`careerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `companies`
+--
+
+DROP TABLE IF EXISTS `companies`;
+CREATE TABLE IF NOT EXISTS `companies` (
+  `companyId` int(11) NOT NULL AUTO_INCREMENT,
+  `companyName` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `location` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `description` varchar(500) COLLATE latin1_spanish_ci NOT NULL,
+  `email` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`companyId`),
+  KEY `companyId` (`companyId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `joboffers`
+--
+
+DROP TABLE IF EXISTS `joboffers`;
+CREATE TABLE IF NOT EXISTS `joboffers` (
+  `offerId` int(11) NOT NULL AUTO_INCREMENT,
+  `companyId` int(11) NOT NULL,
+  `offerDescription` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`offerId`),
+  KEY `offerId` (`offerId`,`companyId`),
+  KEY `offerId_2` (`offerId`,`companyId`),
+  KEY `companyId` (`companyId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `jobposition`
+--
+
+DROP TABLE IF EXISTS `jobposition`;
+CREATE TABLE IF NOT EXISTS `jobposition` (
+  `jobPositionId` int(11) NOT NULL,
+  `careerId` int(11) NOT NULL,
+  `description` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`jobPositionId`),
+  KEY `jobPositionId` (`jobPositionId`,`careerId`),
+  KEY `careerId` (`careerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `jobxacc`
+--
+
+DROP TABLE IF EXISTS `jobxacc`;
+CREATE TABLE IF NOT EXISTS `jobxacc` (
+  `offerId` int(11) NOT NULL,
+  `accountId` int(11) NOT NULL,
+  KEY `offerId` (`offerId`,`accountId`),
+  KEY `accountId` (`accountId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `offersxposition`
+--
+
+DROP TABLE IF EXISTS `offersxposition`;
+CREATE TABLE IF NOT EXISTS `offersxposition` (
+  `offerId` int(11) NOT NULL,
+  `jobPositionId` int(11) NOT NULL,
+  UNIQUE KEY `offerId` (`offerId`),
+  UNIQUE KEY `jobPositionId` (`jobPositionId`),
+  KEY `offerId_2` (`offerId`,`jobPositionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `students`
+--
+
+DROP TABLE IF EXISTS `students`;
+CREATE TABLE IF NOT EXISTS `students` (
+  `studentId` int(11) NOT NULL,
+  `careerId` int(11) NOT NULL,
+  `firstName` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `lastName` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `dni` int(11) NOT NULL,
+  `fileNumber` int(11) NOT NULL,
+  `gender` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `birthdate` date NOT NULL,
+  `email` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `password` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `prvilegios` int(11) NOT NULL,
+  PRIMARY KEY (`studentId`),
+  KEY `careerId` (`careerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `joboffers`
+--
+ALTER TABLE `joboffers`
+  ADD CONSTRAINT `joboffers_ibfk_1` FOREIGN KEY (`companyId`) REFERENCES `companies` (`companyId`);
+
+--
+-- Filtros para la tabla `jobposition`
+--
+ALTER TABLE `jobposition`
+  ADD CONSTRAINT `jobposition_ibfk_1` FOREIGN KEY (`careerId`) REFERENCES `careers` (`careerId`);
+
+--
+-- Filtros para la tabla `jobxacc`
+--
+ALTER TABLE `jobxacc`
+  ADD CONSTRAINT `jobxacc_ibfk_1` FOREIGN KEY (`offerId`) REFERENCES `joboffers` (`offerId`),
+  ADD CONSTRAINT `jobxacc_ibfk_2` FOREIGN KEY (`accountId`) REFERENCES `accounts` (`accountId`);
+
+--
+-- Filtros para la tabla `offersxposition`
+--
+ALTER TABLE `offersxposition`
+  ADD CONSTRAINT `offersxposition_ibfk_1` FOREIGN KEY (`jobPositionId`) REFERENCES `jobposition` (`jobPositionId`),
+  ADD CONSTRAINT `offersxposition_ibfk_2` FOREIGN KEY (`offerId`) REFERENCES `joboffers` (`offerId`);
+
+--
+-- Filtros para la tabla `students`
+--
+ALTER TABLE `students`
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`careerId`) REFERENCES `careers` (`careerId`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
