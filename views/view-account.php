@@ -15,35 +15,35 @@
             <tbody>
                 <tr>
                     <th scope="row">Email: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getEmail() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getEmail() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Nombre: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getFirstName() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getFirstName() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Apellido: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getLastName() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getLastName() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Dni: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getDni() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getDni() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Numero de Archivo: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getFileNumber() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getFileNumber() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Genero: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getGender() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getGender() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Cumpleaños: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getBirthDate() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getBirthDate() : 'Vacio'; ?></td>
                 </tr>
                 <tr>
                     <th scope="row">Telefono: </th>
-                    <td><?= (isset($_SESSION['cuenta'])) ? $_SESSION['cuenta']->getStudent()->getPhoneNumber() : 'Vacio'; ?></td>
+                    <td><?= (isset($_SESSION['account'])) ? $_SESSION['account']->getStudent()->getPhoneNumber() : 'Vacio'; ?></td>
                 </tr>
         </tbody>
     </table>
