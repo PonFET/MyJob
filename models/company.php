@@ -10,6 +10,16 @@
         private $email;
         private $phoneNumber;
 
+        function __construct($companyId = 0, $companyName = "", $location = "", $description = "", $email = "", $phoneNumber = 0)
+        {
+                $this->companyId = $companyId;
+                $this->companyName = $companyName;
+                $this->location = $location;
+                $this->description = $description;
+                $this->email = $email;
+                $this->phoneNumber = $phoneNumber;
+        }
+
         /**
          * Get the value of companyId
          */ 
