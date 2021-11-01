@@ -1,7 +1,7 @@
 <?php
     namespace controllers;
 
-    use daos\daoCompanies as DAOCompanies;
+    use daos\DaoCompanies as DAOCompanies;
     use models\Company as Company;
     use PDOException;
 
@@ -56,7 +56,6 @@
         {
             $companyList = $this->daoCompany->getAll();
             
-
             $company = new Company();
 
             foreach($companyList as $key)
@@ -70,6 +69,14 @@
             $this->daoCompany->delete($company);
 
             $this->showCompanyView();
-        }        
+        }   
+        
+        public function showList(){
+
+            $arrayCompany = $this->daoCompany->getAll();
+    
+            require_once(VIEWS_PATH."list-company.php");
+        }
+
     }
 ?>
