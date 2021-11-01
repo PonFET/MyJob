@@ -1,5 +1,5 @@
 <?php
-    include_once(VIEWS_PATH."header.php");
+    require_once(VIEWS_PATH."header.php");
 ?>
 
 <div id="listaUser">
@@ -28,15 +28,15 @@
                                     <form class="" action="<?php echo FRONT_ROOT?>companyController/delete" method="POST">
                                         <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId() ?>">Eliminar</button>
                                     </form>
-                                    <form action="<?php echo FRONT_ROOT?>companyController/addUp" method="POST">
-                                        <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
-                                    </form>
                                     <form action="<?php echo FRONT_ROOT?>companyController/modify" method="POST">
                                         <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        <form action="<?php echo FRONT_ROOT?>companyController/add" method="POST">
+                            <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
+                        </form>
                     </div>
                 </div>
                 <?php } ?>
@@ -46,5 +46,5 @@
 </div>
 
 <?php
-    include_once(VIEWS_PATH."footer.php");
+    require_once(VIEWS_PATH."footer.php");
 ?>

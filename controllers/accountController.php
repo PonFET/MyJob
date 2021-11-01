@@ -108,7 +108,7 @@ class accountControllers{
         include ROOT . VIEWS_PATH . "update-account.php";
     }
 
-    public function update($email, $password, $rPassword){
+    public function update($password, $rPassword){
 
         $daoStudent = $daoStudents::getInstance();
 
@@ -116,13 +116,12 @@ class accountControllers{
         
         $_SESSION['updateValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
 
-        if($_SESSION['updateValidator']['password'] == 'is-valid'){
+        if($_SESSION['updateValidator']['password'] == 'is-invalid'){
             $this->editAccount();
         }
         else{
             unset($_SESSION['updateValidator']);
 
-            $accountOriginal->setEmail($email);
             $accountOriginal->setPassword($password);
 
             try{
