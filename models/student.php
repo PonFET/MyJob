@@ -12,7 +12,6 @@ class Student{
     private $gender;
     private $birthDate;
     private $email;
-    private $password;
     private $phoneNumber;
     private $active;
 

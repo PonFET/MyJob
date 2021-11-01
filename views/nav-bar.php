@@ -44,7 +44,7 @@
                                 <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showList">Ver Propuesta Laboral</a>
                             </li>
 
-                            <!-- Mostraria una pagina donde se encuentran todos los usuarios alumnos con su derecha las propuesta laborales que estan postulandose.-->
+                            <!-- Muestra las postulaciones que ha hecho-->
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListHistory">Ver Historial de Propuestas Laborales de Estudiantes</a>
                             </li>

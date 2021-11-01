@@ -1,5 +1,4 @@
 <?php
-    include_once(VIEWS_PATH."nav-bar.php");
     include_once(VIEWS_PATH."header.php");
 ?>
 
@@ -27,13 +26,13 @@
                                         
                                 <div class="card-body">
                                     <form class="" action="<?php echo FRONT_ROOT?>companyController/delete" method="POST">
-                                        <button type="submit" name="idCine" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId() ?>">Eliminar</button>
+                                        <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId() ?>">Eliminar</button>
                                     </form>
                                     <form action="<?php echo FRONT_ROOT?>companyController/addUp" method="POST">
-                                        <button type="submit"  name="idCine" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
+                                        <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
                                     </form>
                                     <form action="<?php echo FRONT_ROOT?>companyController/modify" method="POST">
-                                        <button type="submit"  name="idCine" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
+                                        <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
                                     </form>
                                 </div>
                             </div>
