@@ -29,7 +29,7 @@
                                 <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListAccepted">Ver Propuesta Laboral Aceptadas</a>
                             </li>
 
-                        <!-- Agregar Usuario
+                        <!-- Agregar Usuario, Preguntar a que se refiere.
                         -->
 
                         <?php } 
@@ -55,8 +55,8 @@
             } if (!isset($_SESSION['account'])){ ?>
 
                 <div class="userOff d-flex align-items-end">
-                <a class="nav-link" href="<?= FRONT_ROOT ?>LoginController/init">Iniciar Sesion</a>
-                <a class="nav-link" href="<?= FRONT_ROOT ?>AccountController/register">Crear Cuenta</a>
+                    <a class="nav-link" href="<?= FRONT_ROOT ?>LoginController/init">Iniciar Sesion</a>
+                    <a class="nav-link" href="<?= FRONT_ROOT ?>AccountController/register">Crear Cuenta</a>
                 </div>
             <?php 
             }else if ($_SESSION['account']->getPrivilegios() == 1) { ?>
@@ -69,7 +69,7 @@
                         </a>
             
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="<?= FRONT_ROOT ?>studentController/showList">Perfil</a>
+                          <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/viewAccount">Perfil</a>
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/logOff">Cerrar Sesion</a>
                         </div>

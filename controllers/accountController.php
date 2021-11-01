@@ -139,4 +139,12 @@ class accountControllers{
         }
     }
     
+    public function showList(){
+
+        $arrayAccount = $this->daoAccount->getAll();
+
+        require_once(VIEWS_PATH."list-account.php");
+    }
+
+
 }
