@@ -70,6 +70,24 @@
             
         }
 
+
+        public function delete(JobOffer $offer)
+        {
+            try
+            {
+                $query = 'DELETE FROM ' . $this->tableName . ' WHERE (offerId="' . $offer->getOfferId() . '");';
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query);
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
         public function getAllOffers()
         {
             try
@@ -82,12 +100,9 @@
 
                 foreach ($resultSet as $fila)
                 {
-                    $jobOffer = new JobOffer();
-                    $jobOffer->setOfferId($fila['offerId']);
-                    $jobOffer->setCompanyId($fila['companyId']);
-                    $jobOffer->setOfferDescription($fila['offerDescription']);
+                    $aux = $this->parseToObject($fila);
 
-                    array_push($jobOfferList, $jobOffer);
+                    array_push($jobOfferList, $aux);
                 }
 
                 return $jobOfferList;
@@ -116,6 +131,16 @@
             {
                 throw $ex;
             }
+        }
+
+        public function parseToObject($value)
+        {
+            $jobO= new JobOffer(); 
+            $jobO->setOfferId($value['offerId']); 
+            $jobO->setCompanyId($value['companyId']); 
+            $jobO->setOfferDescription($value['offerDescription']); 
+        
+            return $jobO;
         }
         
     }
