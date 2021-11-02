@@ -45,6 +45,7 @@ class accountControllers{
     // Creo que no es necesario enviarle todos los parametros de Student, ya que este obtiene todos sus datos desde la API, recibiendo el email
     // podemos comparar con la API para saber cual student tiene el mismo email, si no existe deberiamos devolverlo al register()
     // Si hacemos esto modificar el metodo.
+    // Modificar por el status controller.
     public function create($email, $password, $rPassword){
         $daoStudent = $daoStudents::GetInstance();
 
@@ -79,6 +80,39 @@ class accountControllers{
 
             }
         }
+    }
+
+    public function createAdmin($email, $password, $rPassword){
+
+        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
+
+        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
+
+        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid'){
+            $this->addAdmin();
+        }
+        else{
+            unset($_SESSION['registerValidator']);
+
+            //el privilegio (cuarto parametro) es 0 para entender que es admin, primer parametro es el id
+            $account = new Account(0, $email, $password, 0);
+
+            try{
+                $this->daoAccount->add($account);
+            }
+            catch(PDOException $p){
+                
+            }
+        }
+
+    }
+
+    public function addAdmin(){
+        require_once("views/add-admin.php");
+    }
+
+    public function addStudent(){
+        require_once("views/add-student.php");
     }
 
     public function logOff(){
