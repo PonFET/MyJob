@@ -51,6 +51,7 @@ class accountControllers{
         // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
         $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
 
+        // Aun no funciona
         $_SESSION['registerValidator']['emailAPI'] = ($this->daoStudent->existAPI($email)) ? 'is-valid' : 'is-invalid';
         
         $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';

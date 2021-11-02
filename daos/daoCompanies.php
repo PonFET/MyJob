@@ -166,28 +166,6 @@
             }
         }
 
-               
-        /* Posible funcion para agregar empresas, en tal caso crear el enabled(activar) en este archivo junto a los private y agregarlo como parametro en el add.
-            Tambien tendriamos que revisar cuando relacionar con empresas con enabled en 0(desactivado) o en 1(activado).
-            
-        public function addUp($companyId){
-            $value =0;
-
-            try
-            {
-                $parameters['companyId'] = $companyId;
-                $sql = "UPDATE companies set " . DaoCompanies::COLUMN_ENABLED . " = 0 where companyId= $companyId";  
-                
-                $this->connection=Connection::getInstance();
-                $value = $this->connection->ExecuteNonQuery($sql,$parameters);
-            }
-                catch(PDOException $ex){
-                throw $ex;
-            }
-            return $value;
-        }
-*/
-
         public function mapeo($value){
    
             $company = new Company();

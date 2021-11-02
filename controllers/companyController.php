@@ -25,6 +25,9 @@
             require_once(VIEWS_PATH . 'view-company.php');
         }
 
+        public function showAdd(){
+            require_once(VIEWS_PATH."add-company.php");
+        }
 
         public function add($companyName, $location, $description, $email, $phoneNumber)
         {
@@ -35,6 +38,10 @@
             $this->showList();
         }
 
+        public function showModify($companyId){
+            $company = $this->daoCompany->getById($companyId);
+            require_once(VIEWS_PATH."update-company.php");
+        }
 
         public function modify($companyId, $companyName, $location, $description, $email, $phoneNumber)
         {
@@ -51,16 +58,6 @@
             $this->showList();
         }
 
-        /* Esta funcion utiliza la variable enabled que permite activar las compañias, si bien se crean en otro metodo como activadas/desactivadas este metodo las activa.
-            Esto podria llevar a cambiar la funcion de abajo delete en el cual pasariamos a desactivar las compañias en vez de eliminarlas.
-
-        public function addUp($companyId){
-            $this->daoCompany->addUp($companyId);
-            
-            $this->showList();
-        }
-
-        */
         public function delete($id)
         {
             $companyList = $this->daoCompany->getAll();

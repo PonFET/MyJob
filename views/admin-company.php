@@ -28,13 +28,13 @@
                                     <form class="" action="<?php echo FRONT_ROOT?>companyController/delete" method="POST">
                                         <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId() ?>">Eliminar</button>
                                     </form>
-                                    <form action="<?php echo FRONT_ROOT?>companyController/modify" method="POST">
+                                    <form action="<?php echo FRONT_ROOT?>companyController/showModify" method="POST">
                                         <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <form action="<?php echo FRONT_ROOT?>companyController/add" method="POST">
+                        <form action="<?php echo FRONT_ROOT?>companyController/showAdd" method="POST">
                             <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
                         </form>
                     </div>
