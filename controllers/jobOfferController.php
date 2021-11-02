@@ -4,6 +4,7 @@
     use daos\daoJobOffers as DAOJobOffers;
     use daos\daoJobPosition as DAOJobPositions;
     use models\jobPosition as JobPosition;
+    use models\Account as Account;
     use models\jobOffer as JobOffer;
 
     class jobOfferController
@@ -19,7 +20,7 @@
 
 
 
-        public function showOfferView()
+        public function showOfferView($message)
         {
             session_start();
 
@@ -35,8 +36,9 @@
             $offer = new JobOffer();
             $offer->setCompanyId($companyId);
             $offer->setOfferDescription($offerDescription);
+            $offer->setArrayJobPos($jobPositionIdArray);
 
-            $this->daoJobOffers->add($offer, $jobPositionIdArray);
+            $this->daoJobOffers->add($offer);
 
             $this->showOfferView();
         }        
@@ -59,9 +61,28 @@
             $this->showOfferView();
         }
 
-        public function studentPostulationAdd()
+        public function studentPostulationAdd($studentId, $jobOfferId)
         {
             //Verificar primero si el alumno ya está postulado.
+            $accountAux = new Account();
+            $jobOfferAux = new JobOffer();
+            $accountAux->setStudentId($studentId);
+            $jobOfferAux->setOfferId($jobOfferId);
+
+            $exists = 0;
+
+            $exists = $this->daoJobOffers->getStudentsByOffers($accountAux);
+
+            if($exists != 0) //El método del DAO es un COUNT(), si el estudiante ya está postulado devuelve un 1, de lo contrario un 0.
+            {
+                $this->showOfferView($message = 'El estudiante ya está postulado a una oferta!');
+            }
+
+            else //Si no está postulado, se carga en la tabla intermedia.
+            {
+                $this->daoJobOffers->addPostulation($accountAux, $jobOfferAux);
+                $this->showOfferView($message = 'Postulación exitosa!');
+            }
         }
 
         public function studentPostulationHistory($studentId)
