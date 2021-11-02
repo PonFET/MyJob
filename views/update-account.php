@@ -1,5 +1,4 @@
 <?php
-    require_once(VIEWS_PATH."nav-bar.php");
     require_once(VIEWS_PATH."header.php");
 ?>
 
@@ -11,18 +10,7 @@
                 <h1>Actualizar</h1>
 
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        
-                        <label for="inputEmail4">Email</label>
-
-                        <input type="email" class="form-control" id="inputEmail4" name="email" 
-                         value= "<?= (isset($_SESSION['account']))? $_SESSION['account']->getEmail() : 'Vacio'; ?>" >
-                        
-                        <div class="invalid-feedback">
-                             El email ya se encuentra en uso
-                        </div>
-
-                    </div>
+                    
                     <div class="form-group col-md-6">
 
                         <label for="inputPassword4">Password</label>

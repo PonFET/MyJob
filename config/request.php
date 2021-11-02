@@ -15,12 +15,12 @@ class request{
         $urlArray = array_filter($urlArray);
 
         if(empty($urlArray))
-            $this->controller = "statusController";            
+            $this->controller = "Home";            
         else
             $this->controller = ucwords(array_shift($urlArray));
 
         if(empty($urlArray))
-            $this->method = "typeSession";
+            $this->method = "Index";
         else
             $this->method = array_shift($urlArray);
 

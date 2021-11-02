@@ -26,27 +26,37 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListAccepted">Ver Propuesta Laboral Aceptadas</a>
+                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListAccepted">Ver Propuestas Laborales Aceptadas</a>
                             </li>
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Agregar Cuenta
+                                </a>
 
-                        <!-- Agregar Usuario, Preguntar a que se refiere.
-                        -->
+                                <a class="dropdown-item" href="<?php echo FRONT_ROOT?>AccountController/addAdmin">Admin</a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/addStudent">Estudiante</a>
+                                
+                            </li>
 
                         <?php } 
                         else {
                             ?>
                             
                             <li class="nav-item">
+                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showList">Ver Propuestas Laborales</a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a class="nav-link" href="<?= FROTN_ROOT ?>companyController/showList">Ver Empresas</a>
                             </li>
 
+                            <!-- Muestra las postulaciones que ha hecho-->
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showList">Ver Propuesta Laboral</a>
-                            </li>
-
-                            <!-- Mostraria una pagina donde se encuentran todos los usuarios alumnos con su derecha las propuesta laborales que estan postulandose.-->
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListHistory">Ver Historial de Propuestas Laborales de Estudiantes</a>
+                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListHistory">Ver Historial de Propuestas Laborales</a>
                             </li>
                    
                         <?php } ?>

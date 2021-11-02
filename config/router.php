@@ -6,7 +6,7 @@ use config\request as Request;
 
 class router{
     public static function Route(Request $request){
-        $controllerName = $request->getcontroller();
+        $controllerName = $request->getcontroller() . 'controller';
         $methodName = $request->getmethod();
         $methodParameters = $request->getparameters();
         $controllerClassName = "controllers\\". $controllerName;    
