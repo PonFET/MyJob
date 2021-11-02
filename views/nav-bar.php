@@ -14,19 +14,19 @@
                     if(isset($_SESSION['account'])){
                         if($_SESSION['account']->getPrivilegios() == 0){?>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>accountController/showList">Administrar Usuarios</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>accountController/showList">Administrar Usuarios</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>companyController/adminList">Administrar Empresas</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>companyController/adminList">Administrar Empresas</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/add">Agregar Propuesta Laboral</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/add">Agregar Propuesta Laboral</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListAccepted">Ver Propuestas Laborales Aceptadas</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showListAccepted">Ver Propuesta Laboral Aceptadas</a>
                             </li>
                             
                             <li class="nav-item dropdown">
@@ -34,7 +34,7 @@
                                 Agregar Cuenta
                                 </a>
 
-                                <a class="dropdown-item" href="<?php echo FRONT_ROOT?>AccountController/addAdmin">Admin</a>
+                        <!-- Agregar Usuario, Preguntar a que se refiere. || Estudiantes o cuentas Admin (cuentas de empresa opcional pero preferible)-->
 
                                 <div class="dropdown-divider"></div>
 
@@ -47,16 +47,16 @@
                             ?>
                             
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showList">Ver Propuestas Laborales</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>companyController/showList">Ver Empresas</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>companyController/showList">Ver Empresas</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showList">Ver Propuesta Laboral</a>
                             </li>
 
                             <!-- Muestra las postulaciones que ha hecho-->
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FROTN_ROOT ?>jobOfferController/showListHistory">Ver Historial de Propuestas Laborales</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showListHistory">Ver Historial de Propuestas Laborales de Estudiantes</a>
                             </li>
                    
                         <?php } ?>

@@ -128,6 +128,7 @@ class accountControllers{
 
         $loginController = new LoginController();
         $loginController->init();
+        //header
     }
 
     public function viewAccount(){

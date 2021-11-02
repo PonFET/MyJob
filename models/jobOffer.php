@@ -6,12 +6,14 @@
         private $offerId;
         private $companyId;        
         private $offerDescription;
+        private $arrayJobPos;
 
-        function __construct($offerId = 0, $companyId = 0, $offerDescription = '')
+        function __construct($offerId = 0, $companyId = 0, $offerDescription = '', $arrayJobPos = array())
         {
             $this->offerId = $offerId;
             $this->companyId = $companyId;            
             $this->offerDescription = $offerDescription;
+            $this->arrayJobPos = $arrayJobPos;
         }
 
         /**
@@ -70,6 +72,26 @@
         public function setOfferDescription($offerDescription)
         {
                 $this->offerDescription = $offerDescription;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of arrayJobPos
+         */ 
+        public function getArrayJobPos()
+        {
+                return $this->arrayJobPos;
+        }
+
+        /**
+         * Set the value of arrayJobPos
+         *
+         * @return  self
+         */ 
+        public function setArrayJobPos($arrayJobPos)
+        {
+                $this->arrayJobPos = $arrayJobPos;
 
                 return $this;
         }

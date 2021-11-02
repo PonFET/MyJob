@@ -9,8 +9,9 @@
         private $description;
         private $email;
         private $phoneNumber;
+        private $cuit;
 
-        function __construct($companyId = 0, $companyName = "", $location = "", $description = "", $email = "", $phoneNumber = 0)
+        function __construct($companyId = 0, $companyName = "", $location = "", $description = "", $email = "", $phoneNumber = 0, $cuit = 0)
         {
                 $this->companyId = $companyId;
                 $this->companyName = $companyName;
@@ -18,6 +19,7 @@
                 $this->description = $description;
                 $this->email = $email;
                 $this->phoneNumber = $phoneNumber;
+                $this->cuit = $cuit;
         }
 
         /**
@@ -136,6 +138,26 @@
         public function setPhoneNumber($phoneNumber)
         {
                 $this->phoneNumber = $phoneNumber;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of cuit
+         */ 
+        public function getCuit()
+        {
+                return $this->cuit;
+        }
+
+        /**
+         * Set the value of cuit
+         *
+         * @return  self
+         */ 
+        public function setCuit($cuit)
+        {
+                $this->cuit = $cuit;
 
                 return $this;
         }

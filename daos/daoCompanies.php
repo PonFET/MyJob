@@ -23,15 +23,16 @@
         {
             if($company instanceof Company){
                 try{                    
-                    $sql = 'INSERT into companies (companyId, companyName, location, description, email, phoneNumber) 
-                    values (:companyId, :companyName, :location, :description, :email, :phoneNumber);';
+                    $sql = 'INSERT into companies (companyId, companyName, location, description, email, phoneNumber, cuit) 
+                    values (:companyId, :companyName, :location, :description, :email, :phoneNumber, :cuit);';
     
                     $parameters['companyId'] = $company->getCompanyId();
                     $parameters['companyName'] = $company->getCompanyName();
                     $parameters['location'] = $company->getLocation();
                     $parameters['description'] = $company->getDescription();
                     $parameters['email'] = $company->getEmail();
-                    $parameters['phoneNumber'] = $company->getPhoneNumber();                    
+                    $parameters['phoneNumber'] = $company->getPhoneNumber();  
+                    $parameters['cuit'] = $company->getCuit();
     
                     $this->connection = Connection::GetInstance();
     
@@ -52,7 +53,8 @@
                          location=:location,
                           description=:description,
                            email=:email,
-                            phoneNumber=:phoneNumber
+                            phoneNumber=:phoneNumber,
+                             cuit=:cuit
                              WHERE companyId=:companyId;";
 
                 $parameters["companyName"] = $company->getCompanyName();
@@ -60,6 +62,7 @@
                 $parameters["description"] = $company->getDescription();                
                 $parameters["email"] = $company->getEmail();
                 $parameters["phoneNumber"] = $company->getPhoneNumber();                
+                $parameters['cuit'] = $company->getCuit();
 
                 $this->connection = Connection::GetInstance();
 
@@ -175,7 +178,8 @@
             $company->setLocation($value["location"]);
             $company->setDescription($value["description"]);
             $company->setEmail($value["email"]);
-            $company->setPhoneNumber($value["phoneNumber"]);            
+            $company->setPhoneNumber($value["phoneNumber"]);
+            $company->setCuit($value['cuit']);
     
             return $company;
         }

@@ -5,6 +5,7 @@
     use DAOS\Idao as Idao;
     use DAOS\Connection as Connection;
     use Models\jobOffer as JobOffer;
+    use Models\Account as Account;
 
     class daoJobOffers
     {
@@ -17,7 +18,7 @@
         }
 
 
-        public function add(jobOffer $jobOffer, $jobPositionIdArray)
+        public function add(jobOffer $jobOffer)
         {
             $resultSet = null;           
             try //Registro nuevo JobOffer
@@ -47,9 +48,9 @@
             {
                 throw $ex;
             }
-
             
-            foreach ($jobPositionIdArray as $jobPositionId) //Hago un registro en OffersXPosition por cada jobPosition en el array
+            
+            foreach ($jobOffer->getArrayJobPos() as $jobPositionId) //Hago un registro en OffersXPosition por cada jobPosition en el array
             {
                 try 
                 {
@@ -70,6 +71,24 @@
             
         }
 
+
+        public function delete(JobOffer $offer)
+        {
+            try
+            {
+                $query = 'DELETE FROM ' . $this->tableName . ' WHERE (offerId="' . $offer->getOfferId() . '");';
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query);
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
         public function getAllOffers()
         {
             try
@@ -82,12 +101,9 @@
 
                 foreach ($resultSet as $fila)
                 {
-                    $jobOffer = new JobOffer();
-                    $jobOffer->setOfferId($fila['offerId']);
-                    $jobOffer->setCompanyId($fila['companyId']);
-                    $jobOffer->setOfferDescription($fila['offerDescription']);
+                    $aux = $this->parseToObject($fila);
 
-                    array_push($jobOfferList, $jobOffer);
+                    array_push($jobOfferList, $aux);
                 }
 
                 return $jobOfferList;
@@ -98,6 +114,48 @@
                 throw $ex;
             }
         }
+
+
+        public function getStudentsByOffers(Account $account)
+        {
+            $resultSet = 0;
+
+            try
+            {
+                $query = "SELECT COUNT(studentId) as studentId FROM offersxposition WHERE studentId=" . $account->getStudentId() . ";";
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                return $resultSet;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+
+        }
+
+
+        public function addPostulation(Account $account, JobOffer $jobOffer)
+        {
+            try
+            {
+                $query = "INSERT INTO offersxposition (offerId, accountId) VALUES (:studentId, :offerId);";
+
+                $parameters["studentId"] = $account->getStudentId();
+                $parameters["offerId"] = $jobOffer->getOfferId();
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query, $parameters);
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
 
         public function getAllOffersbyPosition()
         {
@@ -116,6 +174,16 @@
             {
                 throw $ex;
             }
+        }
+
+        public function parseToObject($value)
+        {
+            $jobO= new JobOffer(); 
+            $jobO->setOfferId($value['offerId']); 
+            $jobO->setCompanyId($value['companyId']); 
+            $jobO->setOfferDescription($value['offerDescription']); 
+        
+            return $jobO;
         }
         
     }

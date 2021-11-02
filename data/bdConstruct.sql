@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 30-10-2021 a las 19:48:08
+-- Tiempo de generación: 02-11-2021 a las 22:28:07
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -32,7 +32,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `accountId` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `password` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  PRIMARY KEY (`accountId`)
+  `prvilegeId` int(11) NOT NULL,
+  PRIMARY KEY (`accountId`),
+  KEY `prvilegeId` (`prvilegeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
@@ -63,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `companies` (
   `description` varchar(500) COLLATE latin1_spanish_ci NOT NULL,
   `email` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `cuit` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`companyId`),
   KEY `companyId` (`companyId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -132,6 +135,20 @@ CREATE TABLE IF NOT EXISTS `offersxposition` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `privileges`
+--
+
+DROP TABLE IF EXISTS `privileges`;
+CREATE TABLE IF NOT EXISTS `privileges` (
+  `privilegeId` int(11) NOT NULL AUTO_INCREMENT,
+  `privilegeName` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
+  `privilegeDescription` varchar(300) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`privilegeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `students`
 --
 
@@ -149,7 +166,6 @@ CREATE TABLE IF NOT EXISTS `students` (
   `password` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `prvilegios` int(11) NOT NULL,
   PRIMARY KEY (`studentId`),
   KEY `careerId` (`careerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -157,6 +173,12 @@ CREATE TABLE IF NOT EXISTS `students` (
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `accounts`
+--
+ALTER TABLE `accounts`
+  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`prvilegeId`) REFERENCES `privileges` (`privilegeId`);
 
 --
 -- Filtros para la tabla `joboffers`
