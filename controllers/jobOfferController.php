@@ -15,7 +15,7 @@
         public function __construct()
         {
             $this->daoJobOffers = new DAOJobOffers();
-            $this->daoJobPositions = new DAOJobPositions();
+            $this->daoJobPositions = new DAOJobPositions(); //Un DAO llama a otro DAO si precisa info.
         }
 
 
@@ -26,7 +26,7 @@
 
             $offerList = $this->daoJobOffers->getAllOffers();
             $offXposList = $this->daoJobOffers->getAllOffersbyPosition();
-            $positionList = $this->daoJobPositions->getAll();
+            $positionList = $this->daoJobPositions->getAll();   //Armar array de jobpositions desde DAO.
 
             require_once(VIEWS_PATH . 'offer-list.php');
         }

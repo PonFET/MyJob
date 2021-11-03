@@ -68,7 +68,48 @@
                     throw $ex;
                 }
             }
-            
+            //hacer un solo try/catch
+        }
+
+
+        public function update(JobOffer $offer, $positionChange)
+        //PositionChange es una variable donde TRUE significa que las JobPosition hay que updatearlas, si es FALSE son las mismas y no hay que modificar
+        {
+            try
+            {
+                $query = "UPDATE " . $this->tableName . " SET companyId=:companyId, offerDescription=:offerDescription WHERE offerId=:id;";
+
+                $parameters["companyId"] = $offer->getCompanyId();
+                $parameters["offerDescription"] = $offer->getOfferDescription();
+                $parameters["id"] = $offer->getOfferId();
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query, $parameters);
+
+                if($positionChange == true)
+                {
+                    $query = "DELETE FROM offersxposition WHERE (offerId='" . $offer->getOfferId() . "');"; //Borro todos los registros de ese OfferId
+
+                    $this->connection = Connection::GetInstance();
+                    $this->connection->ExecuteNonQuery($query);
+
+                    foreach ($offer->getArrayJobPos() as $jobPositionId) //Hago un registro en OffersXPosition por cada jobPosition en el array
+                    {
+                        $query = 'INSERT INTO offersxposition (offerId, jobPositionId) VALUES (:offerId, :jobPositionId);';
+
+                        $parameters['offerId'] = $offer->getOfferId();
+                        $parameters['jobPositionId'] = $jobPositionId;
+
+                        $this->connection = Connection::GetInstance();
+                        $this->connection->ExecuteNonQuery($query, $parameters);
+                    }
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
 
 
