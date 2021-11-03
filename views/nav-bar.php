@@ -1,5 +1,6 @@
 <div class='container-fluid'>
     <nav>
+        <!-- modificar este front -->
         <a href="<?= FRONT_ROOT ?>StatusController/typeSession">
         <i class="fas fa-video"> MyJob</i>
         </a>
@@ -12,7 +13,7 @@
             <ul class="navbar-nav mr-auto ">
                     <?php 
                     if(isset($_SESSION['account'])){
-                        if($_SESSION['account']->getPrivilegios() == 0){?>
+                        if($_SESSION['account']->getPrivilegios() == "admin"){?>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= FRONT_ROOT ?>accountController/showList">Administrar Usuarios</a>
                             </li>
@@ -35,6 +36,7 @@
                                 </a>
 
                         <!-- Agregar Usuario, Preguntar a que se refiere. || Estudiantes o cuentas Admin (cuentas de empresa opcional pero preferible)-->
+                                <a class="dropdown-item" href="<?php echo FRONT_ROOT?>AccountController/addAdmin">Admin</a>
 
                                 <div class="dropdown-divider"></div>
 
@@ -51,7 +53,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showList">Ver Propuesta Laboral</a>
+                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showOfferView">Ver Propuesta Laboral</a>
                             </li>
 
                             <!-- Muestra las postulaciones que ha hecho-->
@@ -69,7 +71,7 @@
                     <a class="nav-link" href="<?= FRONT_ROOT ?>AccountController/register">Crear Cuenta</a>
                 </div>
             <?php 
-            }else if ($_SESSION['account']->getPrivilegios() == 1) { ?>
+            }else if ($_SESSION['account']->getPrivilegios() == "student") { ?>
                 <?php $student = $_SESSION['account']->getStudent();   ?>
             
                 <div class="userOff d-flex align-items-end">
@@ -88,7 +90,7 @@
             
                 <?php } else { ?>
             
-                    <?php if ($_SESSION['account']->getPrivilegios() == 0) { ?>
+                    <?php if ($_SESSION['account']->getPrivilegios() == "admin") { ?>
             
                       <div class="userOff d-flex align-items-end">
                         <a class="nav-link" href="<?= FRONT_ROOT ?>AccountController/logOff">Cerrar Sesion</a>

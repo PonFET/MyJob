@@ -63,7 +63,7 @@ class accountControllers{
         else{
             unset($_SESSION['registerValidator']);
 
-            $account = new Account(0, $email, $password, 1);
+            $account = new Account(0, $email, $password, "student");
 
             $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
 
@@ -74,6 +74,38 @@ class accountControllers{
 
                 $statusController = new StatusController();
                 $statusController->typeSession();
+
+            }
+            catch(PDOException $p){
+
+            }
+        }
+    }
+
+    // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
+    public function createStudent($email, $password, $rPassword){
+        $daoStudent = $daoStudents::GetInstance();
+
+        // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
+        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
+
+        // Aun no funciona
+        $_SESSION['registerValidator']['emailAPI'] = ($this->daoStudent->existAPI($email)) ? 'is-valid' : 'is-invalid';
+        
+        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
+
+        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid' || $_SESSION['registerValidator']['emailAPI'] == 'is-valid'){
+            $this->register();
+        }
+        else{
+            unset($_SESSION['registerValidator']);
+
+            $account = new Account(0, $email, $password, "student");
+
+            $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
+
+            try{
+                $this->daoAccount->add($account);
 
             }
             catch(PDOException $p){
@@ -93,9 +125,8 @@ class accountControllers{
         }
         else{
             unset($_SESSION['registerValidator']);
-
-            //el privilegio (cuarto parametro) es 0 para entender que es admin, primer parametro es el id
-            $account = new Account(0, $email, $password, 0);
+            
+            $account = new Account(0, $email, $password, "admin");
 
             try{
                 $this->daoAccount->add($account);
