@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">
-            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>AccountController/create" method="POST">
+            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>AccountController/createStudent" method="POST">
                 <h1>Ingresar Estudiante:</h1>
                 <div class="form-row">
 
