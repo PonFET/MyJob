@@ -9,13 +9,9 @@ use PDOException;
 
 class accountControllers{
     private $daoAccount;
-    private $statusController;
-    private $loginController;
 
     function __construct(){
         $this->daoAccount = daoAccounts::GetInstance();
-        $this->statusController = new StatusController();
-        $this->loginController = new LoginController();
     }
 
     public function verify($email = "", $password = ""){
@@ -24,28 +20,33 @@ class accountControllers{
 
             if($account->getPassword() == $password){
                 $_SESSION["account"] = $account;
-                $this->statusController->typeSession();
+                if($_SESSION["account"]->getPrivilegios() == "admin"){
+                    require_once "views/list-account.php";
+
+                }
+                else if($_SESSION["account"]->getPrivilegios() == "student"){
+                    require_once "views/offer-list.php";
+                }
             }
             else{
                 $_SESSION["loginValidator"]["passValidator"] = "is-invalid";
                 $_SESSION["loginValidator"]["emailValidator"] = "is-valid";
-                $this->loginController->init();
+                require_once(VIEWS_PATH."login.php");
             }
         }
         else{
             $_SESSION["loginValidator"]["emailValidator"] = "is-invalid";
-            $this->loginController->init();
+            require_once(VIEWS_PATH."login.php");
         }
     }
 
     public function register(){
-        include "views/signup.php";
+        require_once "views/signup.php";
     }
 
     // Creo que no es necesario enviarle todos los parametros de Student, ya que este obtiene todos sus datos desde la API, recibiendo el email
     // podemos comparar con la API para saber cual student tiene el mismo email, si no existe deberiamos devolverlo al register()
     // Si hacemos esto modificar el metodo.
-    // Modificar por el status controller.
     public function create($email, $password, $rPassword){
         $daoStudent = $daoStudents::GetInstance();
 
@@ -71,9 +72,8 @@ class accountControllers{
                 $this->daoAccount->add($account);
 
                 $_SESSION['account'] = $account;
-
-                $statusController = new StatusController();
-                $statusController->typeSession();
+                
+                require_once "views/offer-list.php";
 
             }
             catch(PDOException $p){
