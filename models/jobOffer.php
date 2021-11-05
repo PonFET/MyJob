@@ -7,13 +7,14 @@
         private $companyId;        
         private $offerDescription;
         private $arrayJobPos;
+        private $enable;
 
         function __construct($offerId = 0, $companyId = 0, $offerDescription = '', $arrayJobPos = array())
         {
             $this->offerId = $offerId;
             $this->companyId = $companyId;            
             $this->offerDescription = $offerDescription;
-            $this->arrayJobPos = $arrayJobPos;
+            $this->arrayJobPos = $arrayJobPos;            
         }
 
         /**
@@ -92,6 +93,26 @@
         public function setArrayJobPos($arrayJobPos)
         {
                 $this->arrayJobPos = $arrayJobPos;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of enable
+         */ 
+        public function getEnable()
+        {
+                return $this->enable;
+        }
+
+        /**
+         * Set the value of enable
+         *
+         * @return  self
+         */ 
+        public function setEnable($enable)
+        {
+                $this->enable = $enable;
 
                 return $this;
         }
