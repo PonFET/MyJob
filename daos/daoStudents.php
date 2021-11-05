@@ -42,7 +42,7 @@ class DaoStudents implements Idao{
 
             $this->connection = connection::GetInstance();
 
-            $result = $this->Execute($sql);
+            $result = $this->connection->Execute($sql);
 
             $rta = ($result[0][0] != 1)? false : true;
 
@@ -53,17 +53,18 @@ class DaoStudents implements Idao{
         }
     }
 
-    //verifica si el mail ingresado esta en la API,
-    //modificar para que haga una vision a toda la API de students y compare uno por uno los mails
+    //verifica si el mail ingresado esta en la API, quizas la rta tenga que devolver la rta contraria.
     public function existAPI($email){
         try{
-            $sql = "SELECT exists ( SELECT * from students where email = :email);";
-
-            $this->connection = connection::GetInstance();
-
-            $result = $this->Execute($sql);
-
-            $rta = ($result[0][0] != 1)? false : true;
+            
+            $rta = true;
+            
+            $listStudent = $this->studentsFromApi();
+            foreach($listStudent as $student){
+                if($email == $student->getEmail()){
+                    $rta = false;
+                }
+            }
 
             return $rta;
         }
