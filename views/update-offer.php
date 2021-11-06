@@ -28,7 +28,7 @@
             </tr>
             <tr align="center">
                 <td>
-                    <form action="<?php echo FRONT_ROOT ;?>/JobOfferController/update" method="POST"> 
+                    <form action="<?php echo FRONT_ROOT ;?>/JobOffer/update" method="POST"> 
                         <input type="hidden" name="offerId" value='<?php echo $jobOffer->getOfferId(); ?>'>
                         <p>
                             <table width="600px">

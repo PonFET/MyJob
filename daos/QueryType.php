@@ -1,5 +1,5 @@
 <?php
-    namespace daos;
+    namespace Daos;
     
     abstract class QueryType
     {

@@ -1,20 +1,26 @@
 <?php 
+    namespace Config;
 
-namespace config;
+    use Config\Request as Request;
 
-use config\request as Request;
+    class Router
+    {
+        public static function route(Request $request)
+        {
+            $controllerName = $request->getcontroller() . 'Controller';
 
-class router{
-    public static function Route(Request $request){
-        $controllerName = $request->getcontroller() . 'controller';
-        $methodName = $request->getmethod();
-        $methodParameters = $request->getparameters();
-        $controllerClassName = "controllers\\". $controllerName;    
-        $controller = new $controllerClassName;
-        if(!isset($methodParameters))            
-            call_user_func(array($controller, $methodName));
-        else
-            call_user_func_array(array($controller, $methodName), $methodParameters);
+            $methodName = $request->getmethod();
+
+            $methodParameters = $request->getparameters();          
+
+            $controllerClassName = "Controllers\\". $controllerName;            
+
+            $controller = new $controllerClassName;
+            
+            if(!isset($methodParameters))            
+                call_user_func(array($controller, $methodName));
+            else
+                call_user_func_array(array($controller, $methodName), $methodParameters);
+        }
     }
-}
 ?>

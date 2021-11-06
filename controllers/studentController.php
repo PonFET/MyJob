@@ -1,14 +1,14 @@
 <?php
-namespace controllers;
+namespace Controllers;
 
-use daos\DaoStudents;
+use Daos\DaoStudents;
 use models\Student as student;
 use PDOException;
 
 //El studentController no tendra mucha utilidad ya que accountController tendra la mayoria de sus metodos haciendo su trabajo.
 //Aun asi lo dejaremos por ahora ya que podriamos crearle metodos que solo este pueda ejecutar.
 
-class studentController{
+class StudentController{
     private $daoStudent;
     private $statusController;
     private $loginController;

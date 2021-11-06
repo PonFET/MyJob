@@ -35,7 +35,7 @@
                 </tr>
         </tbody>
     </table>
-    <a href="<?= FRONT_ROOT ?>AccountController/edit" type="button">Editar Cuenta</a>
+    <a href="<?= FRONT_ROOT ?>Account/edit" type="button">Editar Cuenta</a>
     </div>
 </div>
 

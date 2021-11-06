@@ -1,14 +1,14 @@
 <?php
-    namespace controllers;
+    namespace Controllers;
 
-    use daos\daoJobOffers as DAOJobOffers;
+    use Daos\DaoJobOffers as DAOJobOffers;
     use Exception;
-    use daos\daoJobPosition as DAOJobPositions;       
-    use daos\daoCompanies as DAOCompanies;
+    use Daos\DaoJobPosition as DAOJobPositions;       
+    use Daos\DaoCompanies as DAOCompanies;
     use models\Account as Account;
     use models\jobOffer as JobOffer;
 
-    class jobOfferController
+    class JobOfferController
     {
         private $daoJobOffers;
         private $daoJobPositions;

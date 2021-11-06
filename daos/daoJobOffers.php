@@ -1,14 +1,14 @@
 <?php
-    namespace DAOS;
+    namespace Daos;
 
     use \Exception as Exception;
-    use DAOS\Idao as Idao;
-    use DAOS\Connection as Connection;
-    use Models\jobOffer as JobOffer;
-    use Models\Account as Account;
+    use Daos\Idao as Idao;
+    use Daos\Connection as Connection;
+    use models\jobOffer as JobOffer;
+    use models\Account as Account;
     use models\Student;
 
-class daoJobOffers
+class DaoJobOffers
     {
         private $jobOfferList = array();
         private $tableName = 'jobOffers';

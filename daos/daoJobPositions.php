@@ -1,14 +1,14 @@
 <?php
 
-namespace daos;
+namespace Daos;
 
 require_once("config/autoload.php");
 
 use PDOExceptions;
 use models\JobPosition as jobPosition;
-use daos\connection as connection;
+use Daos\Connection as connection;
 
-class daoJobPosition implements Idao{
+class DaoJobPosition implements Idao{
     private $connection;
     private static $instance = null;
 

@@ -1,7 +1,7 @@
 <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12 col-sm-6 col-md-3">
-                <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>AccountController/verify" method="POST">
+                <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/verify" method="POST">
                         <h3 class="text-center font-eight-bol">Iniciar Sesion</h3>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Entrar</button>
-                        <a href="<?= FRONT_ROOT ?>AccountController/register" class="btn btn-success"> Registrarse</a>
+                        <a href="<?= FRONT_ROOT ?>Account/register" class="btn btn-success"> Registrarse</a>
                 </form>
             </div>
         </div>

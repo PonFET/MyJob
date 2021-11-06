@@ -1,12 +1,10 @@
 <?php
 
-namespace daos;
+namespace Daos;
 
-require_once("config.autoload.php");
-
-use daos\Connection as Connection;
+use Daos\Connection as Connection;
 use models\Account as Account;
-use daos\DaoStudents as DaoStudents;
+use Daos\DaoStudents as DaoStudents;
 use PDOException;
 
 class DaoAccounts implements Idao{
