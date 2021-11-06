@@ -1,13 +1,13 @@
 <?php
-namespace controllers;
+namespace Controllers;
 
-use daos\DaoAccounts as daoAccounts;
+use Daos\DaoAccounts as DaoAccounts;
 use models\Account as Account;
-use daos\DaoStudents;
+use Daos\DaoStudents;
 use models\Student as Student;
 use PDOException;
 
-class accountControllers{
+class AccountController{
     private $daoAccount;
 
     function __construct(){

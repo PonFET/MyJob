@@ -1,10 +1,10 @@
 <?php
 
-namespace daos;
+namespace Daos;
 
 use \PDO as PDO;
 use \Exception as Exception;
-use daos\QueryType as QueryType;
+use Daos\QueryType as QueryType;
 
 class Connection
 {

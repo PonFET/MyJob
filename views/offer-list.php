@@ -24,7 +24,7 @@
                                     <span class="h2 border-text"> <?php echo $jobOffer->offerDescription(); ?></span>
                                 </div>
                             </div>
-                            <form action="<?= FRONT_ROOT ?>jobOfferController/postulation" method="POST">
+                            <form action="<?= FRONT_ROOT ?>jobOffer/postulation" method="POST">
                                 
                                 <input type="hidden" name="offerId" value='<?php echo $jobOffer->getOfferId(); ?>'>
 

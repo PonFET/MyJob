@@ -1,11 +1,11 @@
 <?php
-    namespace controllers;
+    namespace Controllers;
 
-    use daos\DaoCompanies as DAOCompanies;
+    use Daos\DaoCompanies as DAOCompanies;
     use models\Company as Company;
     use PDOException;
 
-    class companyController
+    class CompanyController
     {
         private $daoCompany;        
 

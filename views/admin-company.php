@@ -25,16 +25,16 @@
                                 </div>
                                         
                                 <div class="card-body">
-                                    <form class="" action="<?php echo FRONT_ROOT?>companyController/delete" method="POST">
+                                    <form class="" action="<?php echo FRONT_ROOT?>company/delete" method="POST">
                                         <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId() ?>">Eliminar</button>
                                     </form>
-                                    <form action="<?php echo FRONT_ROOT?>companyController/showModify" method="POST">
+                                    <form action="<?php echo FRONT_ROOT?>company/showModify" method="POST">
                                         <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <form action="<?php echo FRONT_ROOT?>companyController/showAdd" method="POST">
+                        <form action="<?php echo FRONT_ROOT?>company/showAdd" method="POST">
                             <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
                         </form>
                     </div>
