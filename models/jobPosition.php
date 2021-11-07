@@ -4,10 +4,10 @@ namespace models;
 
 class jobPosition{
     private $jobPositionId;
-    private $carrerId;
+    private $careerId;
     private $description;
     
-    function __construct($jobPositionId = 0, $carrerId = 0, $description = ""){
+    function __construct($jobPositionId = 0, $careerId = 0, $description = ""){
         $this->jobPositionId=$jobPositionId;
         $this->careerId=$careerId;
         $this->description=$description;
@@ -22,12 +22,12 @@ class jobPosition{
         return $this;
     }
 
-    public function getCarrerId(){
-        return $this->carrerId;
+    public function getCareerId(){
+        return $this->careerId;
     }
 
-    public function setCarrerId($carrerId){
-        $this->carrerId = $carrerId;
+    public function setCareerId($careerId){
+        $this->careerId = $careerId;
         return $this;
     }
 
