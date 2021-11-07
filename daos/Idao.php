@@ -1,6 +1,6 @@
 <?php 
 
-namespace daos;
+namespace Daos;
 
 interface Idao {     
     public function getAll();

@@ -1,13 +1,13 @@
 <?php
-    namespace DAOS;
+    namespace Daos;
 
-    use \Exception as Exception;
-    use DAOS\Idao as Idao;
-    use DAOS\Connection as Connection;
-    use Models\jobOffer as JobOffer;
-    use Models\Account as Account;
+    use \Exception as Exception;    
+    use Daos\Connection as Connection;
+    use models\jobOffer as JobOffer;
+    use models\Account as Account;
+    
 
-    class daoJobOffers
+    class DaoJobOffers
     {
         private $jobOfferList = array();
         private $tableName = 'jobOffers';
@@ -68,7 +68,49 @@
                     throw $ex;
                 }
             }
-            
+            //hacer un solo try/catch
+        }
+
+
+        public function update(JobOffer $offer)
+        //PositionChange es una variable donde TRUE significa que las JobPosition hay que updatearlas, si es FALSE son las mismas y no hay que modificar
+        {
+            try
+            {
+                $query = "UPDATE " . $this->tableName . " SET companyId=:companyId, offerDescription=:offerDescription WHERE offerId=:id;";
+
+                $parameters["companyId"] = $offer->getCompanyId();
+                $parameters["offerDescription"] = $offer->getOfferDescription();
+                $parameters["id"] = $offer->getOfferId();
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query, $parameters);
+
+                /*if($positionChange == true)
+                {
+                    $query = "DELETE FROM offersxposition WHERE (offerId='" . $offer->getOfferId() . "');"; //Borro todos los registros de ese OfferId
+
+                    $this->connection = Connection::GetInstance();
+                    $this->connection->ExecuteNonQuery($query);
+
+                    foreach ($offer->getArrayJobPos() as $jobPositionId) //Hago un registro en OffersXPosition por cada jobPosition en el array
+                    {
+                        $query = 'INSERT INTO offersxposition (offerId, jobPositionId) VALUES (:offerId, :jobPositionId);';
+
+                        $parameters['offerId'] = $offer->getOfferId();
+                        $parameters['jobPositionId'] = $jobPositionId;
+
+                        $this->connection = Connection::GetInstance();
+                        $this->connection->ExecuteNonQuery($query, $parameters);
+                    }
+                }
+                */
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
 
 
@@ -77,6 +119,12 @@
             try
             {
                 $query = 'DELETE FROM ' . $this->tableName . ' WHERE (offerId="' . $offer->getOfferId() . '");';
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query);
+
+
+                $query = 'DELETE FROM offersxposition WHERE (offerId="' . $offer->getOfferId() . '");';
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query);
@@ -93,7 +141,7 @@
         {
             try
             {
-                $jobOfferList = array();
+                $resultSet = 0;
 
                 $query = 'SELECT * FROM ' . $this->tableName;
                 $this->connection = Connection::GetInstance();
@@ -103,10 +151,10 @@
                 {
                     $aux = $this->parseToObject($fila);
 
-                    array_push($jobOfferList, $aux);
+                    array_push($this->jobOfferList, $aux);
                 }
 
-                return $jobOfferList;
+                return $this->jobOfferList;
             }
 
             catch (Exception $ex)
@@ -116,7 +164,8 @@
         }
 
 
-        public function getStudentsByOffers(Account $account)
+        // Implementación solicitada en segunda entrega de Metodología, un estudiante solamente podía tener una sola postulación.
+        /*public function getStudentsByOffers(Account $account) 
         {
             $resultSet = 0;
 
@@ -135,16 +184,17 @@
             }
 
         }
+        */
 
 
         public function addPostulation(Account $account, JobOffer $jobOffer)
         {
             try
             {
-                $query = "INSERT INTO offersxposition (offerId, accountId) VALUES (:studentId, :offerId);";
-
-                $parameters["studentId"] = $account->getStudentId();
+                $query = "INSERT INTO jobxacc (offerId, accountId) VALUES (:offerId, :accountId);";
+                
                 $parameters["offerId"] = $jobOffer->getOfferId();
+                $parameters["accountId"] = $account->getId();
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters);
@@ -175,6 +225,27 @@
                 throw $ex;
             }
         }
+
+
+        public function getAllOffersByStudent(Account $account)
+        {
+            try
+            {
+                $resultSet = 0;
+
+                $query = 'SELECT * FROM jobxacc WHERE accountId=' . $account->getId() . ';';
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                return $resultSet;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
 
         public function parseToObject($value)
         {

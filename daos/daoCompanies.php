@@ -1,13 +1,13 @@
 <?php
-    namespace DAOS;
+    namespace Daos;
 
     use \Exception as Exception;
-    use DAOS\Idao as Idao;
-    use DAOS\Connection as Connection;
-    use Models\Company as Company;
+    use Daos\Idao as Idao;
+    use Daos\Connection as Connection;
+    use models\Company as Company;
 
 
-    class daoCompanies implements Idao
+    class DaoCompanies implements Idao
     {
         private $companyList = array();
         private $tableName = "companies";
@@ -153,7 +153,7 @@
         }
 
 
-        public function delete(Company $company)
+        public function delete(Company $company) //Droppear de otras tablas vinculadas al id
         {
             try
             {

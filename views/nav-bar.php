@@ -1,102 +1,66 @@
-<div class='container-fluid'>
-    <nav>
-        <a href="<?= FRONT_ROOT ?>StatusController/typeSession">
-        <i class="fas fa-video"> MyJob</i>
-        </a>
-            <div class="nav-header">
-                <button class="nav-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto ">
-                    <?php 
-                    if(isset($_SESSION['account'])){
-                        if($_SESSION['account']->getPrivilegios() == 0){?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>accountController/showList">Administrar Usuarios</a>
-                            </li>
+<nav class="navbar navbar-expand-lg  navbar-dark bg-dark">    
+    <span class="navbar-text">
+            <strong>MyJob</strong>
+    </span>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>companyController/adminList">Administrar Empresas</a>
-                            </li>
+    <?php if(isset($_SESSION['account'])){
+        if($_SESSION['account']->getPrivilegios() == "admin"){ ?>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/add">Agregar Propuesta Laboral</a>
-                            </li>
+            <!-- Admin -->
+        
+    <ul class="navbar-nav ml-auto">        
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/showList">Administrar Usuarios</a>
+        </li> 
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showListAccepted">Ver Propuesta Laboral Aceptadas</a>
-                            </li>
-                            
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Agregar Cuenta
-                                </a>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>company/adminList">Administrar Empresas</a>
+        </li>       
 
-                        <!-- Agregar Usuario, Preguntar a que se refiere. || Estudiantes o cuentas Admin (cuentas de empresa opcional pero preferible)-->
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/add">Agregar Propuesta Laboral</a>
+        </li>
 
-                                <div class="dropdown-divider"></div>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showListAccepted">Ver Propuestas Aceptadas</a>
+        </li>
 
-                                <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/addStudent">Estudiante</a>
-                                
-                            </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>user/logOut">Cerrar sesion</a>
+        </li>
+    </ul>
+    <?php }
+    else { ?>
 
-                        <?php } 
-                        else {
-                            ?>
-                            
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>companyController/showList">Ver Empresas</a>
-                            </li>
+        <!-- Estudiante -->
+    <span class="navbar-text">
+        <strong><?php echo $_SESSION['lastName'] ?></strong>
+    </span>
+    <ul class="navbar-nav ml-auto">        
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>company/showList">Ver Empresas</a>
+        </li> 
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showList">Ver Propuesta Laboral</a>
-                            </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showOfferView">Ver Propuestas</a>
+        </li>       
 
-                            <!-- Muestra las postulaciones que ha hecho-->
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= FRONT_ROOT ?>jobOfferController/showListHistory">Ver Historial de Propuestas Laborales de Estudiantes</a>
-                            </li>
-                   
-                        <?php } ?>
-            </ul>
-            <?php
-            } if (!isset($_SESSION['account'])){ ?>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showListHistory">Ver Historial de Postulaciones</a>
+        </li>
+        
+    </ul>
+    <?php } } if (!isset($_SESSION['account'])) { ?>
+        <ul class="navbar-nav ml-auto">        
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/viewAccount">Iniciar Sesión</a>
+            </li> 
 
-                <div class="userOff d-flex align-items-end">
-                    <a class="nav-link" href="<?= FRONT_ROOT ?>LoginController/init">Iniciar Sesion</a>
-                    <a class="nav-link" href="<?= FRONT_ROOT ?>AccountController/register">Crear Cuenta</a>
-                </div>
-            <?php 
-            }else if ($_SESSION['account']->getPrivilegios() == 1) { ?>
-                <?php $student = $_SESSION['account']->getStudent();   ?>
-            
-                <div class="userOff d-flex align-items-end">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="<?= FRONT_ROOT ?>LoginController/init" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <?= $student->getFirstName() . " " . $student->getLastName() ?>
-                        </a>
-            
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/viewAccount">Perfil</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="<?= FRONT_ROOT ?>AccountController/logOff">Cerrar Sesion</a>
-                        </div>
-                    </li>
-                </div>
-            
-                <?php } else { ?>
-            
-                    <?php if ($_SESSION['account']->getPrivilegios() == 0) { ?>
-            
-                      <div class="userOff d-flex align-items-end">
-                        <a class="nav-link" href="<?= FRONT_ROOT ?>AccountController/logOff">Cerrar Sesion</a>
-                      </div>
-            
-                    <?php }
-                    }
-                ?>
-        </div>
-    </nav>
-</div>
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/register">Registrarse</a>
+            </li>                           
+        </ul>
+
+        <?php } ?>
+
+</nav>

@@ -1,16 +1,11 @@
 <?php 
 
-namespace controllers;
-
-// usar daoStudent o daoJobOffer????
-use daos\DaoStudents;
+namespace Controllers;
 
 class HomeController {
-    function navBar(){
-        $studentDAO = DaoStudents::GetInstance();
-        $studentDAO->updateFromApi();  
-        $listStudents = $studentDAO->getAll();
-         include_once ROOT . VIEWS_PATH . 'nav-bar.php'; 
+    public function Index(){
+        require_once(VIEWS_PATH."header.php");
+        require_once(VIEWS_PATH."login.php");
     }
 }
 ?>

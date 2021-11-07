@@ -1,19 +1,17 @@
 <?php
 
-namespace daos;
-
-require_once("config/autoload.php");
+namespace Daos;
 
 use PDOExceptions;
 use models\Student as Student;
 use models\Account;
-use daos\connection as connection;
+use Daos\Connection as connection;
 
 class DaoStudents implements Idao{
     private $connection;
     private static $instance = null;
 
-    private function __construct(){
+    public function __construct(){
     }
 
     public static function GetInstance(){
@@ -40,9 +38,11 @@ class DaoStudents implements Idao{
         try{
             $sql = "SELECT exists ( SELECT * from students where email = :email);";
 
+            $parameters["email"] = $email;
+
             $this->connection = connection::GetInstance();
 
-            $result = $this->Execute($sql);
+            $result = $this->connection->Execute($sql, $parameters);
 
             $rta = ($result[0][0] != 1)? false : true;
 
@@ -53,23 +53,44 @@ class DaoStudents implements Idao{
         }
     }
 
-    //verifica si el mail ingresado esta en la API,
-    //modificar para que haga una vision a toda la API de students y compare uno por uno los mails
+    //verifica si el mail ingresado esta en la API, quizas la rta tenga que devolver la rta contraria.
     public function existAPI($email){
         try{
-            $sql = "SELECT exists ( SELECT * from students where email = :email);";
-
-            $this->connection = connection::GetInstance();
-
-            $result = $this->Execute($sql);
-
-            $rta = ($result[0][0] != 1)? false : true;
+            
+            $rta = true;
+            
+            $listStudent = $this->studentsFromApi();
+            foreach($listStudent as $student){
+                if($email == $student->getEmail()){
+                    $rta = false;
+                }
+            }
 
             return $rta;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
+    }
+
+    public function getStudentByEmailAPI($email)
+    {
+        try{
+            
+            $studentAux = null;
+            
+            $listStudent = $this->studentsFromApi();
+            foreach($listStudent as $student){
+                if($email == $student->getEmail()){
+                    $studentAux = $student;
+                }
+            }
+
+            return $studentAux;
+        }
+        catch(\Exception $ex){
+            throw $ex;
+        } 
     }
 
     // Usar DaoStudents como recolector de la API

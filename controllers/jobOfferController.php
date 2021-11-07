@@ -1,21 +1,24 @@
 <?php
-    namespace controllers;
+    namespace Controllers;
 
-    use daos\daoJobOffers as DAOJobOffers;
-    use daos\daoJobPosition as DAOJobPositions;
-    use models\jobPosition as JobPosition;
+    use Daos\DaoJobOffers as DAOJobOffers;
+    use Exception;
+    use Daos\DaoJobPosition as DAOJobPositions;       
+    use Daos\DaoCompanies as DAOCompanies;
     use models\Account as Account;
     use models\jobOffer as JobOffer;
 
-    class jobOfferController
+    class JobOfferController
     {
         private $daoJobOffers;
         private $daoJobPositions;
+        private $daoCompanies;
 
         public function __construct()
         {
             $this->daoJobOffers = new DAOJobOffers();
-            $this->daoJobPositions = new DAOJobPositions();
+            $this->daoCompanies = new DAOCompanies();
+            //$this->daoJobPositions = new DAOJobPositions(); || Un DAO llama a otro DAO si precisa info.
         }
 
 
@@ -26,7 +29,7 @@
 
             $offerList = $this->daoJobOffers->getAllOffers();
             $offXposList = $this->daoJobOffers->getAllOffersbyPosition();
-            $positionList = $this->daoJobPositions->getAll();
+            $positionList = $this->daoJobPositions->getAll();   //Armar array de jobpositions desde DAO.
 
             require_once(VIEWS_PATH . 'offer-list.php');
         }
@@ -40,8 +43,29 @@
 
             $this->daoJobOffers->add($offer);
 
-            $this->showOfferView();
-        }        
+            $this->showOfferView($message = "");
+        }
+        
+        public function ShowAddOfferView()
+        {
+            session_start();
+
+            $positionList = $this->daoJobPositions->getAll();
+            $companiesList = $this->daoCompanies->getAll();
+
+            require_once(VIEWS_PATH . 'add-offer.php');
+        }
+
+        public function ShowListAccepted()
+        {
+            session_start();
+
+            $offerList = $this->daoJobOffers->getAllEnabled();
+            $companiesList = $this->daoCompanies->getAll();
+            $positionList = $this->daoJobPositions->getAll();
+
+            require_once(VIEWS_PATH . 'list-offer-enabled.php');
+        }
 
         public function delete($offerId)
         {
@@ -58,7 +82,7 @@
 
             $this->daoJobOffers->delete($offer);
 
-            $this->showOfferView();
+            $this->showOfferView($message = "");
         }
 
         public function studentPostulationAdd($studentId, $jobOfferId)
@@ -66,27 +90,41 @@
             //Verificar primero si el alumno ya está postulado.
             $accountAux = new Account();
             $jobOfferAux = new JobOffer();
-            $accountAux->setStudentId($studentId);
+            $accountAux->setId($studentId);
             $jobOfferAux->setOfferId($jobOfferId);
 
-            $exists = 0;
-
-            $exists = $this->daoJobOffers->getStudentsByOffers($accountAux);
-
-            if($exists != 0) //El método del DAO es un COUNT(), si el estudiante ya está postulado devuelve un 1, de lo contrario un 0.
-            {
-                $this->showOfferView($message = 'El estudiante ya está postulado a una oferta!');
-            }
-
-            else //Si no está postulado, se carga en la tabla intermedia.
-            {
-                $this->daoJobOffers->addPostulation($accountAux, $jobOfferAux);
-                $this->showOfferView($message = 'Postulación exitosa!');
-            }
+            $this->daoJobOffers->addPostulation($accountAux, $jobOfferAux);
+            $this->showOfferView($message = 'Postulación exitosa!');
+            
         }
 
-        public function studentPostulationHistory($studentId)
+        public function studentPostulationHistory($accountId)
         {
-            
+            $accountAux = new Account();
+            $accountAux->setId($accountId);
+
+
+            $companiesList = $this->daoCompanies->getAll();
+            $positionList = $this->daoJobPositions->getAll();
+            $postulationList = $this->daoJobOffers->getAllOffersByStudent($accountAux);
+
+            require_once(VIEWS_PATH . "student-history-list");
+        }
+
+        public function update($offerId, $offerDescription)
+        {
+            $jobOfferAux = new JobOffer();
+            $jobOfferAux->setOfferId($offerId);
+            $jobOfferAux->setOfferDescription($offerDescription);
+
+            try
+            {
+                $this->daoJobOffers->update($jobOfferAux);
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
         }
     }

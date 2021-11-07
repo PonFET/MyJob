@@ -1,12 +1,12 @@
 <?php
 
-namespace daos;
+namespace Daos;
 
 require_once("config/autoload.php");
 
 use PDOExceptions;
 use models\Career as career;
-use daos\connection as connection;
+use Daos\Connection as connection;
 
 class DaoCareers implements Idao{
     private $connection;

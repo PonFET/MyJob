@@ -34,7 +34,7 @@
             </tr>
             <tr align="center">
                 <td>
-                    <form action="<?php echo FRONT_ROOT ;?>/CompanyController/update" method="POST"> 
+                    <form action="<?php echo FRONT_ROOT ;?>/Company/update" method="POST"> 
                         <input type="hidden" name="companyId" value='<?php echo $company->getCompanyId(); ?>'>
                         <p>
                             <table width="600px">
