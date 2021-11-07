@@ -153,7 +153,7 @@
         }
 
 
-        public function delete(Company $company)
+        public function delete(Company $company) //Droppear de otras tablas vinculadas al id
         {
             try
             {

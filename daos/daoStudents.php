@@ -11,7 +11,7 @@ class DaoStudents implements Idao{
     private $connection;
     private static $instance = null;
 
-    private function __construct(){
+    public function __construct(){
     }
 
     public static function GetInstance(){
@@ -38,9 +38,11 @@ class DaoStudents implements Idao{
         try{
             $sql = "SELECT exists ( SELECT * from students where email = :email);";
 
+            $parameters["email"] = $email;
+
             $this->connection = connection::GetInstance();
 
-            $result = $this->connection->Execute($sql);
+            $result = $this->connection->Execute($sql, $parameters);
 
             $rta = ($result[0][0] != 1)? false : true;
 
@@ -66,9 +68,29 @@ class DaoStudents implements Idao{
 
             return $rta;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
+    }
+
+    public function getStudentByEmailAPI($email)
+    {
+        try{
+            
+            $studentAux = null;
+            
+            $listStudent = $this->studentsFromApi();
+            foreach($listStudent as $student){
+                if($email == $student->getEmail()){
+                    $studentAux = $student;
+                }
+            }
+
+            return $studentAux;
+        }
+        catch(\Exception $ex){
+            throw $ex;
+        } 
     }
 
     // Usar DaoStudents como recolector de la API

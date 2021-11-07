@@ -1,3 +1,5 @@
+
+
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">
@@ -6,18 +8,16 @@
                 <div class="form-row">
 
                     <div class="form-group col-md-6">
-                        <label for="inputEmail4">Email</label>
-                        <input type="email" class="form-control <?php if(isset($_SESSION['registerValidator'])) echo $_SESSION['registerValidator']['email']; ?>" id="inputEmail4" name="email" 
-                         value= "<?php if(isset($_POST['email'])) echo $_POST['email']; ?>">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email">
                         <div class="invalid-feedback">
-                             El email ya se encuentra en uso
+                            <?php echo $message; ?>
                         </div>
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="inputPassword4">Password</label>
-                        <input type="password" class="form-control <?php if(isset($_SESSION['registerValidator'])) echo $_SESSION['registerValidator']['password']; ?>" id="inputPassword4" name="password"
-                        value="<?php if(isset($_POST['password'])) echo $_POST['password'];?>">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password">
                         <div class="invalid-feedback">
                              El password no coincide
                         </div>
@@ -26,8 +26,8 @@
                 </div>
 
                 <div class="form-group">
-                        <label for="inputPassword4">Repetir Password</label>
-                        <input type="password" class="form-control <?php if(isset($_SESSION['registerValidator'])) echo $_SESSION['registerValidator']['password']; ?>" id="inputPassword4" name="rPassword">
+                        <label for="rPassword">Repetir Password</label>
+                        <input type="password" class="form-control" id="rPassword" name="rPassword">
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Registrarse</button>
@@ -41,3 +41,5 @@
     tenga ese student para ingresarlo a los parametros del create.
     Esto deberian ser especificaiones adheridas al propio create sea de account o de student.
 ->
+
+
