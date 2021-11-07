@@ -3,20 +3,26 @@ namespace Controllers;
 
 use Daos\DaoAccounts as DaoAccounts;
 use models\Account as Account;
-use Daos\DaoStudents;
+use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
 use PDOException;
 
+
+
 class AccountController{
     private $daoAccount;
-    private $daoStudent;
+    private $daoStudent;  
+      
 
     function __construct(){
         $this->daoAccount = daoAccounts::GetInstance();
-        $this->daoStudent = new DaoStudents();
+        $this->daoStudent = new DaoStudents(); 
+        
     }
 
-    public function verify($email='', $password=''){
+    public function verify($email='', $password='')
+    {
+        //$this->daoStudent->updateFromApi();
         if($this->daoAccount->exist($email))
         {
             $accountAux = new Account();

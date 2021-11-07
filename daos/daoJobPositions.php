@@ -2,17 +2,16 @@
 
 namespace Daos;
 
-require_once("config/autoload.php");
 
 use PDOExceptions;
 use models\JobPosition as jobPosition;
 use Daos\Connection as connection;
 
-class DaoJobPosition implements Idao{
+class DaoJobPositions implements Idao{
     private $connection;
     private static $instance = null;
 
-    private function __construct(){
+    public function __construct(){
     }
 
     public static function GetInstance(){
@@ -50,17 +49,17 @@ class DaoJobPosition implements Idao{
     }
 
     public function updateFromApi(){
-        $listJobPosition = $this->careersFromApi();
+        $listJobPosition = $this->jobPositionsFromApi();
         foreach($listJobPosition as $jobPosition){
-            if(!($this->exist($jobPosition->getById()))){
+            
                 $this->add($jobPosition);
-            }
+            
         }
     }
 
     public function getById($jobPositionId){
         try{
-            $sql = "SELECT * from careers where jobPositionId = :jobPositionId;";
+            $sql = "SELECT * from jobPosition where jobPositionId = :jobPositionId;";
 
             $this->connection = connection::GetInstance();
 
@@ -89,7 +88,7 @@ class DaoJobPosition implements Idao{
 
     public function getAll(){
         try{
-            $sql = "SELECT * from jobPositions;";
+            $sql = "SELECT * from jobPosition;";
 
             $this->connection = connection::GetInstance();
 
@@ -108,8 +107,8 @@ class DaoJobPosition implements Idao{
 
         if($jobPosition instanceof JobPosition){
             try{
-                $sql = "INSERT into jobPositions (jobPositionId, careerId, description) 
-                values ( :careerId, :description, :active);";
+                $sql = "INSERT into jobPosition (jobPositionId, careerId, description) 
+                values ( :jobPositionId, :careerId, :description);";
 
                 $parameters['jobPositionId'] = $jobPosition->getJobPositionId();
                 $parameters['careerId'] = $jobPosition->getCareerId();
@@ -118,7 +117,7 @@ class DaoJobPosition implements Idao{
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($sql, $parameters);
-            }catch (Exception $ex){
+            }catch (\Exception $ex){
                 throw $ex;
             }
         }

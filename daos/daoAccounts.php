@@ -86,7 +86,7 @@ class DaoAccounts implements Idao{
         return $account;
     }
 
-    public function getById($id){
+    public function getById($id){ //Busca los values en el índice 0, corregir.
         try{
             $sql = " SELECT * from accounts where id = :id";
 

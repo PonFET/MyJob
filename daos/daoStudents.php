@@ -97,9 +97,10 @@ class DaoStudents implements Idao{
     public function updateFromApi(){
         $listStudent = $this->studentsFromApi();
         foreach($listStudent as $student){
-            if(!($this->exist($student->getEmail()))){
+
+                var_dump($student);
                 $this->add($student);
-            }
+            
         }
     }
     
@@ -231,7 +232,7 @@ class DaoStudents implements Idao{
         }
     }
 
-    //supongo que aca hay que poner el if para hacer la comparacion con los mails y encontrar el student
+    // NO ANDA
     public function add($account){
 
         if(($account instanceof Account) && ($account->getStudent() instanceof Student)){
@@ -247,7 +248,7 @@ class DaoStudents implements Idao{
                 $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($sql, $parameters);
-            }catch (Exception $ex){
+            }catch (\Exception $ex){
                 throw $ex;
             }
         }
