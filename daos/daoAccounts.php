@@ -51,19 +51,15 @@ class DaoAccounts implements Idao{
 
     public function getByEmail($email){
         try{
-            $sql = "SELECT * from accounts where email = :email";
+            $sql = "SELECT a.*, p.privilegeName FROM accounts a LEFT JOIN privileges p ON a.privilegeId = p.privilegeId WHERE a.email = :email;";
 
             $parameters["email"] = $email;
 
             $this->connection = Connection::GetInstance();
+            
+            $resultSet = $this->connection->Execute($sql, $parameters);            
 
-            $resultSet = $this->connection->Execute($sql, $parameters);
-
-            var_dump($resultSet);
-
-            $array = $this->mapeo($resultSet);
-
-            $object = !empty($array) ? $array[0] : [];
+            $object = $this->mapeo($resultSet);            
 
             return $object;
         }
@@ -74,19 +70,18 @@ class DaoAccounts implements Idao{
 
     public function mapeo($value)
     {
-        //var_dump($value);
         $account = new Account();
 
         $account->setId($value[0]['accountId']);
         $account->setEmail($value[0]['email']);
         $account->setPassword($value[0]['password']);
         $account->setStudentId($value[0]['studentId']);
-        $account->setPrivilegios($value[0]['privilegeId']);       
+        $account->setPrivilegios($value[0]['privilegeName']); 
 
         return $account;
     }
 
-    public function getById($id){ //Busca los values en el índice 0, corregir.
+    public function getById($id){ 
         try{
             $sql = " SELECT * from accounts where id = :id";
 
@@ -100,7 +95,7 @@ class DaoAccounts implements Idao{
 
             return $object;
         }
-        catch (Exception $ex){
+        catch (\Exception $ex){
             throw $ex;
         }
     }

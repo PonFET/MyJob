@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 07-11-2021 a las 22:38:58
+-- Tiempo de generación: 08-11-2021 a las 10:41:53
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -165,7 +165,6 @@ CREATE TABLE IF NOT EXISTS `students` (
   `gender` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `birthdate` date NOT NULL,
   `email` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  `password` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`studentId`),
@@ -180,7 +179,8 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- Filtros para la tabla `accounts`
 --
 ALTER TABLE `accounts`
-  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`privilegeId`) REFERENCES `privileges` (`privilegeId`);
+  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`privilegeId`) REFERENCES `privileges` (`privilegeId`),
+  ADD CONSTRAINT `accounts_ibfk_2` FOREIGN KEY (`studentId`) REFERENCES `students` (`studentId`);
 
 --
 -- Filtros para la tabla `joboffers`
@@ -212,8 +212,7 @@ ALTER TABLE `offersxposition`
 -- Filtros para la tabla `students`
 --
 ALTER TABLE `students`
-  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`careerId`) REFERENCES `careers` (`careerId`),
-  ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`studentId`) REFERENCES `accounts` (`studentId`);
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`careerId`) REFERENCES `careers` (`careerId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

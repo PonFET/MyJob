@@ -1,20 +1,21 @@
 <?php
     require_once(VIEWS_PATH."header.php");
+    include_once(VIEWS_PATH."nav-bar.php");    
 ?>
 
-<div id="listaUser">
+<div>
     <div class ="container"> 
-        <div class="listUser-container">
+        <div>
             <div class="row">
                 <div class="col-9">
-                    <h2> Compañias
+                    <h2> Empresas </h2>
                 </div>
             </div>
             <div class="row">
                 <?php 
                 foreach($arrayCompany as $company)
                 {
-
+                    
                 ?>
                 <div class="col-3" style="margin-bottom:20px">
                     <div class="card">
@@ -25,21 +26,25 @@
                                 </div>
                                         
                                 <div class="card-body">
-                                    <form class="" action="<?php echo FRONT_ROOT?>company/delete" method="POST">
-                                        <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId() ?>">Eliminar</button>
+                                    <form class="" action="<?php echo FRONT_ROOT ?>company/delete" method="POST">
+                                        <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Eliminar</button>
                                     </form>
-                                    <form action="<?php echo FRONT_ROOT?>company/showModify" method="POST">
+                                    <form action="<?php echo FRONT_ROOT ?>company/showModify" method="POST">
                                         <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <form action="<?php echo FRONT_ROOT?>company/showAdd" method="POST">
-                            <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Agregar</button>
-                        </form>
+                        
                     </div>
                 </div>
                 <?php } ?>
+
+                
+                <form action="<?php echo FRONT_ROOT ?>company/showAdd" method="POST">
+                    <button type="submit"  name="companyId" class="btn-dark btn-sm">Agregar</button>
+                </form>
+                
             </div>
         </div>
     </div>

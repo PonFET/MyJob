@@ -21,8 +21,7 @@ class AccountController{
     }
 
     public function verify($email='', $password='')
-    {
-        //$this->daoStudent->updateFromApi();
+    {        
         if($this->daoAccount->exist($email))
         {
             $accountAux = new Account();
@@ -30,7 +29,10 @@ class AccountController{
 
             if($accountAux->getPassword() == $password)
             {
-                session_start();
+                if(!isset($_SESSION))
+                {
+                    session_start();
+                }
                 $_SESSION["account"] = $accountAux;
 
                 require_once(VIEWS_PATH . "offer-list.php");
@@ -54,13 +56,11 @@ class AccountController{
 
         if($password == $rPassword)
         {
-
-            if(!$this->daoStudent->exist($email))
+            if($this->daoStudent->exist($email) == false)
             {
-                $studentAux = new Student();
-                $studentAux = $this->daoStudent->getStudentByEmailAPI($email);
-                var_dump($studentAux);
-                $account = new Account($email, $password, $privilege='student', $studentAux->getStudentId());
+                $studentAux = new Student();                
+                $studentAux = $this->daoStudent->getStudentByEmailAPI($email);                 
+                $account = new Account($email, $password, $privilegios='student', $studentAux->getStudentId());
 
                 try
                 {                    
@@ -93,7 +93,7 @@ class AccountController{
 
     // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
     public function createStudent($email, $password, $rPassword){
-        $daoStudent = $daoStudents::GetInstance();
+        $daoStudent = $this->daoStudent::GetInstance();
 
         // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
         $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
@@ -166,9 +166,7 @@ class AccountController{
         
         unset($_SESSION['loginValidator']); 
 
-        //$loginController = new LoginController();
-        //$loginController->init();
-        //header
+        header("location: " . FRONT_ROOT . "index.php");
     }
 
     public function viewAccount(){

@@ -1,3 +1,5 @@
+<?php include_once(VIEWS_PATH."nav-bar.php"); ?>
+
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">

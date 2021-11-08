@@ -11,9 +11,8 @@
         private $phoneNumber;
         private $cuit;
 
-        function __construct($companyId = 0, $companyName = "", $location = "", $description = "", $email = "", $phoneNumber = 0, $cuit = 0)
-        {
-                $this->companyId = $companyId;
+        function __construct($companyName = "", $location = "", $description = "", $email = "", $phoneNumber = 0, $cuit = 0)
+        {                
                 $this->companyName = $companyName;
                 $this->location = $location;
                 $this->description = $description;

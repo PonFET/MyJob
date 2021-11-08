@@ -26,7 +26,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="<?php echo FRONT_ROOT ?>user/logOut">Cerrar sesion</a>
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/logOff">Cerrar sesion</a>
         </li>
     </ul>
     <?php }
@@ -34,7 +34,7 @@
 
         <!-- Estudiante -->
     <span class="navbar-text">
-        <strong><?php echo $_SESSION['lastName'] ?></strong>
+        <strong><?php //echo $_SESSION['lastName'] ?></strong>
     </span>
     <ul class="navbar-nav ml-auto">        
         <li class="nav-item">
@@ -48,7 +48,10 @@
         <li class="nav-item">
             <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showListHistory">Ver Historial de Postulaciones</a>
         </li>
-        
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/logOff">Cerrar sesion</a>
+        </li>        
     </ul>
     <?php } } if (!isset($_SESSION['account'])) { ?>
         <ul class="navbar-nav ml-auto">        

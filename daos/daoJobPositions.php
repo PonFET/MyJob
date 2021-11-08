@@ -79,9 +79,9 @@ class DaoJobPositions implements Idao{
     public function mapeo($value){
    
         $jobPosition = new JobPosition();
-        $jobPosition->setJobPositionId($value["jobPositionId"]);
-        $jobPosition->setCareerId($value["careerId"]);
-        $jobPosition->setDescription($value["description"]);
+        $jobPosition->setJobPositionId($value[0]["jobPositionId"]);
+        $jobPosition->setCareerId($value[0]["careerId"]);
+        $jobPosition->setDescription($value[0]["description"]);
 
         return $jobPosition;
     }
@@ -98,7 +98,7 @@ class DaoJobPositions implements Idao{
         
             return $array;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }
