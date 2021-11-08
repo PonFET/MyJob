@@ -29,7 +29,7 @@ class DaoAccounts implements Idao{
                 $parameters['email'] =  $account->getEmail();
                 $parameters['password'] =  $account->getPassword();
                 $parameters['privilegios'] =  $account->getPrivilegios();
-                $this->connection = connection::GetInstance();
+                $this->connection = Connection::GetInstance();
 
                 $this->connection->ExecuteNonQuery($sql,$parameters);
 
@@ -51,39 +51,37 @@ class DaoAccounts implements Idao{
 
     public function getByEmail($email){
         try{
-            $sql = " SELECT * from accounts where email = :email";
+            $sql = "SELECT a.*, p.privilegeName FROM accounts a LEFT JOIN privileges p ON a.privilegeId = p.privilegeId WHERE a.email = :email;";
+
+            $parameters["email"] = $email;
 
             $this->connection = Connection::GetInstance();
+            
+            $resultSet = $this->connection->Execute($sql, $parameters);            
 
-            $resultSet = $this->connection->Execute($sql);
-
-            $array = $this->mapeo($resultSet);
-
-            $object = !empty($array) ? $array[0] : [];
+            $object = $this->mapeo($resultSet);            
 
             return $object;
         }
-        catch (Exception $ex){
+        catch (\Exception $ex){
             throw $ex;
         }
     }
 
-    public function mapeo($value){
-
-        $daoStudent = DaoStudents::GetInstance();
-   
+    public function mapeo($value)
+    {
         $account = new Account();
 
-        $account->setId($value["id"]);
-        $account->setEmail($value["email"]);
-        $account->setPassword($value["password"]);
-        $account->setPrivilegios($value["privilegios"]);
-        $account->setStudent($daoStudent->getById($account->getId()));
+        $account->setId($value[0]['accountId']);
+        $account->setEmail($value[0]['email']);
+        $account->setPassword($value[0]['password']);
+        $account->setStudentId($value[0]['studentId']);
+        $account->setPrivilegios($value[0]['privilegeName']); 
 
         return $account;
     }
 
-    public function getById($id){
+    public function getById($id){ 
         try{
             $sql = " SELECT * from accounts where id = :id";
 
@@ -97,29 +95,36 @@ class DaoAccounts implements Idao{
 
             return $object;
         }
-        catch (Exception $ex){
+        catch (\Exception $ex){
             throw $ex;
         }
     }
 
     public function exist($email){
         try{
-            $sql = "SELECT exists ( SELECT * from accounts where email = :email);";
+            $sql = "SELECT * from accounts where email=:email;";
+            
+            $parameters['email'] = $email;
 
-            $this->connection = connection::GetInstance();
+            $this->connection = Connection::GetInstance();
 
-            $result = $this->Execute($sql);
+            $result = $this->connection->Execute($sql, $parameters);
 
-            $rta = ($result[0][0] != 1)? false : true;
+            if($result)
+            {
+                return true;
+            }
 
-            return $rta;
+            else return false;
+            
         }
-        catch(Exception $ex){
+
+        catch(\Exception $ex){
             throw $ex;
         }
     }
 
-    public function update($account){
+    public function update($account){ //sacar perfiles
         if($account instanceof Account){
             if($this->exist($account->getEmail())){
                 try{
@@ -131,7 +136,7 @@ class DaoAccounts implements Idao{
     
                     $this->connection->ExecuteNonQuery($query, $parameters);
     
-                    $daoProfile = DaoProfiles::GetInstance();
+                    $daoProfile = DaoAccounts::GetInstance();
                     $daoProfile->update($cuenta->getProfile());
                 }
                 catch (Exception $ex) {

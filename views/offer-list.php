@@ -1,10 +1,11 @@
 <?php
     require_once(VIEWS_PATH."header.php");
+    include_once(VIEWS_PATH."nav-bar.php");
 ?>
 
-<div id="listaUser">
+<div>
     <div class ="container"> 
-        <div class="listUser-container">
+        <div>
             <div class="row">
                 <div class="col-9">
                     <h2> Ofertas Laborales
@@ -21,7 +22,7 @@
                         <div class="card-img-top jobOffer-card container">
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <span class="h2 border-text"> <?php echo $jobOffer->offerDescription(); ?></span>
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getOfferDescription(); ?></span>
                                 </div>
                             </div>
                             <form action="<?= FRONT_ROOT ?>jobOffer/postulation" method="POST">

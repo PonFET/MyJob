@@ -1,14 +1,13 @@
 <?php
     namespace Daos;
 
-    use \Exception as Exception;
-    use Daos\Idao as Idao;
+    use \Exception as Exception;    
     use Daos\Connection as Connection;
     use models\jobOffer as JobOffer;
     use models\Account as Account;
-    use models\Student;
+    
 
-class DaoJobOffers
+    class DaoJobOffers
     {
         private $jobOfferList = array();
         private $tableName = 'jobOffers';
@@ -123,6 +122,12 @@ class DaoJobOffers
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query);
+
+
+                $query = 'DELETE FROM offersxposition WHERE (offerId="' . $offer->getOfferId() . '");';
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query);
             }
 
             catch (Exception $ex)
@@ -159,7 +164,7 @@ class DaoJobOffers
         }
 
 
-        // Implementación solicitada en segunda entrega, un estudiante solamente podía tener una sola postulación.
+        // Implementación solicitada en segunda entrega de Metodología, un estudiante solamente podía tener una sola postulación.
         /*public function getStudentsByOffers(Account $account) 
         {
             $resultSet = 0;
@@ -182,14 +187,14 @@ class DaoJobOffers
         */
 
 
-        public function addPostulation(Account $account, JobOffer $jobOffer) //Ta mal.
+        public function addPostulation(Account $account, JobOffer $jobOffer)
         {
             try
             {
-                $query = "INSERT INTO offersxposition (offerId, accountId) VALUES (:studentId, :offerId);";
-
-                $parameters["studentId"] = $account->getId();
+                $query = "INSERT INTO jobxacc (offerId, accountId) VALUES (:offerId, :accountId);";
+                
                 $parameters["offerId"] = $jobOffer->getOfferId();
+                $parameters["accountId"] = $account->getId();
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters);
@@ -232,14 +237,7 @@ class DaoJobOffers
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
 
-                foreach ($resultSet as $fila)
-                {
-                    $aux = $this->parseToObject($fila);
-
-                    array_push($this->jobOfferList, $aux);
-                }
-
-                return $this->jobOfferList;
+                return $resultSet;
             }
 
             catch (Exception $ex)

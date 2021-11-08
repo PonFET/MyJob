@@ -1,13 +1,15 @@
 <?php
     require_once(VIEWS_PATH."header.php");
+    include_once(VIEWS_PATH."nav-bar.php");
+    //var_dump($_SESSION['account']);
 ?>
 
-<div id="listaUser">
+<div>
     <div class ="container"> 
-        <div class="listUser-container">
+        <div>
             <div class="row">
                 <div class="col-9">
-                    <h2> Compañias
+                    <h2> Empresas
                 </div>
             </div>
             <div class="row">
@@ -21,11 +23,12 @@
                         <div class="card-img-top company-card container">
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <span class="h2 border-text"> <?php echo $company->getCompanyName(); ?></span>
-                                    <span class="h2 border-text"> <?php echo $company->getLocation(); ?></span>
-                                    <span class="h2 border-text"> <?php echo $company->getDescription(); ?></span>
-                                    <span class="h2 border-text"> <?php echo $company->getEmail(); ?></span>
-                                    <span class="h2 border-text"> <?php echo $company->getPhoneNumber(); ?></span>
+                                    <span class="h1 border-text"> <?php echo $company->getCompanyName(); ?></span><br>
+                                    <span class="h6 border-text"> <?php echo $company->getLocation(); ?></span><br>
+                                    <span class="h6 border-text"> <?php echo $company->getDescription(); ?></span><br>
+                                    <span class="h6 border-text"> <?php echo $company->getEmail(); ?></span><br>
+                                    <span class="h6 border-text"> <?php echo $company->getPhoneNumber(); ?></span><br>
+                                    <span class="h6 border-text"> <?php echo $company->getCuit(); ?></span>
                                 </div>
                             </div>
                         </div>

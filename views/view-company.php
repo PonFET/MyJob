@@ -1,5 +1,6 @@
 <?php
     require_once(VIEWS_PATH."header.php");
+    include_once(VIEWS_PATH."nav-bar.php");
 ?>
 <!-- No se usa -->
 
@@ -8,8 +9,12 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">Datos</th>
-                    <th scope="col">Informacion</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Ubicación</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Número Telefónico</th>
+                    <th scope="col">CUIT</th>
                 </tr>
             </thead>
             <tbody>

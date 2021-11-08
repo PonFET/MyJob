@@ -12,7 +12,7 @@ class DaoCareers implements Idao{
     private $connection;
     private static $instance = null;
 
-    private function __construct(){
+    public function __construct(){
     }
 
     public static function GetInstance(){
@@ -51,10 +51,9 @@ class DaoCareers implements Idao{
 
     public function updateFromApi(){
         $listCareer = $this->careersFromApi();
-        foreach($listCareer as $career){
-            if(!($this->exist($career->getById()))){
-                $this->add($career);
-            }
+        foreach($listCareer as $career)
+        {
+            $this->add($career);            
         }
     }
 

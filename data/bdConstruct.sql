@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 02-11-2021 a las 22:28:07
+-- Tiempo de generación: 08-11-2021 a las 10:41:53
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -32,9 +32,11 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `accountId` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `password` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  `prvilegeId` int(11) NOT NULL,
+  `studentId` int(11) NOT NULL,
+  `privilegeId` int(11) NOT NULL,
   PRIMARY KEY (`accountId`),
-  KEY `prvilegeId` (`prvilegeId`)
+  KEY `prvilegeId` (`privilegeId`),
+  KEY `studentId` (`studentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
@@ -47,7 +49,7 @@ DROP TABLE IF EXISTS `careers`;
 CREATE TABLE IF NOT EXISTS `careers` (
   `careerId` int(11) NOT NULL,
   `description` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  `active` tinyint(1) NOT NULL,
+  `active` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`careerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
@@ -163,7 +165,6 @@ CREATE TABLE IF NOT EXISTS `students` (
   `gender` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `birthdate` date NOT NULL,
   `email` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  `password` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`studentId`),
@@ -178,7 +179,8 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- Filtros para la tabla `accounts`
 --
 ALTER TABLE `accounts`
-  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`prvilegeId`) REFERENCES `privileges` (`privilegeId`);
+  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`privilegeId`) REFERENCES `privileges` (`privilegeId`),
+  ADD CONSTRAINT `accounts_ibfk_2` FOREIGN KEY (`studentId`) REFERENCES `students` (`studentId`);
 
 --
 -- Filtros para la tabla `joboffers`

@@ -2,21 +2,18 @@
 
 namespace models;
 
-use models\Student as Student;
-
 class Account{
 	private $id;
 	private $email;
 	private $password;
 	private $privilegios;
-	private $student;
+	private $studentId;
 
-	function __construct ($id=0,$email="", $password="", $privilegios="") {
-		$this->id = $id;
+	function __construct ($email="", $password="", $privilegios="", $studentId = 0) {		
 		$this->email = $email;
 		$this->password = $password;
 		$this->privilegios = $privilegios;
-		$this->student = new Student();
+		$this->studentId = $studentId;
 		
     }
 
@@ -57,12 +54,12 @@ class Account{
 		return $this;
     }
     
-	public function getStudent(){
-		return $this->student;
+	public function getStudentId(){
+		return $this->studentId;
 	}
 
-	public function setStudent($student){
-		$this->student = $student;
+	public function setStudentId($studentId){
+		$this->studentId = $studentId;
 		return $this;
 	}
 }

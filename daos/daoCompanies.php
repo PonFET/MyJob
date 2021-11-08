@@ -7,7 +7,7 @@
     use models\Company as Company;
 
 
-    class DaoCompanies implements Idao
+    class DaoCompanies
     {
         private $companyList = array();
         private $tableName = "companies";
@@ -19,14 +19,12 @@
 
 
         
-        public function add($company)
-        {
-            if($company instanceof Company){
+        public function add(Company $company)
+        {            
                 try{                    
-                    $sql = 'INSERT into companies (companyId, companyName, location, description, email, phoneNumber, cuit) 
-                    values (:companyId, :companyName, :location, :description, :email, :phoneNumber, :cuit);';
-    
-                    $parameters['companyId'] = $company->getCompanyId();
+                    $sql = 'INSERT into companies (companyName, location, description, email, phoneNumber, cuit) 
+                    values (:companyName, :location, :description, :email, :phoneNumber, :cuit);';    
+                    
                     $parameters['companyName'] = $company->getCompanyName();
                     $parameters['location'] = $company->getLocation();
                     $parameters['description'] = $company->getDescription();
@@ -40,7 +38,7 @@
                 }catch (Exception $ex){
                     throw $ex;
                 }
-            }
+            
         }
 
 
@@ -63,6 +61,7 @@
                 $parameters["email"] = $company->getEmail();
                 $parameters["phoneNumber"] = $company->getPhoneNumber();                
                 $parameters['cuit'] = $company->getCuit();
+                $parameters['companyId'] = $company->getCompanyId();
 
                 $this->connection = Connection::GetInstance();
 
@@ -117,10 +116,12 @@
         public function getById($companyId){
             try{
                 $sql = "SELECT * from companies where companyId = :companyId;";
+
+                $parameters["companyId"] = $companyId;
     
                 $this->connection = connection::GetInstance();
     
-                $result = $this->connection->Execute($sql);
+                $result = $this->connection->Execute($sql, $parameters);
     
                 $array = $this->mapeo($result);
     
@@ -153,7 +154,7 @@
         }
 
 
-        public function delete(Company $company)
+        public function delete(Company $company) //Droppear de otras tablas vinculadas al id
         {
             try
             {
@@ -169,19 +170,26 @@
             }
         }
 
-        public function mapeo($value){
+        public function mapeo($result)
+        {
+            $objectArray = array();            
    
-            $company = new Company();
+            foreach($result as $value)
+            {
+                $company = new Company();
 
-            $company->setCompanyId($value["companyId"]);
-            $company->setCompanyName($value["companyName"]);
-            $company->setLocation($value["location"]);
-            $company->setDescription($value["description"]);
-            $company->setEmail($value["email"]);
-            $company->setPhoneNumber($value["phoneNumber"]);
-            $company->setCuit($value['cuit']);
+                $company->setCompanyId($value["companyId"]);
+                $company->setCompanyName($value["companyName"]);
+                $company->setLocation($value["location"]);
+                $company->setDescription($value["description"]);
+                $company->setEmail($value["email"]);
+                $company->setPhoneNumber($value["phoneNumber"]);
+                $company->setCuit($value['cuit']);
+
+                array_push($objectArray, $company);
+            }
     
-            return $company;
+            return $objectArray;
         }
 
 

@@ -11,5 +11,5 @@
 </head>
 <body>
 <?php
-    require_once(VIEWS_PATH."nav-bar.php");
+    //include_once(VIEWS_PATH."nav-bar.php");
 ?>

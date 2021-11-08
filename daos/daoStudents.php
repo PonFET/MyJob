@@ -4,14 +4,14 @@ namespace Daos;
 
 use PDOExceptions;
 use models\Student as Student;
-use models\Account;
 use Daos\Connection as connection;
+use Exception;
 
 class DaoStudents implements Idao{
     private $connection;
     private static $instance = null;
 
-    private function __construct(){
+    public function __construct(){
     }
 
     public static function GetInstance(){
@@ -34,19 +34,30 @@ class DaoStudents implements Idao{
         }
     }*/
 
-    public function exist($email){
-        try{
-            $sql = "SELECT exists ( SELECT * from students where email = :email);";
+    public function exist($email)
+    {
+        try
+        {
+            $result = null;
+            
+            $query = "SELECT * FROM students WHERE email=:email;";
+
+            $parameters["email"] = $email;
 
             $this->connection = connection::GetInstance();
 
-            $result = $this->connection->Execute($sql);
+            $result = $this->connection->Execute($query, $parameters);
 
-            $rta = ($result[0][0] != 1)? false : true;
+            if($result != null)
+            {
+                return true;
+            }
 
-            return $rta;
+            else return false;
         }
-        catch(Exception $ex){
+
+        catch(Exception $ex)
+        {
             throw $ex;
         }
     }
@@ -66,18 +77,38 @@ class DaoStudents implements Idao{
 
             return $rta;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
+    }
+
+    public function getStudentByEmailAPI($email)
+    {
+        try{
+            
+            $studentAux = null;
+            
+            $listStudent = $this->studentsFromApi();
+            foreach($listStudent as $student){
+                if($email == $student->getEmail()){
+                    $studentAux = $student;                    
+                }                
+            }
+
+            
+            return $studentAux;
+        }
+        catch(\Exception $ex){
+            throw $ex;
+        } 
     }
 
     // Usar DaoStudents como recolector de la API
     public function updateFromApi(){
         $listStudent = $this->studentsFromApi();
-        foreach($listStudent as $student){
-            if(!($this->exist($student->getEmail()))){
-                $this->add($student);
-            }
+        foreach($listStudent as $student)
+        {                
+            $this->add($student);
         }
     }
     
@@ -129,7 +160,7 @@ class DaoStudents implements Idao{
 
             return $object;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }
@@ -149,7 +180,7 @@ class DaoStudents implements Idao{
 
             return $object;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }
@@ -168,7 +199,7 @@ class DaoStudents implements Idao{
 
             return $object;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }
@@ -187,7 +218,7 @@ class DaoStudents implements Idao{
 
             return $object;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }
@@ -204,55 +235,43 @@ class DaoStudents implements Idao{
         
             return $array;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }
 
-    //supongo que aca hay que poner el if para hacer la comparacion con los mails y encontrar el student
-    public function add($account){
+    
+    public function add(Student $student)
+    {
+        try
+        {
+            $sql = "INSERT into students (studentId, careerId, firstName, lastName, dni, fileNumber, gender, birthDate, email, phoneNumber, active) 
+            values (:studentId, :careerId, :firstName, :lastName, :dni, :fileNumber, :gender, :birthDate, :email, :phoneNumber, :active);";
 
-        if(($account instanceof Account) && ($account->getStudent() instanceof Student)){
-            try{
-                // entran todos los atributos que se presentan en el bdConstruct de students
-                $sql = "INSERT into students (id, studentId, careerId, firstName, lastName, dni, fileNumber, gender, birthDate, email, password, phoneNumber, active) 
-                values (:id, :studentId, :careerId, :firstName, :lastName, :dni, :fileNumber, :gender, :birthDate, :email, :password, :phoneNumber, :active);";
-
-                $parameters['id'] = $account->getId();
-                // posiblemente borrar el toArray ya que el studentFromApi nos trae un arreglo del student
-                $parameters = $this->toArray($account->getStudent());
-
-                $this->connection = Connection::GetInstance();
-
-                $this->connection->ExecuteNonQuery($sql, $parameters);
-            }catch (Exception $ex){
-                throw $ex;
-            }
-        }
-    }
-
-    //posiblemente no ande
-    public function toArray($object){
-        $parameters = array();
-
-        if($object instanceof Student){
+            $parameters['studentId'] = $student->getStudentId();
+            $parameters['careerId'] = $student->getCareerId();
+            $parameters['firstName'] = $student->getFirstName();
+            $parameters['lastName'] = $student->getLastName();
+            $parameters['dni'] = $student->getDni();
+            $parameters['fileNumber'] = $student->getFileNumber();
+            $parameters['gender'] = $student->getGender();
+            $parameters['birthDate'] = $student->getBirthDate();
+            $parameters['email'] = $student->getEmail();
+            $parameters['phoneNumber'] = $student->getPhoneNumber();
+            $parameters['active'] = $student->getActive();
             
-            $parameters['studentId'] = $object->getStudentId();
-            $parameters['careerId'] = $object->getCareerId();
-            $parameters['firstName'] = $object->getFirstName();
-            $parameters['lastName'] = $object->getLastName();
-            $parameters['dni'] = $object->getDni();
-            $parameters['fileNumber'] = $object->getFileNumber();
-            $parameters['gender'] = $object->getGender();
-            $parameters['birthDate'] = $object->getBirthDate();
-            $parameters['email'] = $object->getEmail();
-            $parameters['password'] = $object->getPassword();
-            $parameters['phoneNumber'] = $object->getPhoneNumber();
-            $parameters['active'] = $object->getActive();
+            $this->connection = Connection::GetInstance();
+
+            $this->connection->ExecuteNonQuery($sql, $parameters);
+        }
+        
+        catch(\Exception $ex)
+        {
+            throw $ex;
             
         }
-        return $parameters;
-    }
+        
+    }    
     
     public function mapeo($value){
    
@@ -265,8 +284,7 @@ class DaoStudents implements Idao{
         $student->setFileNumber($value["fileNumber"]);
         $student->setGender($value["gender"]);
         $student->setBirthDate($value["birthDate"]);
-        $student->setEmail($value["email"]);
-        $student->setPassword($value["password"]);
+        $student->setEmail($value["email"]);        
         $student->setPhoneNumber($value["phoneNumber"]);
         $student->setActive($value["active"]);
 

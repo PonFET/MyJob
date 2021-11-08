@@ -3,88 +3,97 @@ namespace Controllers;
 
 use Daos\DaoAccounts as DaoAccounts;
 use models\Account as Account;
-use Daos\DaoStudents;
+use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
 use PDOException;
 
+
+
 class AccountController{
     private $daoAccount;
+    private $daoStudent;  
+      
 
     function __construct(){
         $this->daoAccount = daoAccounts::GetInstance();
+        $this->daoStudent = new DaoStudents(); 
+        
     }
 
-    public function verify($email = "", $password = ""){
-        if($this->daoAccount->exist($email)){
-            $account = $this->daoAccount->getByEmail($email);
+    public function verify($email='', $password='')
+    {        
+        if($this->daoAccount->exist($email))
+        {
+            $accountAux = new Account();
+            $accountAux = $this->daoAccount->getByEmail($email);
 
-            if($account->getPassword() == $password){
-                $_SESSION["account"] = $account;
-                if($_SESSION["account"]->getPrivilegios() == "admin"){
-                    require_once "views/list-account.php";
+            if($accountAux->getPassword() == $password)
+            {
+                if(!isset($_SESSION))
+                {
+                    session_start();
+                }
+                $_SESSION["account"] = $accountAux;
 
-                }
-                else if($_SESSION["account"]->getPrivilegios() == "student"){
-                    require_once "views/offer-list.php";
-                }
-            }
-            else{
-                $_SESSION["loginValidator"]["passValidator"] = "is-invalid";
-                $_SESSION["loginValidator"]["emailValidator"] = "is-valid";
-                require_once(VIEWS_PATH."login.php");
+                require_once(VIEWS_PATH . "offer-list.php");
             }
         }
-        else{
-            $_SESSION["loginValidator"]["emailValidator"] = "is-invalid";
+        else
+        {
+            //no existe   
             require_once(VIEWS_PATH."login.php");
         }
     }
 
-    public function register(){
+    public function register($message=''){
         require_once "views/signup.php";
     }
 
     // Creo que no es necesario enviarle todos los parametros de Student, ya que este obtiene todos sus datos desde la API, recibiendo el email
     // podemos comparar con la API para saber cual student tiene el mismo email, si no existe deberiamos devolverlo al register()
     // Si hacemos esto modificar el metodo.
-    public function create($email, $password, $rPassword){
-        $daoStudent = $daoStudents::GetInstance();
+    public function create($email, $password, $rPassword){        
 
-        // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
+        if($password == $rPassword)
+        {
+            if($this->daoStudent->exist($email) == false)
+            {
+                $studentAux = new Student();                
+                $studentAux = $this->daoStudent->getStudentByEmailAPI($email);                 
+                $account = new Account($email, $password, $privilegios='student', $studentAux->getStudentId());
 
-        // Aun no funciona
-        $_SESSION['registerValidator']['emailAPI'] = ($this->daoStudent->existAPI($email)) ? 'is-valid' : 'is-invalid';
-        
-        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
-
-        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid' || $_SESSION['registerValidator']['emailAPI'] == 'is-valid'){
-            $this->register();
-        }
-        else{
-            unset($_SESSION['registerValidator']);
-
-            $account = new Account(0, $email, $password, "student");
-
-            $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
-
-            try{
-                $this->daoAccount->add($account);
-
-                $_SESSION['account'] = $account;
+                try
+                {                    
+                    $this->daoAccount->add($account);
+                    session_start();
+                    $_SESSION['account'] = $account;
+                    require_once "views/offer-list.php";
+                }
                 
-                require_once "views/offer-list.php";
-
+                catch(\Exception $ex)
+                {
+                    throw $ex;
+                }
             }
-            catch(PDOException $p){
-
+            
+            else
+            {
+                //mail ya registrado
+                $this->register($message='El mail ya está registrado.');
             }
+        }
+        
+        else
+        {
+            //la contraseña no coincide
+            $this->register($message='Las contraseñas no coinciden.');
         }
     }
+    
 
     // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
     public function createStudent($email, $password, $rPassword){
-        $daoStudent = $daoStudents::GetInstance();
+        $daoStudent = $this->daoStudent::GetInstance();
 
         // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
         $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
@@ -157,9 +166,7 @@ class AccountController{
         
         unset($_SESSION['loginValidator']); 
 
-        $loginController = new LoginController();
-        $loginController->init();
-        //header
+        header("location: " . FRONT_ROOT . "index.php");
     }
 
     public function viewAccount(){
@@ -177,7 +184,7 @@ class AccountController{
 
     public function update($password, $rPassword){
 
-        $daoStudent = $daoStudents::getInstance();
+        $daoStudent = $daoStudent::getInstance();
 
         $accountOriginal = $_SESSION['account'];
         

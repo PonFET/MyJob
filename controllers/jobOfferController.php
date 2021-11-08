@@ -3,7 +3,7 @@
 
     use Daos\DaoJobOffers as DAOJobOffers;
     use Exception;
-    use Daos\DaoJobPosition as DAOJobPositions;       
+    use Daos\DaoJobPositions as DAOJobPositions;       
     use Daos\DaoCompanies as DAOCompanies;
     use models\Account as Account;
     use models\jobOffer as JobOffer;
@@ -18,14 +18,14 @@
         {
             $this->daoJobOffers = new DAOJobOffers();
             $this->daoCompanies = new DAOCompanies();
-            //$this->daoJobPositions = new DAOJobPositions(); || Un DAO llama a otro DAO si precisa info.
+            $this->daoJobPositions = new DAOJobPositions();
         }
 
 
 
-        public function showOfferView($message)
+        public function showOfferView($message='')
         {
-            session_start();
+            //session_start();
 
             $offerList = $this->daoJobOffers->getAllOffers();
             $offXposList = $this->daoJobOffers->getAllOffersbyPosition();
