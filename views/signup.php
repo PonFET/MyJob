@@ -1,4 +1,10 @@
-
+<?php
+    include_once(VIEWS_PATH."nav-bar.php");
+    if($message != '')
+    {
+        echo '<script>alert(' . $message . ')</script>';
+    }
+?>
 
 <div class="container-fluid">
     <div class="row justify-content-center">
@@ -41,5 +47,7 @@
     tenga ese student para ingresarlo a los parametros del create.
     Esto deberian ser especificaiones adheridas al propio create sea de account o de student.
 ->
+
+<?php include_once(VIEWS_PATH . "footer.php"); ?>
 
 

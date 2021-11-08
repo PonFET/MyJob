@@ -1,4 +1,7 @@
-<?php var_dump($_POST); ?>
+<?php
+    //var_dump($_POST);
+    include_once(VIEWS_PATH."nav-bar.php");
+?>
 
 <div class="container-fluid">
         <div class="row justify-content-center">

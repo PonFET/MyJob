@@ -1,5 +1,6 @@
 <?php
     require_once(VIEWS_PATH."header.php");
+    include_once(VIEWS_PATH."nav-bar.php");
 ?>
 
 <table border="2" align="center" cellspacing="5px">

@@ -29,9 +29,9 @@
             require_once(VIEWS_PATH."add-company.php");
         }
 
-        public function add($companyName, $location, $description, $email, $phoneNumber)
+        public function add($companyName, $location, $description, $email, $phoneNumber, $cuit)
         {
-            $company = new Company($companyName, $location, $description, $email, $phoneNumber);
+            $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
 
             $this->daoCompany->add($company);
 
@@ -39,11 +39,12 @@
         }
 
         public function showModify($companyId){
+            
             $company = $this->daoCompany->getById($companyId);
             require_once(VIEWS_PATH."update-company.php");
         }
 
-        public function modify($companyId, $companyName, $location, $description, $email, $phoneNumber)
+        public function modify($companyId, $companyName, $location, $description, $email, $phoneNumber, $cuit)
         {
             $company = new Company();
             $company->setCompanyId($companyId);
@@ -52,6 +53,7 @@
             $company->setDescription($description);
             $company->setEmail($email);
             $company->setPhoneNumber($phoneNumber);
+            $company->setCuit($cuit);
 
             $this->daoCompany->update($company);
 
@@ -79,6 +81,8 @@
         
         public function showList(){
 
+            //session_start();
+            
             $arrayCompany = $this->daoCompany->getAll();
     
             require_once(VIEWS_PATH."list-company.php");
@@ -86,6 +90,8 @@
 
         public function adminList(){
 
+            //session_start();
+            
             $arrayCompany = $this->daoCompany->getAll();
             
             require_once(VIEWS_PATH."admin-company.php");
