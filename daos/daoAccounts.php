@@ -7,7 +7,7 @@ use models\Account as Account;
 use Daos\DaoStudents as DaoStudents;
 use PDOException;
 
-class DaoAccounts implements Idao{
+class DaoAccounts{
     private $connection;
     private static $instance = null;
 

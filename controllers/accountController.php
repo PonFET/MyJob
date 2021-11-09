@@ -86,6 +86,7 @@ class AccountController{
         else{
 
                 $_SESSION["email"] = $email;
+                $_SESSION["privilegios"] = $privilegios;
                 header("location:".FRONT_ROOT."Student/addPassword");
 
         }
@@ -96,12 +97,12 @@ class AccountController{
         require_once "views/confirmPriv.php";
     }
 
-    public function create($email,$password, $rPassword,$id, $privilegios){
+    public function create($email,$password, $rPassword, $privilegios){
 
         try{
             if($password == $rPassword){
                                
-                $account = new Account($id, $email, $password, $privilegios);
+                $account = new Account($email, $password, $privilegios);
       
                 $this->daoAccount->add($account);
 
@@ -112,12 +113,13 @@ class AccountController{
 
                 require_once "views/offer-list.php";
 
-
             }
             else{
 
                 //la contraseña no coincide
-                $this->daoStudent->addPassword($message='Las contraseñas no coinciden.');
+                $_SESSION["email"] = $email;
+                $_SESSION["privilegios"] = $privilegios;
+                header("location:".FRONT_ROOT."Student/addPassword");
 
             }
         }
@@ -126,7 +128,6 @@ class AccountController{
         }
 
     }
-
 
 /*
     public function create($email, $password, $rPassword, $privilegios){        

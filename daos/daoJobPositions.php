@@ -7,7 +7,7 @@ use PDOExceptions;
 use models\JobPosition as jobPosition;
 use Daos\Connection as connection;
 
-class DaoJobPositions implements Idao{
+class DaoJobPositions{
     private $connection;
     private static $instance = null;
 
@@ -48,6 +48,7 @@ class DaoJobPositions implements Idao{
         return $listJobPosition;
     }
 
+    //NO USAR!!
     public function updateFromApi(){
         $listJobPosition = $this->jobPositionsFromApi();
         foreach($listJobPosition as $jobPosition){

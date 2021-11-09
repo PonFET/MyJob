@@ -70,21 +70,6 @@ class DaoStudents implements Idao{
         }
     }
 
-    // utilizar este metodo si el de abajo no funciona
-    public function getStudentByEmailAPI2($email){
-        $this->updateFromApi();
-
-        $i=0;
-        while($i < count($this->listStudent) && $this->listStudent[$i]->getEmail()!=$email){
-            $i++;
-        }
-        if($i < count($this->listStudent)){
-            return $this->listStudent[$i];
-        }else{
-            return null;
-        }
-    }
-
     public function getStudentByEmailAPI($email){
         try{
             
@@ -104,7 +89,7 @@ class DaoStudents implements Idao{
         } 
     }
 
-    // Usar DaoStudents como recolector de la API
+    // NO USAR!!
     public function updateFromApi(){
         $listStudent = $this->studentsFromApi();
         foreach($listStudent as $student)

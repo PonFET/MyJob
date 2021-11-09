@@ -46,8 +46,8 @@ class StudentController{
     public function addPassword($message=''){
 
         $email = $_SESSION["email"];
+        $privilegios = $_SESSION["privilegios"];
 
-        //verificar cual de los dos metodos funciona
         $student = $this->daoStudent->getStudentByEmailAPI($email);
 
         $career = $this->daoCareer->getCareerByIdAPI($student->getCareerId());

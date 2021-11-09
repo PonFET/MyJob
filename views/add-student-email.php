@@ -10,7 +10,7 @@ include_once(VIEWS_PATH."nav-bar.php");
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">
             <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/registerStudent" method="POST">
-                <h1>Ingresar Email:</h1>
+                <h2>Ingresar Email:</h2>
 
                 <div class="form-row">
                     <div class="col-3">

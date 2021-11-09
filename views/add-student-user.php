@@ -4,17 +4,12 @@ include_once(VIEWS_PATH."nav-bar.php");
 
 ?>
 
-<!-- como dejar el id de cuenta -->
-<input type="hidden" value="default" name="id">
-<input type="hidden" value="student" name="privilegios">
-<input type="hidden" value="<?php echo $student->getStudentId() ?>">
 
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-12 col-sm-6 col-md-3">
 
             <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/create" method="POST">
-                <h1>Verificar Datos:</h1>
+                <h2>Verificar Datos:</h2>
                 <div class="row d-flex justify-content-center">
 
                     <div class="col-3">
@@ -64,12 +59,28 @@ include_once(VIEWS_PATH."nav-bar.php");
                         <label for="rPassword" class="form-label">Repita la contrasenia:</label>
                         <input type="password" class="form-control mb- lg" name="rPassword" required>
                     </div>
-                    
+
+                </div>
+
+                <br>
+
+                <div>
+                    <div class="col-3">
+                        <label for="email" class="form-label"></label>
+                        <input type="hidden" value="email" name="email">
+                    </div>
+                    <div class="col-3">
+                        <label for="privilegios" class="form-label"></label>
+                        <input type="hidden" value="privilegios" name="privilegios">
+                    </div>
                 </div>
 
 
-                <button type="submit" class="btn btn-primary">Crear cuenta</button>
+                <div>
+                    <button type="submit" class="btn btn-primary">Crear cuenta</button>
+                </div>
+
             </form>
-        </div>
+        
     </div>
 </div>
