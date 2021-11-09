@@ -35,18 +35,25 @@
                         <label for="rPassword">Repetir Password</label>
                         <input type="password" class="form-control" id="rPassword" name="rPassword">
                 </div>
+
+                <br>
+                
+                <div class="row">
+                    <div>
+                        <select name="select">
+                            <option value="student" name="privilegios" id="student" selected>Estudiante</option>
+                            <option value="company" name="privilegios" id="company">Compañia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <br>
                 
                 <button type="submit" class="btn btn-primary">Registrarse</button>
             </form>
         </div>
     </div>
 </div>
-<!--Si usamos el create de account con los parametros de student llamandolos: create(studentid, etc), tendriamos que crear aqui los input"hidden" que guarden la informacion.
-    Ya que si se ingresa un mail que no es de la API no deberia ser posible crear la cuenta de usuario, avisandole al creador que no tiene email en la API o la cuenta ya existe.
-    Entonces tendriamos que permitir que se ingresen los datos email y password, hacer que la funcione compare con la API si tiene un mail identico y ahi igualar los datos que
-    tenga ese student para ingresarlo a los parametros del create.
-    Esto deberian ser especificaiones adheridas al propio create sea de account o de student.
-->
 
 <?php include_once(VIEWS_PATH . "footer.php"); ?>
 

@@ -5,18 +5,22 @@ use Daos\DaoAccounts as DaoAccounts;
 use models\Account as Account;
 use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
+use Daos\DaoCompanies as DaoCompanies;
+use models\Company as Company;
 use PDOException;
 
 
 
 class AccountController{
     private $daoAccount;
-    private $daoStudent;  
+    private $daoStudent; 
+    private $DaoCompany;  
       
 
     function __construct(){
         $this->daoAccount = daoAccounts::GetInstance();
         $this->daoStudent = new DaoStudents(); 
+        $this->DaoCompany = new DaoCompanies(); 
         
     }
 
@@ -35,7 +39,7 @@ class AccountController{
                 }
                 $_SESSION["account"] = $accountAux;
 
-                require_once(VIEWS_PATH . "offer-list.php");
+                header("location:".FRONT_ROOT."Student/viewOffer");
             }
         }
         else
@@ -49,44 +53,57 @@ class AccountController{
         require_once "views/signup.php";
     }
 
-    // Creo que no es necesario enviarle todos los parametros de Student, ya que este obtiene todos sus datos desde la API, recibiendo el email
-    // podemos comparar con la API para saber cual student tiene el mismo email, si no existe deberiamos devolverlo al register()
-    // Si hacemos esto modificar el metodo.
-    public function create($email, $password, $rPassword){        
+    public function create($email, $password, $rPassword, $privilegios){        
+        
+        $studentList = $daoStudent->getAll();
+        $companyList = $DaoCompany->getAll();
 
-        if($password == $rPassword)
-        {
-            if($this->daoStudent->exist($email) == false)
+        try{
+            if($password == $rPassword)
             {
-                $studentAux = new Student();                
-                $studentAux = $this->daoStudent->getStudentByEmailAPI($email);                 
-                $account = new Account($email, $password, $privilegios='student', $studentAux->getStudentId());
+                if($privilegios == "student"){
 
-                try
-                {                    
-                    $this->daoAccount->add($account);
-                    session_start();
-                    $_SESSION['account'] = $account;
-                    require_once "views/offer-list.php";
-                }
-                
-                catch(\Exception $ex)
-                {
-                    throw $ex;
+                    if($this->daoStudent->exist($email) == true){
+
+                        $this->register($message='El mail ya está registrado en Base de Datos.');
+                    }
+                    else if($this->daoStudent->existAPI($email) == true){
+
+                        $this->register($message='El mail no está registrado en API.');
+                        
+                    }
+                    else{
+                        
+                            $_SESSION["email"] = $email;
+                            $_SESSION["password"] = $password;
+
+                            if($privilegios == "student"){
+                                header("location:".FRONT_ROOT."Student/viewOffer");
+                            }else{
+                                header("location:".FRONT_ROOT."Company/ShowAddView");
+                            }
+                            
+                          /* Esto estaba antes cuando solo era student.
+                          $studentAux = new Student();                
+                            $studentAux = $this->daoStudent->getStudentByEmailAPI($email);                 
+                            $account = new Account($email, $password, $privilegios='student', $studentAux->getStudentId());
+                  
+                            $this->daoAccount->add($account);
+                            session_start();
+                            $_SESSION['account'] = $account;
+                            require_once "views/offer-list.php";*/
+
+                    }            
                 }
             }
             
-            else
-            {
-                //mail ya registrado
-                $this->register($message='El mail ya está registrado.');
+            else{
+                //la contraseña no coincide
+                $this->register($message='Las contraseñas no coinciden.');
             }
+
         }
-        
-        else
-        {
-            //la contraseña no coincide
-            $this->register($message='Las contraseñas no coinciden.');
+        catch(PDOException $p){
         }
     }
     

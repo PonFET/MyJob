@@ -9,6 +9,7 @@ use Exception;
 
 class DaoStudents implements Idao{
     private $connection;
+    private $studentList = array();
     private static $instance = null;
 
     public function __construct(){
@@ -20,19 +21,6 @@ class DaoStudents implements Idao{
         }
         return self::$instance;
     }
-
-    /* este metodo no va a ser utilizado ya que no podemos modificar de la api
-    public function update($student){
-        try{
-
-            $this->connection = connection::GetInstance();
-
-            $this->connection->ExecuteNonQuery($sql, $parameters);
-        }
-        catch(Exception $ex){
-            throw $ex;
-        }
-    }*/
 
     public function exist($email)
     {
@@ -62,6 +50,17 @@ class DaoStudents implements Idao{
         }
     }
 
+    //revisando. Continuar mañana.
+    public function viewOffer(){
+        $email = $_SESSION["email"];
+        $password = $_SESSION["password"];
+        //verificar cual de los dos metodos funciona
+        $student = $this->getStudentByEmailAPI($email);
+
+        $career = $this->careerAPI->SearchById($student->getCareerId());
+        require_once(VIEWS_PATH . "offer-list.php");
+    }
+
     //verifica si el mail ingresado esta en la API, quizas la rta tenga que devolver la rta contraria.
     public function existAPI($email){
         try{
@@ -82,8 +81,22 @@ class DaoStudents implements Idao{
         }
     }
 
-    public function getStudentByEmailAPI($email)
-    {
+    // utilizar este metodo si el de abajo no funciona
+    public function getStudentByEmailAPI2($email){
+        $this->updateFromApi();
+
+        $i=0;
+        while($i < count($this->listStudent) && $this->listStudent[$i]->getEmail()!=$email){
+            $i++;
+        }
+        if($i < count($this->listStudent)){
+            return $this->listStudent[$i];
+        }else{
+            return null;
+        }
+    }
+
+    public function getStudentByEmailAPI($email){
         try{
             
             $studentAux = null;
@@ -95,7 +108,6 @@ class DaoStudents implements Idao{
                 }                
             }
 
-            
             return $studentAux;
         }
         catch(\Exception $ex){
