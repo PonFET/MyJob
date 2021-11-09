@@ -9,7 +9,7 @@ use Exception;
 
 class DaoStudents implements Idao{
     private $connection;
-    private $studentList = array();
+    private $listStudent = array();
     private static $instance = null;
 
     public function __construct(){
@@ -48,17 +48,6 @@ class DaoStudents implements Idao{
         {
             throw $ex;
         }
-    }
-
-    //revisando. Continuar mañana.
-    public function viewOffer(){
-        $email = $_SESSION["email"];
-        $password = $_SESSION["password"];
-        //verificar cual de los dos metodos funciona
-        $student = $this->getStudentByEmailAPI($email);
-
-        $career = $this->careerAPI->SearchById($student->getCareerId());
-        require_once(VIEWS_PATH . "offer-list.php");
     }
 
     //verifica si el mail ingresado esta en la API, quizas la rta tenga que devolver la rta contraria.

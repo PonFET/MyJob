@@ -3,6 +3,8 @@ namespace Controllers;
 
 use Daos\DaoStudents;
 use models\Student as student;
+use Daos\DaoCareers as DaoCareers;
+use models\Career as Career;
 use PDOException;
 
 //El studentController no tendra mucha utilidad ya que accountController tendra la mayoria de sus metodos haciendo su trabajo.
@@ -10,13 +12,11 @@ use PDOException;
 
 class StudentController{
     private $daoStudent;
-    private $statusController;
-    private $loginController;
+    private $daoCareer;  
 
     function __construct(){
         $this->daoStudent = daoStudents::getInstance();
-        $this->statusController = new StatusController();
-        $this->loginController = new LoginController();
+        $this->daoCareer = new DaoCareers(); 
     }
 
     public function verificar($email = "", $password = ""){
@@ -43,34 +43,16 @@ class StudentController{
         include "views/signup.php";
     }
 
-    public function create( $email, $password, $rPassword){
-        $daoStudent = $daoStudents::getInstance();
+    public function addPassword($message=''){
 
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
-        
-        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
+        $email = $_SESSION["email"];
 
-        if($_SESSION['registerValidator']['email'] == 'is-invalid' || $_SESSION['registerValidator']['password'] == 'is-invalid'){
-            $this->register();
-        }
-        else{
-            unset($_SESSION['registerValidator']);
+        //verificar cual de los dos metodos funciona
+        $student = $this->daoStudent->getStudentByEmailAPI($email);
 
-            $student = new Student(0, $email, $password, 1);
+        $career = $this->daoCareer->getCareerByIdAPI($student->getCareerId());
 
-            try{
-                $this->daoStudent->add($student);
-
-                $_SESSION['student'] = $student;
-
-                $statusController = new StatusController();
-                $statusController->typeSession();
-
-            }
-            catch(PDOException $p){
-
-            }
-        }
+        require_once(VIEWS_PATH . "add-student-user.php");
     }
 
     public function logOff(){

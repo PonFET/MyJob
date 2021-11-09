@@ -10,6 +10,7 @@ use Daos\Connection as connection;
 
 class DaoCareers implements Idao{
     private $connection;
+    private $listCareer = array();
     private static $instance = null;
 
     public function __construct(){
@@ -74,6 +75,21 @@ class DaoCareers implements Idao{
         catch(Exception $ex){
             throw $ex;
         }
+    }
+
+    public function getCareerByIdAPI($careerId){
+        $this->updateFromApi();
+
+        $i=0;
+        while($i < count($this->listCareer) && $this->listCareer[$i]->getEmail()!=$email){
+            $i++;
+        }
+        if($i < count($this->listCareer)){
+            return $this->listCareer[$i];
+        }else{
+            return null;
+        }
+
     }
 
     public function mapeo($value){

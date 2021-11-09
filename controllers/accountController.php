@@ -14,13 +14,13 @@ use PDOException;
 class AccountController{
     private $daoAccount;
     private $daoStudent; 
-    private $DaoCompany;  
+    private $daoCompany;  
       
 
     function __construct(){
         $this->daoAccount = daoAccounts::GetInstance();
         $this->daoStudent = new DaoStudents(); 
-        $this->DaoCompany = new DaoCompanies(); 
+        $this->daoCompany = new DaoCompanies(); 
         
     }
 
@@ -49,14 +49,90 @@ class AccountController{
         }
     }
 
-    public function register($message=''){
-        require_once "views/signup.php";
+    public function register(){
+        require_once "views/confirmPriv.php";
     }
 
+    public function confirmPriv($privilegios){
+
+        try{
+
+            $_SESSION["privilegios"] = $privilegios;
+
+            if($privilegios == "student"){
+                require_once(VIEWS_PATH."add-student-email.php");
+            }
+            else{
+                require_once(VIEWS_PATH."add-company-user.php");
+            }
+        }
+        catch(PDOException $p){
+
+        }
+
+    }
+
+    public function registerStudent($email, $privilegios){
+
+        if($this->daoStudent->exist($email) == true){
+
+            $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
+        }
+        else if($this->daoStudent->existAPI($email) == true){
+
+            $this->tryOtherEmail($message='El mail no está registrado en API.');
+            
+        }
+        else{
+
+                $_SESSION["email"] = $email;
+                header("location:".FRONT_ROOT."Student/addPassword");
+
+        }
+
+    }
+
+    public function tryOtherEmail($message=''){
+        require_once "views/confirmPriv.php";
+    }
+
+    public function create($email,$password, $rPassword,$id, $privilegios){
+
+        try{
+            if($password == $rPassword){
+                               
+                $account = new Account($id, $email, $password, $privilegios);
+      
+                $this->daoAccount->add($account);
+
+                /*
+                $subject= "Registrado";
+                $msg= "Te has registrado en nuestra MyJob.";
+                Email::send("fedu_zero@hotmail.com",$subject,$msg);*/
+
+                require_once "views/offer-list.php";
+
+
+            }
+            else{
+
+                //la contraseña no coincide
+                $this->daoStudent->addPassword($message='Las contraseñas no coinciden.');
+
+            }
+        }
+
+        catch(PDOException $p){
+        }
+
+    }
+
+
+/*
     public function create($email, $password, $rPassword, $privilegios){        
         
         $studentList = $daoStudent->getAll();
-        $companyList = $DaoCompany->getAll();
+        $companyList = $daoCompany->getAll();
 
         try{
             if($password == $rPassword)
@@ -91,7 +167,15 @@ class AccountController{
                             $this->daoAccount->add($account);
                             session_start();
                             $_SESSION['account'] = $account;
-                            require_once "views/offer-list.php";*/
+                            require_once "views/offer-list.php";
+                            */
+
+                            /* 
+                                
+                            $subject= "Registrado";
+                            $msg= "Te has registrado en nuestra MyJob.";
+                            Email::send("fedu_zero@hotmail.com",$subject,$msg);
+                            
 
                     }            
                 }
@@ -106,7 +190,7 @@ class AccountController{
         catch(PDOException $p){
         }
     }
-    
+    */
 
     // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
     public function createStudent($email, $password, $rPassword){
@@ -193,6 +277,10 @@ class AccountController{
         }else{
             require_once("views/login.php");
         }
+    }
+    
+    public function logIn(){
+        require_once("views/login.php");
     }
 
     public function editAccount(){
