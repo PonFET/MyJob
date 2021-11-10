@@ -18,8 +18,6 @@
 
         public function showCompanyView()
         {
-            session_start();
-            
             $companyList = $this->daoCompany->getAll();
 
             require_once(VIEWS_PATH . 'view-company.php');
@@ -81,8 +79,6 @@
         
         public function showList(){
 
-            //session_start();
-            
             $arrayCompany = $this->daoCompany->getAll();
     
             require_once(VIEWS_PATH."list-company.php");
@@ -90,8 +86,6 @@
 
         public function adminList(){
 
-            //session_start();
-            
             $arrayCompany = $this->daoCompany->getAll();
             
             require_once(VIEWS_PATH."admin-company.php");

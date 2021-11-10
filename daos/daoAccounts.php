@@ -57,7 +57,9 @@ class DaoAccounts{
 
             $this->connection = Connection::GetInstance();
             
-            $resultSet = $this->connection->Execute($sql, $parameters);            
+            $resultSet = $this->connection->Execute($sql, $parameters);
+
+            var_dump($resultSet);
 
             $object = $this->mapeo($resultSet);            
 
@@ -89,9 +91,7 @@ class DaoAccounts{
 
             $result = $this->connection->Execute($sql);
 
-            $array = $this->mapeo($result);
-
-            $object = !empty($array) ? $array[0] : [];
+            $object = $this->mapeo($result);            
 
             return $object;
         }
@@ -162,19 +162,30 @@ class DaoAccounts{
     public function getAll(){
         $sql = "SELECT * FROM accounts";
         $accountList = array();
-        try{
+        
+        try
+        {
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($sql);
             
-            if(!empty($resultSet)){ 
-                foreach ($resultSet as $row) {
-                    $aux = $this->mapeo($row);
-                    array_push($accountList,$aux);
-                }  
-            }
-            } catch (PDOException $ex) { 
-                throw $ex; 
-            } 
+            foreach ($resultSet as $row)
+            {                    
+                $account = new Account();
+                $account->setId($row["accountId"]);
+                $account->setEmail($row["email"]);
+                $account->setPassword($row["password"]);
+                $account->setStudentId($row["studentId"]);
+                $account->setPrivilegios($row["privilegeId"]);
+                array_push($accountList,$account);
+            }  
+        
+        }
+        
+        catch (PDOException $ex)
+        { 
+            throw $ex; 
+        }
+
         return $accountList;
     }
 

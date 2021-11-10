@@ -36,7 +36,7 @@
 
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <span class="h2 border-text"> <?php echo $jobOffer->offerDescription(); ?></span>
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getofferDescription(); ?></span>
                                 </div>
                             </div>
                             

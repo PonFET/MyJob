@@ -32,14 +32,10 @@ class AccountController{
             $accountAux = $this->daoAccount->getByEmail($email);
 
             if($accountAux->getPassword() == $password)
-            {
-                if(!isset($_SESSION))
-                {
-                    session_start();
-                }
+            {                
                 $_SESSION["account"] = $accountAux;
-
-                header("location:".FRONT_ROOT."Student/viewOffer");
+                
+                header("Location: showList");
             }
         }
         else
@@ -106,11 +102,6 @@ class AccountController{
       
                 $this->daoAccount->add($account);
 
-                /*
-                $subject= "Registrado";
-                $msg= "Te has registrado en nuestra MyJob.";
-                Email::send("fedu_zero@hotmail.com",$subject,$msg);*/
-
                 require_once "views/offer-list.php";
 
             }
@@ -128,70 +119,6 @@ class AccountController{
         }
 
     }
-
-/*
-    public function create($email, $password, $rPassword, $privilegios){        
-        
-        $studentList = $daoStudent->getAll();
-        $companyList = $daoCompany->getAll();
-
-        try{
-            if($password == $rPassword)
-            {
-                if($privilegios == "student"){
-
-                    if($this->daoStudent->exist($email) == true){
-
-                        $this->register($message='El mail ya está registrado en Base de Datos.');
-                    }
-                    else if($this->daoStudent->existAPI($email) == true){
-
-                        $this->register($message='El mail no está registrado en API.');
-                        
-                    }
-                    else{
-                        
-                            $_SESSION["email"] = $email;
-                            $_SESSION["password"] = $password;
-
-                            if($privilegios == "student"){
-                                header("location:".FRONT_ROOT."Student/viewOffer");
-                            }else{
-                                header("location:".FRONT_ROOT."Company/ShowAddView");
-                            }
-                            
-                          /* Esto estaba antes cuando solo era student.
-                          $studentAux = new Student();                
-                            $studentAux = $this->daoStudent->getStudentByEmailAPI($email);                 
-                            $account = new Account($email, $password, $privilegios='student', $studentAux->getStudentId());
-                  
-                            $this->daoAccount->add($account);
-                            session_start();
-                            $_SESSION['account'] = $account;
-                            require_once "views/offer-list.php";
-                            */
-
-                            /* 
-                                
-                            $subject= "Registrado";
-                            $msg= "Te has registrado en nuestra MyJob.";
-                            Email::send("fedu_zero@hotmail.com",$subject,$msg);
-                            
-
-                    }            
-                }
-            }
-            
-            else{
-                //la contraseña no coincide
-                $this->register($message='Las contraseñas no coinciden.');
-            }
-
-        }
-        catch(PDOException $p){
-        }
-    }
-    */
 
     // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
     public function createStudent($email, $password, $rPassword){
@@ -271,7 +198,7 @@ class AccountController{
         header("location: " . FRONT_ROOT . "index.php");
     }
 
-    public function viewAccount(){
+    public function viewAccount(){ //Poner en NavBar
         if(isset($_SESSION['account'])){
             include ROOT . VIEWS_PATH . "nav-bar.php";
             include ROOT . VIEWS_PATH . "view-account.php";
