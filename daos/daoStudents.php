@@ -9,6 +9,7 @@ use Exception;
 
 class DaoStudents implements Idao{
     private $connection;
+    private $listStudent = array();
     private static $instance = null;
 
     public function __construct(){
@@ -20,19 +21,6 @@ class DaoStudents implements Idao{
         }
         return self::$instance;
     }
-
-    /* este metodo no va a ser utilizado ya que no podemos modificar de la api
-    public function update($student){
-        try{
-
-            $this->connection = connection::GetInstance();
-
-            $this->connection->ExecuteNonQuery($sql, $parameters);
-        }
-        catch(Exception $ex){
-            throw $ex;
-        }
-    }*/
 
     public function exist($email)
     {
@@ -82,8 +70,7 @@ class DaoStudents implements Idao{
         }
     }
 
-    public function getStudentByEmailAPI($email)
-    {
+    public function getStudentByEmailAPI($email){
         try{
             
             $studentAux = null;
@@ -95,7 +82,6 @@ class DaoStudents implements Idao{
                 }                
             }
 
-            
             return $studentAux;
         }
         catch(\Exception $ex){
@@ -103,7 +89,7 @@ class DaoStudents implements Idao{
         } 
     }
 
-    // Usar DaoStudents como recolector de la API
+    // NO USAR!!
     public function updateFromApi(){
         $listStudent = $this->studentsFromApi();
         foreach($listStudent as $student)

@@ -5,18 +5,22 @@ use Daos\DaoAccounts as DaoAccounts;
 use models\Account as Account;
 use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
+use Daos\DaoCompanies as DaoCompanies;
+use models\Company as Company;
 use PDOException;
 
 
 
 class AccountController{
     private $daoAccount;
-    private $daoStudent;  
+    private $daoStudent; 
+    private $daoCompany;  
       
 
     function __construct(){
         $this->daoAccount = daoAccounts::GetInstance();
         $this->daoStudent = new DaoStudents(); 
+        $this->daoCompany = new DaoCompanies(); 
         
     }
 
@@ -41,51 +45,80 @@ class AccountController{
         }
     }
 
-    public function register($message=''){
-        require_once "views/signup.php";
+    public function register(){
+        require_once "views/confirmPriv.php";
     }
 
-    // Creo que no es necesario enviarle todos los parametros de Student, ya que este obtiene todos sus datos desde la API, recibiendo el email
-    // podemos comparar con la API para saber cual student tiene el mismo email, si no existe deberiamos devolverlo al register()
-    // Si hacemos esto modificar el metodo.
-    public function create($email, $password, $rPassword){        
+    public function confirmPriv($privilegios){
 
-        if($password == $rPassword)
-        {
-            if($this->daoStudent->exist($email) == false)
-            {
-                $studentAux = new Student();                
-                $studentAux = $this->daoStudent->getStudentByEmailAPI($email);                 
-                $account = new Account($email, $password, $privilegios='student', $studentAux->getStudentId());
+        try{
 
-                try
-                {                    
-                    $this->daoAccount->add($account);
-                    session_start();
-                    $_SESSION['account'] = $account;
-                    require_once "views/offer-list.php";
-                }
-                
-                catch(\Exception $ex)
-                {
-                    throw $ex;
-                }
+            $_SESSION["privilegios"] = $privilegios;
+
+            if($privilegios == "student"){
+                require_once(VIEWS_PATH."add-student-email.php");
             }
+            else{
+                require_once(VIEWS_PATH."add-company-user.php");
+            }
+        }
+        catch(PDOException $p){
+
+        }
+
+    }
+
+    public function registerStudent($email, $privilegios){
+
+        if($this->daoStudent->exist($email) == true){
+
+            $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
+        }
+        else if($this->daoStudent->existAPI($email) == true){
+
+            $this->tryOtherEmail($message='El mail no está registrado en API.');
             
-            else
-            {
-                //mail ya registrado
-                $this->register($message='El mail ya está registrado.');
+        }
+        else{
+
+                $_SESSION["email"] = $email;
+                $_SESSION["privilegios"] = $privilegios;
+                header("location:".FRONT_ROOT."Student/addPassword");
+
+        }
+
+    }
+
+    public function tryOtherEmail($message=''){
+        require_once "views/confirmPriv.php";
+    }
+
+    public function create($email,$password, $rPassword, $privilegios){
+
+        try{
+            if($password == $rPassword){
+                               
+                $account = new Account($email, $password, $privilegios);
+      
+                $this->daoAccount->add($account);
+
+                require_once "views/offer-list.php";
+
+            }
+            else{
+
+                //la contraseña no coincide
+                $_SESSION["email"] = $email;
+                $_SESSION["privilegios"] = $privilegios;
+                header("location:".FRONT_ROOT."Student/addPassword");
+
             }
         }
-        
-        else
-        {
-            //la contraseña no coincide
-            $this->register($message='Las contraseñas no coinciden.');
+
+        catch(PDOException $p){
         }
+
     }
-    
 
     // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
     public function createStudent($email, $password, $rPassword){
@@ -172,6 +205,10 @@ class AccountController{
         }else{
             require_once("views/login.php");
         }
+    }
+    
+    public function logIn(){
+        require_once("views/login.php");
     }
 
     public function editAccount(){

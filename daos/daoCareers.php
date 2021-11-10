@@ -8,8 +8,9 @@ use PDOExceptions;
 use models\Career as career;
 use Daos\Connection as connection;
 
-class DaoCareers implements Idao{
+class DaoCareers{
     private $connection;
+    private $listCareer = array();
     private static $instance = null;
 
     public function __construct(){
@@ -49,6 +50,7 @@ class DaoCareers implements Idao{
         return $listCareer;
     }
 
+    //NO USAR!!
     public function updateFromApi(){
         $listCareer = $this->careersFromApi();
         foreach($listCareer as $career)
@@ -74,6 +76,25 @@ class DaoCareers implements Idao{
         catch(Exception $ex){
             throw $ex;
         }
+    }
+
+    public function getCareerByIdAPI($careerId){
+        try{
+            
+            $careerAux = null;
+            
+            $listCareer = $this->careersFromApi();
+            foreach($listCareer as $career){
+                if($careerId == $career->getCareerId()){
+                    $careerAux = $career;                    
+                }                
+            }
+
+            return $careerAux;
+        }
+        catch(\Exception $ex){
+            throw $ex;
+        } 
     }
 
     public function mapeo($value){
