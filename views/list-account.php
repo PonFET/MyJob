@@ -23,7 +23,7 @@
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
                                     <span class="h2 border-text"> <?php echo $account->getEmail(); ?></span>
-                                    <span class="h2 border-text"> <?php echo $account->getStudent()->getFirstName(); ?></span>
+                                    <span class="h2 border-text"> <?php echo $account->getPrivilegios(); ?></span>
                                 </div>
                             </div>
                         </div>

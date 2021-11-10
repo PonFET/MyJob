@@ -25,8 +25,6 @@
 
         public function showOfferView($message='')
         {
-            //session_start();
-
             $offerList = $this->daoJobOffers->getAllOffers();
             $offXposList = $this->daoJobOffers->getAllOffersbyPosition();
             $positionList = $this->daoJobPositions->getAll();   //Armar array de jobpositions desde DAO.
@@ -48,19 +46,15 @@
         
         public function ShowAddOfferView()
         {
-            session_start();
-
-            $positionList = $this->daoJobPositions->getAll();
+            $positionList = $this->daoJobPositions->getAll();            
             $companiesList = $this->daoCompanies->getAll();
 
             require_once(VIEWS_PATH . 'add-offer.php');
         }
 
-        public function ShowListAccepted()
+        public function ShowListActive()
         {
-            session_start();
-
-            $offerList = $this->daoJobOffers->getAllEnabled();
+            $offerList = $this->daoJobOffers->getAllEnabledOffers();
             $companiesList = $this->daoCompanies->getAll();
             $positionList = $this->daoJobPositions->getAll();
 

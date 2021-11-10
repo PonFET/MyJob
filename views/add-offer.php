@@ -12,21 +12,22 @@
                     <div class="form-group col-md-6">
 
                         <div>
-                            <label for="cine" class="text-light" style="width: 68px">Compañía:</label>
+                            <label class="text-dark" style="width: 68px">Compañía:</label><br>
                             <select name="companyId" id="companyId" required>
                                     <?php foreach($companiesList as $company) { ?>
                                         <option value="<?php echo $company->getCompanyId(); ?>"><?php echo $company->getCompanyName(); ?></option>
                                     <?php } ?>
-                        </div>
+                        </div><br>
+
 
                         <div>
-                            <label for="cine" class="text-light">Descripción:</label>
+                            <label class="text-dark">Descripción:</label>
                             <input type="textarea" name="offerDescription" id="offerDescription" required>
                         </div>                        
 
                         <div>
-                            <label for="cine" class="text-light" style="width: 68px">Posiciones buscadas:</label>                            
-                                    <?php foreach($PositionList as $jobPosition) { ?>
+                            <label class="text-dark" style="width: 68px">Posiciones buscadas:</label>                            
+                                    <?php foreach($positionList as $jobPosition) { ?>
                                         <tr>
                                             <td>
                                                 <input type="checkbox" name="jobPositionIdArray[]" id="jobPositionIdArray[]" value="<?php echo $jobPosition->getJobPositionId(); ?>">                                                
