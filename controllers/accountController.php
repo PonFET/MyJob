@@ -70,7 +70,7 @@ class AccountController{
 
     public function registerStudent($email, $privilegios){
 
-        if($this->daoStudent->exist($email) == true){
+        if($this->daoAccount->exist($email) == true){
 
             $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
         }
@@ -93,14 +93,19 @@ class AccountController{
         require_once "views/confirmPriv.php";
     }
 
-    public function create($email,$password, $rPassword, $privilegios){
+    public function create($email, $password, $rPassword, $privilegios){
 
         try{
+            
             if($password == $rPassword){
                                
                 $account = new Account($email, $password, $privilegios);
       
                 $this->daoAccount->add($account);
+                
+               /* $_SESSION["account"] = $account;
+                
+                header("Location: showListStudent");*/
 
                 require_once "views/offer-list.php";
 
@@ -111,6 +116,43 @@ class AccountController{
                 $_SESSION["email"] = $email;
                 $_SESSION["privilegios"] = $privilegios;
                 header("location:".FRONT_ROOT."Student/addPassword");
+
+            }
+        }
+
+        catch(PDOException $p){
+        }
+
+    }
+
+    public function createCompany($companyName,$location, $description, $phoneNumber, $cuit, $email, $password, $rPassword, $privilegios){
+
+        try{
+            if($this->daoCompany->exist($email) == true){
+
+                $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
+
+            }
+
+            if($password == $rPassword){
+                               
+                $account = new Account($email, $password, $privilegios);
+      
+                $this->daoAccount->add($account);
+
+                $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
+
+                $this->daoCompany->add($company);
+
+                $_SESSION["account"] = $account;
+                
+                header("Location: showListCompany");
+
+            }
+            else{
+
+                //la contraseña no coincide
+                require_once "views/confirmPriv.php";
 
             }
         }
@@ -251,6 +293,18 @@ class AccountController{
 
         require_once(VIEWS_PATH."list-account.php");
     }
+
+    public function showListCompany(){
+
+        require_once(VIEWS_PATH."view-company.php");
+    }
+
+    /*public function showListStudent(){
+
+        $arrayAccount = $this->daoAccount->getAll();
+
+        require_once(VIEWS_PATH."list-account.php");
+    }*/
 
 
 }
