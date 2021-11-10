@@ -28,14 +28,10 @@ class AccountController{
             $accountAux = $this->daoAccount->getByEmail($email);
 
             if($accountAux->getPassword() == $password)
-            {
-                if(!isset($_SESSION))
-                {
-                    session_start();
-                }
+            {                
                 $_SESSION["account"] = $accountAux;
-
-                require_once(VIEWS_PATH . "offer-list.php");
+                
+                header("Location: showList");
             }
         }
         else
@@ -169,7 +165,7 @@ class AccountController{
         header("location: " . FRONT_ROOT . "index.php");
     }
 
-    public function viewAccount(){
+    public function viewAccount(){ //Poner en NavBar
         if(isset($_SESSION['account'])){
             include ROOT . VIEWS_PATH . "nav-bar.php";
             include ROOT . VIEWS_PATH . "view-account.php";

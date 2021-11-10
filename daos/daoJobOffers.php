@@ -23,7 +23,7 @@
             $resultSet = null;           
             try //Registro nuevo JobOffer
             {
-                $query = 'INSERT INTO' . $this->tableName . ' (companyId, offerDescription) VALUES (:companyId, :offerDescription);';
+                $query = 'INSERT INTO ' . $this->tableName . ' (companyId, offerDescription) VALUES (:companyId, :offerDescription);';
 
                 $parameters['companyId'] = $jobOffer->getCompanyId();
                 $parameters['offerDescription'] = $jobOffer->getOfferDescription();
@@ -41,7 +41,7 @@
             {                
                 $query = 'SELECT LAST_INSERT_ID() FROM joboffers;';
                 $this->connection = Connection::GetInstance();
-                $resultSet = $this->connection->Execute($query);
+                $resultSet = $this->connection->Execute($query);                
             }
             
             catch (Exception $ex)
@@ -50,23 +50,23 @@
             }
             
             
-            foreach ($jobOffer->getArrayJobPos() as $jobPositionId) //Hago un registro en OffersXPosition por cada jobPosition en el array
+            try //Hago un registro en OffersXPosition por cada jobPosition en el array
             {
-                try 
-                {
+                foreach ($jobOffer->getArrayJobPos() as $jobPositionId)
+                {                    
                     $query = 'INSERT INTO offersxposition (offerId, jobPositionId) VALUES (:offerId, :jobPositionId);';
 
-                    $parameters['offerId'] = $resultSet;
-                    $parameters['jobPositionId'] = $jobPositionId;
+                    $parametersOffer['offerId'] = $resultSet[0][0];
+                    $parametersOffer['jobPositionId'] = $jobPositionId;                    
 
                     $this->connection = Connection::GetInstance();
-                    $this->connection->ExecuteNonQuery($query, $parameters);
-                }
+                    $this->connection->ExecuteNonQuery($query, $parametersOffer);
+                }                
+            }
 
-                catch (Exception $ex)
-                {
-                    throw $ex;
-                }
+            catch (Exception $ex)
+            {
+                throw $ex;
             }
             //hacer un solo try/catch
         }
@@ -144,6 +144,32 @@
                 $resultSet = 0;
 
                 $query = 'SELECT * FROM ' . $this->tableName;
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                foreach ($resultSet as $fila)
+                {
+                    $aux = $this->parseToObject($fila);
+
+                    array_push($this->jobOfferList, $aux);
+                }
+
+                return $this->jobOfferList;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function getAllEnabledOffers()
+        {
+            try
+            {
+                $resultSet = 0;
+
+                $query = 'SELECT * FROM ' . $this->tableName . ' WHERE enable=1';
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
 

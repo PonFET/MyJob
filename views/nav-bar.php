@@ -18,11 +18,11 @@
         </li>       
 
         <li class="nav-item">
-            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/add">Agregar Propuesta Laboral</a>
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showAddOfferView">Agregar Propuesta Laboral</a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showListAccepted">Ver Propuestas Aceptadas</a>
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showListActive">Ver Propuestas Activas</a>
         </li>
 
         <li class="nav-item">

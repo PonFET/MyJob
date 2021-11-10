@@ -94,7 +94,17 @@ class DaoJobPositions implements Idao{
 
             $result = $this->connection->Execute($sql);
 
-            $array = $this->mapeo($result);
+            $array = array();
+
+            foreach($result as $row)
+            {
+                $jobPosition = new JobPosition();
+                $jobPosition->setJobPositionId($row["jobPositionId"]);
+                $jobPosition->setCareerId($row["careerId"]);
+                $jobPosition->setDescription($row["description"]);
+                
+                array_push($array, $jobPosition);
+            }
         
             return $array;
         }
