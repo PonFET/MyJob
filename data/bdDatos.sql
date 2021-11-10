@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 08-11-2021 a las 10:44:05
+-- Tiempo de generación: 10-11-2021 a las 00:56:22
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -22,11 +22,21 @@ SET time_zone = "+00:00";
 --
 
 --
+-- Volcado de datos para la tabla `privileges`
+--
+
+INSERT INTO `privileges` (`privilegeId`, `privilegeName`, `privilegeDescription`) VALUES
+(1, 'admin', 'Cuenta Administrador global.'),
+(2, 'student', 'Cuenta tipo Estudiante.'),
+(3, 'empresa', 'Cuenta de Empresa, para cargar Ofertas Laborales propias y revisar postulaciones.');
+
+--
 -- Volcado de datos para la tabla `accounts`
 --
 
-INSERT INTO `accounts` (`accountId`, `email`, `password`, `studentId`, `privilegeId`) VALUES
-(2, 'admin@myjob.com', '1234', 0, 1);
+INSERT INTO `accounts` (`accountId`, `email`, `password`, `privilegeId`) VALUES
+(2, 'admin@myjob.com', '1234', 1),
+(3, 'aknowlys17@unicef.org', '1234', 2);
 
 --
 -- Volcado de datos para la tabla `careers`
@@ -41,6 +51,21 @@ INSERT INTO `careers` (`careerId`, `description`, `active`) VALUES
 (6, 'University technician in administration', '1'),
 (7, 'Bachelor in environmental management', ''),
 (8, 'University technician in environmental procedures and technologies', '1');
+
+--
+-- Volcado de datos para la tabla `companies`
+--
+
+INSERT INTO `companies` (`companyId`, `companyName`, `location`, `description`, `email`, `phoneNumber`, `cuit`) VALUES
+(1, 'TEST', 'TEST LOC', 'TEST DESC', 'test@mail.com', '1234', 'cuit'),
+(3, 'Test mod', 'Loc mod', 'Desc mod', 'mod@mail.com', '123456', '16890000');
+
+--
+-- Volcado de datos para la tabla `joboffers`
+--
+
+INSERT INTO `joboffers` (`offerId`, `companyId`, `offerDescription`, `enable`) VALUES
+(22, 1, 'Programacion Java', 1);
 
 --
 -- Volcado de datos para la tabla `jobposition`
@@ -72,19 +97,19 @@ INSERT INTO `jobposition` (`jobPositionId`, `careerId`, `description`) VALUES
 (23, 8, 'Received technician');
 
 --
--- Volcado de datos para la tabla `privileges`
+-- Volcado de datos para la tabla `offersxposition`
 --
 
-INSERT INTO `privileges` (`privilegeId`, `privilegeName`, `privilegeDescription`) VALUES
-(1, 'admin', 'Cuenta Administrador global.'),
-(2, 'student', 'Cuenta tipo Estudiante.');
+INSERT INTO `offersxposition` (`offerId`, `jobPositionId`) VALUES
+(22, 7);
+
 
 --
 -- Volcado de datos para la tabla `students`
 --
 
 INSERT INTO `students` (`studentId`, `careerId`, `firstName`, `lastName`, `dni`, `fileNumber`, `gender`, `birthdate`, `email`, `phoneNumber`, `active`) VALUES
-(0, 7, 'Admin', 'Admin', '0', '0', 'N/A', '2021-11-02', 'admin@myjob.com', '0', '1'),
+(0, 7, 'Admin', 'Admin', '0', '0', 'N/A', '2021-11-01', 'admin@myjob.com', '0', '1'),
 (1, 2, 'Devlen', 'Douthwaite', '15-992-8607', '33-059-4172', 'Genderqueer', '2021-06-28', 'ddouthwaite0@goo.gl', '849-713-4523', ''),
 (2, 5, 'Wyatan', 'Lorant', '63-025-8112', '01-777-6891', 'Non-binary', '2021-02-23', 'wlorant1@sbwire.com', '171-448-9062', '1'),
 (3, 2, 'Alanson', 'Seemmonds', '06-684-0100', '89-621-0940', 'Agender', '2021-07-03', 'aseemmonds2@upenn.edu', '961-404-8720', '1'),

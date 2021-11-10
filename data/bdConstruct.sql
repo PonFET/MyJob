@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 08-11-2021 a las 10:41:53
+-- Tiempo de generación: 10-11-2021 a las 00:52:24
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -32,11 +32,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `accountId` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `password` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  `studentId` int(11) NOT NULL,
   `privilegeId` int(11) NOT NULL,
   PRIMARY KEY (`accountId`),
-  KEY `prvilegeId` (`privilegeId`),
-  KEY `studentId` (`studentId`)
+  KEY `prvilegeId` (`privilegeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
@@ -83,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `joboffers` (
   `offerId` int(11) NOT NULL AUTO_INCREMENT,
   `companyId` int(11) NOT NULL,
   `offerDescription` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
+  `enable` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`offerId`),
   KEY `offerId` (`offerId`,`companyId`),
   KEY `offerId_2` (`offerId`,`companyId`),
@@ -129,10 +128,9 @@ DROP TABLE IF EXISTS `offersxposition`;
 CREATE TABLE IF NOT EXISTS `offersxposition` (
   `offerId` int(11) NOT NULL,
   `jobPositionId` int(11) NOT NULL,
-  UNIQUE KEY `offerId` (`offerId`),
-  UNIQUE KEY `jobPositionId` (`jobPositionId`),
-  KEY `offerId_2` (`offerId`,`jobPositionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  KEY `offerId` (`offerId`,`jobPositionId`),
+  KEY `jobPositionId` (`jobPositionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -160,13 +158,13 @@ CREATE TABLE IF NOT EXISTS `students` (
   `careerId` int(11) NOT NULL,
   `firstName` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
   `lastName` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
-  `dni` int(11) NOT NULL,
-  `fileNumber` int(11) NOT NULL,
+  `dni` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  `fileNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `gender` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   `birthdate` date NOT NULL,
   `email` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
   `phoneNumber` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
-  `active` tinyint(1) NOT NULL,
+  `active` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`studentId`),
   KEY `careerId` (`careerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -179,8 +177,7 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- Filtros para la tabla `accounts`
 --
 ALTER TABLE `accounts`
-  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`privilegeId`) REFERENCES `privileges` (`privilegeId`),
-  ADD CONSTRAINT `accounts_ibfk_2` FOREIGN KEY (`studentId`) REFERENCES `students` (`studentId`);
+  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`privilegeId`) REFERENCES `privileges` (`privilegeId`);
 
 --
 -- Filtros para la tabla `joboffers`
@@ -205,8 +202,8 @@ ALTER TABLE `jobxacc`
 -- Filtros para la tabla `offersxposition`
 --
 ALTER TABLE `offersxposition`
-  ADD CONSTRAINT `offersxposition_ibfk_1` FOREIGN KEY (`jobPositionId`) REFERENCES `jobposition` (`jobPositionId`),
-  ADD CONSTRAINT `offersxposition_ibfk_2` FOREIGN KEY (`offerId`) REFERENCES `joboffers` (`offerId`);
+  ADD CONSTRAINT `offersxposition_ibfk_1` FOREIGN KEY (`offerId`) REFERENCES `joboffers` (`offerId`),
+  ADD CONSTRAINT `offersxposition_ibfk_2` FOREIGN KEY (`jobPositionId`) REFERENCES `jobposition` (`jobPositionId`);
 
 --
 -- Filtros para la tabla `students`

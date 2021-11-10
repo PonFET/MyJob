@@ -6,6 +6,6 @@ use models\Student;
 
 interface Idao {     
     public function getAll();
-    public function add($object);
+    public function add(Student $student);
 }
 ?>
