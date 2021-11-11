@@ -2,7 +2,6 @@
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");
 ?>
-<!-- No se usa -->
 
 <div class="row justify-content-center">
     <div class="card" style="width: 35rem;">

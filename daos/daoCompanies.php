@@ -77,16 +77,25 @@
 
         public function exist($email){
             try{
-                $sql = "SELECT exists ( SELECT * from companies where email = :email);";
-    
+
+                $result = null;
+                
+                $query = "SELECT * FROM companies WHERE email=:email;";
+
+                $parameters["email"] = $email;
+
                 $this->connection = connection::GetInstance();
-    
-                $result = $this->connection->Execute($sql);
-    
-                $rta = ($result[0][0] != 1)? false : true;
-    
-                return $rta;
+
+                $result = $this->connection->Execute($query, $parameters);
+
+                if($result != null)
+                {
+                    return true;
+                }
+
+                else return false;
             }
+
             catch(Exception $ex){
                 throw $ex;
             }

@@ -84,6 +84,11 @@
             require_once(VIEWS_PATH."list-company.php");
         }
 
+        public function viewCompany(){
+
+            require_once(VIEWS_PATH."view-company.php");
+        }
+
         public function adminList(){
 
             $arrayCompany = $this->daoCompany->getAll();
