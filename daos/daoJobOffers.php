@@ -151,6 +151,12 @@
                 {
                     $aux = $this->parseToObject($fila);
 
+                    $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $aux->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPostion);
+
+                    $aux->setArrayJobPos($positionArray);
+
                     array_push($this->jobOfferList, $aux);
                 }
 
@@ -259,11 +265,37 @@
             {
                 $resultSet = 0;
 
-                $query = 'SELECT * FROM jobxacc WHERE accountId=' . $account->getId() . ';';
+                $query = 'SELECT off.offerId, off.companyId, off.offerDescription, off.enable FROM jobxacc jxa LEFT JOIN joboffers off ON jxa.offerId = off.offerId WHERE jxa.accountId=' . $account->getId() . ';';
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
 
-                return $resultSet;
+                $parsed = array();
+
+                foreach($resultSet as $row)
+                {
+                    $offer = new JobOffer();
+
+                    $offer->setOfferId($row['offerId']);
+                    $offer->setCompanyId($row['companyId']);
+                    $offer->setOfferDescription($row['offerDescription']);
+
+                    $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPostion);
+
+                    $arrayAux = array();
+
+                    foreach($positionArray as $posRow)
+                    {
+                        array_push($arrayAux, $posRow['jobPositionId']);
+                    }
+
+                    $offer->setArrayJobPos($arrayAux);
+
+                    array_push($parsed, $offer);
+                }
+
+                return $parsed;
             }
 
             catch (Exception $ex)

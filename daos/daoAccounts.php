@@ -57,13 +57,19 @@ class DaoAccounts{
 
             $this->connection = Connection::GetInstance();
             
-            $resultSet = $this->connection->Execute($sql, $parameters);
+            $resultSet = $this->connection->Execute($sql, $parameters); 
+            
+            $account = new Account();
 
-            var_dump($resultSet);
+            $account->setId($resultSet[0]['accountId']);
+            $account->setEmail($resultSet[0]['email']);
+            $account->setPassword($resultSet[0]['password']);        
+            $account->setPrivilegios($resultSet[0]['privilegeName']);
 
-            $object = $this->mapeo($resultSet);            
+            array_push($objectArray, $account);
+            
 
-            return $object;
+            return $account;
         }
         catch (\Exception $ex){
             throw $ex;
@@ -76,8 +82,7 @@ class DaoAccounts{
 
         $account->setId($value[0]['accountId']);
         $account->setEmail($value[0]['email']);
-        $account->setPassword($value[0]['password']);
-        $account->setStudentId($value[0]['studentId']);
+        $account->setPassword($value[0]['password']);        
         $account->setPrivilegios($value[0]['privilegeName']); 
 
         return $account;
@@ -173,8 +178,7 @@ class DaoAccounts{
                 $account = new Account();
                 $account->setId($row["accountId"]);
                 $account->setEmail($row["email"]);
-                $account->setPassword($row["password"]);
-                $account->setStudentId($row["studentId"]);
+                $account->setPassword($row["password"]);                
                 $account->setPrivilegios($row["privilegeId"]);
                 array_push($accountList,$account);
             }  

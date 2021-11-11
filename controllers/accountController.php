@@ -140,7 +140,7 @@ class AccountController{
 
             $account = new Account(0, $email, $password, "student");
 
-            $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
+            $account->setStudent(new Student($careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
 
             try{
                 $this->daoAccount->add($account);
@@ -198,12 +198,13 @@ class AccountController{
         header("location: " . FRONT_ROOT . "index.php");
     }
 
-    public function viewAccount(){ //Poner en NavBar
-        if(isset($_SESSION['account'])){
-            include ROOT . VIEWS_PATH . "nav-bar.php";
+    public function viewAccount(){
+
+        $student = $this->daoStudent->getStudentByEmailAPI($_SESSION['account']->getEmail());
+        if(isset($_SESSION['account'])){            
             include ROOT . VIEWS_PATH . "view-account.php";
         }else{
-            require_once("views/login.php");
+            header("Location: login");
         }
     }
     
@@ -215,9 +216,9 @@ class AccountController{
         include ROOT . VIEWS_PATH . "update-account.php";
     }
 
-    public function update($password, $rPassword){
+    public function update($password, $rPassword){ //NO ANDA
 
-        $daoStudent = $daoStudent::getInstance();
+        $daoStudent = $this->daoStudent::getInstance();
 
         $accountOriginal = $_SESSION['account'];
         

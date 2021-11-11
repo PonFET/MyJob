@@ -7,14 +7,12 @@ class Account{
 	private $email;
 	private $password;
 	private $privilegios;
-	private $studentId;
+	
 
-	function __construct ($email="", $password="", $privilegios="", $studentId = 0) {		
+	function __construct ($email="", $password="", $privilegios="") {		
 		$this->email = $email;
 		$this->password = $password;
 		$this->privilegios = $privilegios;
-		$this->studentId = $studentId;
-		
     }
 
 	public function getId(){
@@ -53,13 +51,4 @@ class Account{
 		$this->privilegios = $privilegios;
 		return $this;
     }
-    
-	public function getStudentId(){
-		return $this->studentId;
-	}
-
-	public function setStudentId($studentId){
-		$this->studentId = $studentId;
-		return $this;
-	}
 }

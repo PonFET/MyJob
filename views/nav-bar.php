@@ -36,7 +36,11 @@
     <span class="navbar-text">
         <strong><?php //echo $_SESSION['lastName'] ?></strong>
     </span>
-    <ul class="navbar-nav ml-auto">        
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/viewAccount">Mi Perfil</a>
+        </li>     
+    
         <li class="nav-item">
             <a class="nav-link" href="<?php echo FRONT_ROOT ?>company/showList">Ver Empresas</a>
         </li> 
@@ -46,7 +50,7 @@
         </li>       
 
         <li class="nav-item">
-            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showListHistory">Ver Historial de Postulaciones</a>
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/studentPostulationHistory">Ver Historial de Postulaciones</a>
         </li>
 
         <li class="nav-item">

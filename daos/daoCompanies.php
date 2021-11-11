@@ -144,7 +144,7 @@
     
                 $result = $this->connection->Execute($sql);
     
-                $array = $this->mapeo($result);
+                $array = $this->mapeo($result);               
             
                 return $array;
             }

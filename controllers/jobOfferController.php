@@ -7,6 +7,7 @@
     use Daos\DaoCompanies as DAOCompanies;
     use models\Account as Account;
     use models\jobOffer as JobOffer;
+    use models\jobPosition as JobPosition;
 
     class JobOfferController
     {
@@ -79,12 +80,12 @@
             $this->showOfferView($message = "");
         }
 
-        public function studentPostulationAdd($studentId, $jobOfferId)
+        public function studentPostulationAdd($jobOfferId)
         {
             //Verificar primero si el alumno ya está postulado.
             $accountAux = new Account();
             $jobOfferAux = new JobOffer();
-            $accountAux->setId($studentId);
+            $accountAux->setId($_SESSION['account']->getId());
             $jobOfferAux->setOfferId($jobOfferId);
 
             $this->daoJobOffers->addPostulation($accountAux, $jobOfferAux);
@@ -92,17 +93,17 @@
             
         }
 
-        public function studentPostulationHistory($accountId)
+        public function studentPostulationHistory()
         {
-            $accountAux = new Account();
-            $accountAux->setId($accountId);
+            $accountAux = new Account();            
+            $accountAux->setId($_SESSION['account']->getId());
 
 
             $companiesList = $this->daoCompanies->getAll();
             $positionList = $this->daoJobPositions->getAll();
-            $postulationList = $this->daoJobOffers->getAllOffersByStudent($accountAux);
+            $offerList = $this->daoJobOffers->getAllOffersByStudent($accountAux);
 
-            require_once(VIEWS_PATH . "student-history-list");
+            require_once(VIEWS_PATH . "student-history-list.php");
         }
 
         public function update($offerId, $offerDescription)
