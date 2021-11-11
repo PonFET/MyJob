@@ -39,6 +39,12 @@
                                     <span class="h2 border-text"> <?php echo $jobOffer->getOfferDescription(); ?></span>
                                 </div>
                             </div>
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <span class="h2 border-text">Finalización de búsqueda: <?php echo $jobOffer->getEndDate(); ?></span>
+                                </div>
+                            </div>
                             
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
