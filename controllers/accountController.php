@@ -158,17 +158,17 @@ class AccountController{
 
     }
 
-    // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
+    // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta, admin crea cuenta student
     public function createStudent($email, $password){
         $daoStudent = $this->daoStudent::GetInstance();
 
         if($this->daoAccount->exist($email) == true){
 
-            $this->register($message='El mail ya está registrado en Base de Datos.');
+            $this->addStudent($message='El mail ya está registrado en Base de Datos.');
         }
         else if($this->daoStudent->existAPI($email) == true){
 
-            $this->register($message='El mail no está registrado en API.');
+            $this->addStudent($message='El mail no está registrado en API.');
             
         }
 
@@ -188,35 +188,37 @@ class AccountController{
         }
     }
 
-    public function createAdmin($email, $password, $rPassword){
+    // admin crea cuenta admin
 
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
+    public function createAdmin($email, $password){
 
-        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
+        if($this->daoAccount->exist($email) == true){
 
-        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid'){
-            $this->addAdmin();
+            $this->register($message='El mail ya está registrado en Base de Datos.');
         }
+
         else{
-            unset($_SESSION['registerValidator']);
-            
-            $account = new Account(0, $email, $password, "admin");
 
             try{
+                $account = new Account($email, $password, "student");
+
                 $this->daoAccount->add($account);
+
+                header("Location: showList");
+
             }
             catch(PDOException $p){
-                
+
             }
         }
 
     }
 
-    public function addAdmin(){
+    public function addAdmin($message=''){
         require_once("views/add-admin.php");
     }
 
-    public function addStudent(){
+    public function addStudent($message=''){
         require_once("views/add-student.php");
     }
 
