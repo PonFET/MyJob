@@ -7,18 +7,23 @@
     use Daos\DaoCompanies as DAOCompanies;
     use models\Account as Account;
     use models\jobOffer as JobOffer;
+    use PHPMailer\email as email;
+
+    // agregar esta linea cuando se ejecute el eliminar jobOffer por expiracion: $this->email->sendMail("hiperknife@gmail.com",$ticket);
 
     class JobOfferController
     {
         private $daoJobOffers;
         private $daoJobPositions;
         private $daoCompanies;
+        private $email;
 
         public function __construct()
         {
             $this->daoJobOffers = new DAOJobOffers();
             $this->daoCompanies = new DAOCompanies();
             $this->daoJobPositions = new DAOJobPositions();
+            $this->email = new email();
         }
 
 
