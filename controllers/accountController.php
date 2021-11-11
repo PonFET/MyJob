@@ -45,7 +45,7 @@ class AccountController{
         }
     }
 
-    public function register(){
+    public function register($message=''){
         require_once "views/confirmPriv.php";
     }
 
@@ -72,11 +72,11 @@ class AccountController{
 
         if($this->daoAccount->exist($email) == true){
 
-            $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
+            $this->register($message='El mail ya está registrado en Base de Datos.');
         }
         else if($this->daoStudent->existAPI($email) == true){
 
-            $this->tryOtherEmail($message='El mail no está registrado en API.');
+            $this->register($message='El mail no está registrado en API.');
             
         }
         else{
@@ -87,10 +87,6 @@ class AccountController{
 
         }
 
-    }
-
-    public function tryOtherEmail($message=''){
-        require_once "views/confirmPriv.php";
     }
 
     public function create($email, $password, $rPassword, $privilegios){
@@ -130,7 +126,7 @@ class AccountController{
         try{
             if($this->daoCompany->exist($email) == true){
 
-                $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
+                $this->register($message='El mail ya está registrado en Base de Datos.');
 
             }
 
@@ -152,7 +148,7 @@ class AccountController{
             else{
 
                 //la contraseña no coincide
-                require_once "views/confirmPriv.php";
+                $this->register($message='La contraseña no coincide.');
 
             }
         }
@@ -163,29 +159,27 @@ class AccountController{
     }
 
     // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
-    public function createStudent($email, $password, $rPassword){
+    public function createStudent($email, $password){
         $daoStudent = $this->daoStudent::GetInstance();
 
-        // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
+        if($this->daoAccount->exist($email) == true){
 
-        // Aun no funciona
-        $_SESSION['registerValidator']['emailAPI'] = ($this->daoStudent->existAPI($email)) ? 'is-valid' : 'is-invalid';
-        
-        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
-
-        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid' || $_SESSION['registerValidator']['emailAPI'] == 'is-valid'){
-            $this->register();
+            $this->register($message='El mail ya está registrado en Base de Datos.');
         }
+        else if($this->daoStudent->existAPI($email) == true){
+
+            $this->register($message='El mail no está registrado en API.');
+            
+        }
+
         else{
-            unset($_SESSION['registerValidator']);
-
-            $account = new Account(0, $email, $password, "student");
-
-            $account->setStudent(new Student($careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
 
             try{
+                $account = new Account($email, $password, "student");
+
                 $this->daoAccount->add($account);
+
+                header("Location: showList");
 
             }
             catch(PDOException $p){
