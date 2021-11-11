@@ -50,7 +50,7 @@ class StudentController{
 
         $student = $this->daoStudent->getStudentByEmailAPI($email);
 
-        $career = $this->daoCareer->getCareerByIdAPI($student->getCareerId());
+        $career = $this->daoCareer->getCareerByIdAPI($student->getCareerId());        
 
         require_once(VIEWS_PATH . "add-student-user.php");
     }

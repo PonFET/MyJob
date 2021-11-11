@@ -14,10 +14,9 @@
                     
                     <div class="form-group col-md-6">
 
-                        <label for="inputPassword4">Password</label>
+                        <label for="inputPassword">Password Nueva</label>
 
-                        <input type="password" class="form-control <?php if(isset($_SESSION['updateValidator'])) echo $_SESSION['updateValidator']['password']; ?>" id="inputPassword4" name="password"
-                        value="<?= (isset($_SESSION['account']))? $_SESSION['account']->getPassword() : 'Vacio'; ?>">
+                        <input type="password" class="form-control" id="inputPassword" name="password">
 
                         <div class="invalid-feedback">
                              El password no coincide
@@ -26,9 +25,9 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                        <label for="inputPassword4">Repetir Password</label>
-                        <input type="password" class="form-control <?php if(isset($_SESSION['updateValidator'])) echo $_SESSION['updateValidator']['password']; ?>" id="inputPassword4" name="rPassword">
+                <div class="form-group col-md-6">
+                        <label for="inputPassword">Repetir Password</label>
+                        <input type="password" class="form-control" id="inputPassword" name="rPassword">
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Actualizar</button>
