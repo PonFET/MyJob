@@ -105,16 +105,24 @@
         public function getByEmail($email){
             try{
                 $sql = "SELECT * from companies where email = :email;";
+
+                $parameters['email'] = $email;
     
                 $this->connection = connection::GetInstance();
     
-                $result = $this->connection->Execute($sql);
+                $value = $this->connection->Execute($sql, $parameters);
     
-                $array = $this->mapeo($result);
+                $company = new Company();                
+
+                $company->setCompanyId($value[0]["companyId"]);
+                $company->setCompanyName($value[0]["companyName"]);
+                $company->setLocation($value[0]["location"]);
+                $company->setDescription($value[0]["description"]);
+                $company->setEmail($value[0]["email"]);
+                $company->setPhoneNumber($value[0]["phoneNumber"]);
+                $company->setCuit($value[0]['cuit']);
     
-                $object = !empty($array) ? $array[0] : [];
-    
-                return $object;
+                return $company;
             }
             catch(Exception $ex){
                 throw $ex;

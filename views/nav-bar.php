@@ -63,7 +63,7 @@
             <!-- Compañia -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo FRONT_ROOT ?>company/viewCompany">Ver Perfil</a>
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/viewCompany">Ver Perfil</a>
             </li>
     
             <li class="nav-item">

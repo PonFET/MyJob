@@ -42,28 +42,29 @@
                 <h2>Datos de la Cuenta:</h2>
 
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-9">
 
                         <div>
                             <label class="text-dark" style="width: 68px">Email:</label>
-                            <input type="email" name="email" id="email" required>
+                            <input type="email" class="form-control mb- lg" name="email" id="email" required>
                         </div>
 
-                        <div class="col-3">
+                        <div>
                             <label for="password" class="form-label">Contrasenia:</label>
                             <input type="password" class="form-control mb- lg" name="password" required>
                         </div>
-                        <div class="col-3">
+                        <div>
                             <label for="rPassword" class="form-label">Repita la contrasenia:</label>
                             <input type="password" class="form-control mb- lg" name="rPassword" required>
                         </div>
                         
-                        <div class="col-3">
-                            <label for="privilegios" class="form-label"></label>
-                            <input type="hidden" value="privilegios" name="privilegios">
-                        </div>
+                        
 
                     </div>
+                    <div>
+                            <label for="privilegios" class="form-label"></label>
+                            <input type="hidden" value="3" name="privilegios">
+                        </div>
                 </div>
 
                 

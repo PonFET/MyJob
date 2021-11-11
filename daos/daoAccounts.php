@@ -25,23 +25,15 @@ class DaoAccounts{
     public function add($account){
         if($account instanceof Account){
             try{
-                $sql = "INSERT into accounts (email, password, privilegios) values (:email, :password, :privilegios);";
+                $sql = "INSERT into accounts (email, password, privilegeId) values (:email, :password, :privilegeId);";
                 $parameters['email'] =  $account->getEmail();
                 $parameters['password'] =  $account->getPassword();
-                $parameters['privilegios'] =  $account->getPrivilegios();
+                $parameters['privilegeId'] =  $account->getPrivilegios();
                 $this->connection = Connection::GetInstance();
 
+                var_dump($parameters);
+
                 $this->connection->ExecuteNonQuery($sql,$parameters);
-
-                //el id se genera en la base de datos, por eso tengo que pedir nuevamente el objeto.
-                $object = $this->getByEmail($account->getEmail());
-
-                $account->setId($object->getId());
-            
-                $daoStudent = DaoStudents::GetInstance();
-
-                $daoStudent->add($account);
-
             }
             catch(PDOException $ex){
                 throw $ex;

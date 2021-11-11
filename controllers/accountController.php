@@ -18,7 +18,7 @@ class AccountController{
       
 
     function __construct(){
-        $this->daoAccount = daoAccounts::GetInstance();
+        $this->daoAccount = new DaoAccounts();
         $this->daoStudent = new DaoStudents(); 
         $this->daoCompany = new DaoCompanies(); 
         
@@ -35,7 +35,20 @@ class AccountController{
             {                
                 $_SESSION["account"] = $accountAux;
                 
-                header("Location: showList");
+                if($accountAux->getPrivilegios() == 'admin')
+                {
+                    header("Location: showList");
+                }
+
+                elseif($accountAux->getPrivilegios() == 'student')
+                {
+                    header("Location: viewAccount");
+                }
+
+                elseif($accountAux->getPrivilegios() == 'company')
+                {
+                    header("Location: viewCompany");
+                }
             }
         }
         else
@@ -125,7 +138,7 @@ class AccountController{
 
     }
 
-    public function createCompany($companyName,$location, $description, $phoneNumber, $cuit, $email, $password, $rPassword, $privilegios){
+    public function createCompany($companyName, $location, $description, $phoneNumber, $cuit, $email, $password, $rPassword, $privilegios){
 
         try{
             if($this->daoCompany->exist($email) == true){
@@ -134,7 +147,7 @@ class AccountController{
 
             }
 
-            if($password == $rPassword){
+            elseif($password == $rPassword){
                                
                 $account = new Account($email, $password, $privilegios);
       
@@ -144,7 +157,9 @@ class AccountController{
 
                 $this->daoCompany->add($company);
 
-                $_SESSION["account"] = $account;
+                session_start();
+
+                $_SESSION["account"] = $this->daoAccount->getByEmail($email);
                 
                 header("Location: showListCompany");
 
@@ -287,6 +302,13 @@ class AccountController{
             }
         }
     }
+
+    public function viewCompany()
+    {
+        $company = $this->daoCompany->getByEmail($_SESSION['account']->getEmail());
+
+        require_once (VIEWS_PATH . "view-company.php");
+    }
     
     public function showList(){
 
@@ -294,18 +316,4 @@ class AccountController{
 
         require_once(VIEWS_PATH."list-account.php");
     }
-
-    public function showListCompany(){
-
-        require_once(VIEWS_PATH."view-company.php");
-    }
-
-    /*public function showListStudent(){
-
-        $arrayAccount = $this->daoAccount->getAll();
-
-        require_once(VIEWS_PATH."list-account.php");
-    }*/
-
-
 }
