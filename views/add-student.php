@@ -1,4 +1,10 @@
-<?php include_once(VIEWS_PATH."nav-bar.php"); ?>
+<?php 
+    include_once(VIEWS_PATH."nav-bar.php"); 
+    {
+        echo '<script>alert(' . $message . ')</script>';
+    }
+
+?>
 
 <div class="container-fluid">
     <div class="row justify-content-center">
