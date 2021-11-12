@@ -2,10 +2,15 @@
     namespace Controllers;
 
     use Daos\DaoJobOffers as DAOJobOffers;
+    use Daos\DaoCareers as DAOCareers;
     use Exception;
     use Daos\DaoJobPositions as DAOJobPositions;       
     use Daos\DaoCompanies as DAOCompanies;
+    use Daos\DaoStudents as DAOStudents;
+    use models\Career as Career;
+    use models\Student as Student;
     use models\Account as Account;
+    use Models\Company as Company;
     use models\jobOffer as JobOffer;
     use models\jobPosition as JobPosition;
     use PHPMailer\email as email;
@@ -17,6 +22,8 @@
         private $daoJobOffers;
         private $daoJobPositions;
         private $daoCompanies;
+        private $daoStudents;
+        private $daoCareers;
         private $email;
 
         public function __construct()
@@ -24,6 +31,8 @@
             $this->daoJobOffers = new DAOJobOffers();
             $this->daoCompanies = new DAOCompanies();
             $this->daoJobPositions = new DAOJobPositions();
+            $this->daoStudents = new DAOStudents();
+            $this->daoCareers = new DAOCareers;
             $this->email = new email();
         }
 
@@ -132,5 +141,20 @@
             {
                 throw $ex;
             }
+        }
+
+        public function showPostulations()
+        {
+            $company = new Company();           
+
+            $company = $this->daoCompanies->getByEmail($_SESSION['account']->getEmail());
+
+            $offerList = $this->daoJobOffers->getCompanyOffers($company);
+            $positionList = $this->daoJobPositions->getAll();
+            $studentList = $this->daoStudents->getStudentsByAccount();
+            $careerList = $this->daoCareers->getAll();
+            $jxaList = $this->daoJobOffers->getAllJXA(); 
+
+            require_once(VIEWS_PATH . "company-postulations.php");
         }
     }

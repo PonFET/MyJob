@@ -69,6 +69,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showAddOfferView">Agregar Propuesta Laboral</a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showPostulations">Ver Postulaciones</a>
+            </li>
     
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/logOff">Cerrar sesion</a>

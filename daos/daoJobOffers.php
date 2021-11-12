@@ -5,9 +5,9 @@
     use Daos\Connection as Connection;
     use models\jobOffer as JobOffer;
     use models\Account as Account;
-    
+    use Models\Company;
 
-    class DaoJobOffers
+class DaoJobOffers
     {
         private $jobOfferList = array();
         private $tableName = 'jobOffers';
@@ -264,6 +264,25 @@
         }
 
 
+        public function getAllJXA()
+        {
+            try
+            {
+                $query = 'SELECT * FROM jobxacc;';
+
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                return $resultSet;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
         public function getAllOffersbyPosition() //Cambiar a un Query que llame a todo junto
         {
             try
@@ -278,6 +297,47 @@
             }
 
             catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
+        public function getCompanyOffers(Company $company)
+        {
+            try
+            {
+                $query = "SELECT * FROM " . $this->tableName . " WHERE companyId = " . $company->getCompanyId() . ";";
+
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                $offerList = array();
+
+                foreach($resultSet as $row)
+                {
+                    $offer = $this->parseToObject($row);
+
+                    $queryPosition = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPosition);
+
+                    $arrayAux = array();
+
+                    foreach($positionArray as $posRow)
+                    {
+                        array_push($arrayAux, $posRow['jobPositionId']);
+                    }
+
+                    $offer->setArrayJobPos($arrayAux);
+
+                    array_push($offerList, $offer);
+                }
+
+                return $offerList;
+            }
+
+            catch(Exception $ex)
             {
                 throw $ex;
             }
@@ -329,8 +389,7 @@
             {
                 throw $ex;
             }
-        }
-
+        }        
 
         public function parseToObject($value)
         {
