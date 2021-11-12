@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 10-11-2021 a las 00:52:24
+-- Tiempo de generación: 11-11-2021 a las 21:40:37
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -81,6 +81,8 @@ CREATE TABLE IF NOT EXISTS `joboffers` (
   `offerId` int(11) NOT NULL AUTO_INCREMENT,
   `companyId` int(11) NOT NULL,
   `offerDescription` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
+  `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `endDate` datetime DEFAULT NULL,
   `enable` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`offerId`),
   KEY `offerId` (`offerId`,`companyId`),

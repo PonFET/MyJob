@@ -38,12 +38,16 @@
             require_once(VIEWS_PATH . 'offer-list.php');
         }
 
-        public function add($companyId, $offerDescription, $jobPositionIdArray) //Recibe desde la vista un array con los JobPosition que va a pedir la JobOffer.
+        public function add($companyId, $offerDescription, $startDate, $endDate, $jobPositionIdArray) //Recibe desde la vista un array con los JobPosition que va a pedir la JobOffer.
         {
             $offer = new JobOffer();
             $offer->setCompanyId($companyId);
             $offer->setOfferDescription($offerDescription);
             $offer->setArrayJobPos($jobPositionIdArray);
+            $offer->setStartDate($startDate);
+            $offer->setEndDate($endDate);
+
+            var_dump($offer);
 
             $this->daoJobOffers->add($offer);
 
@@ -111,11 +115,13 @@
             require_once(VIEWS_PATH . "student-history-list.php");
         }
 
-        public function update($offerId, $offerDescription)
+        public function update($offerId, $offerDescription, $startDate, $endDate)
         {
             $jobOfferAux = new JobOffer();
             $jobOfferAux->setOfferId($offerId);
             $jobOfferAux->setOfferDescription($offerDescription);
+            $jobOfferAux->setStartDate($startDate);
+            $jobOfferAux->setEndDate($endDate);
 
             try
             {

@@ -19,11 +19,20 @@
                                     <?php } ?>
                         </div><br>
 
-
                         <div>
                             <label class="text-dark">Descripción:</label>
                             <input type="textarea" name="offerDescription" id="offerDescription" required>
-                        </div>                        
+                        </div><br>
+
+                        <div>
+                            <label class="text-dark">Fecha de Inicio:</label>
+                            <input type="datetime-local" name="startDate" id="startDate" required>
+                        </div><br>
+
+                        <div>
+                            <label class="text-dark">Fecha de Finalización:</label>
+                            <input type="datetime-local" name="endDate" id="endDate" required>
+                        </div><br>
 
                         <div>
                             <label class="text-dark" style="width: 68px">Posiciones buscadas:</label>                            

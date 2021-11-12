@@ -15,7 +15,7 @@
                         </div>
                         <div>
                             <label class="text-light">Descripción:</label>
-                            <input type="text" name="location" id="location" disabled placeholder="<?php echo $company->getLocation();?>" >
+                            <input type="text" name="location" id="location" disabled placeholder="<?php echo $jobOffer->getOfferDescription();?>" >
                         </div>
                         <div>
                             <label class="text-light">Posiciones buscadas:</label>
@@ -36,8 +36,26 @@
                                 <tr>
                                     <td>                                        
                                         <div>
-                                            <label class="text-light" required>Descripción: </label>
+                                            <label class="text-dark" required>Descripción: </label>
                                             <input type="textarea" name="offerDescription"></input>
+                                        </div>                                                                               
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>                                        
+                                        <div>
+                                            <label class="text-dark" required>Fecha de Inicio: </label>
+                                            <input type="datetime-local" name="startDate" value="<?php echo $jobOffer->getStartDate(); ?>"></input>
+                                        </div>                                                                               
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>                                        
+                                        <div>
+                                            <label class="text-dark" required>Fecha de Finalización: </label>
+                                            <input type="datetime-local" name="endDate" value='<?php echo $jobOffer->getEndDate(); ?>'></input>
                                         </div>                                                                               
                                     </td>
                                 </tr>
