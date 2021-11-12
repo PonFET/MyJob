@@ -7,20 +7,21 @@ use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
 use Daos\DaoCompanies as DaoCompanies;
 use models\Company as Company;
+use PHPMailer\email as email;
 use PDOException;
-
-
 
 class AccountController{
     private $daoAccount;
     private $daoStudent; 
     private $daoCompany;  
+    private $email;
       
 
     function __construct(){
         $this->daoAccount = new DaoAccounts();
         $this->daoStudent = new DaoStudents(); 
         $this->daoCompany = new DaoCompanies(); 
+        $this->email = new email();
         
     }
 
@@ -173,8 +174,33 @@ class AccountController{
 
     }
 
-    // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta, admin crea cuenta student
-    public function createStudent($email, $password){
+    /// Es identico a los de arriba, solo que no se inicia sesion cuando se crea la cuenta ya que Admin los crea ///
+
+    public function createAdminByA($email, $password){
+
+        if($this->daoAccount->exist($email) == true){
+
+            $this->addAdmin($message='El mail ya está registrado en Base de Datos.');
+        }
+
+        else{
+
+            try{
+                $account = new Account($email, $password, 1);
+
+                $this->daoAccount->add($account);
+
+                header("Location: showList");
+
+            }
+            catch(PDOException $p){
+
+            }
+        }
+
+    }
+
+    public function createStudentByA($email, $password){
         $daoStudent = $this->daoStudent::GetInstance();
 
         if($this->daoAccount->exist($email) == true){
@@ -190,7 +216,7 @@ class AccountController{
         else{
 
             try{
-                $account = new Account($email, $password, "student");
+                $account = new Account($email, $password, 2);
 
                 $this->daoAccount->add($account);
 
@@ -202,22 +228,24 @@ class AccountController{
             }
         }
     }
-
-    // admin crea cuenta admin
-
-    public function createAdmin($email, $password){
+    
+    public function createCompanyByA($companyName, $location, $description, $phoneNumber, $cuit, $email, $password){
 
         if($this->daoAccount->exist($email) == true){
 
-            $this->register($message='El mail ya está registrado en Base de Datos.');
+            $this->addCompany($message='El mail ya está registrado en Base de Datos.');
         }
 
         else{
 
             try{
-                $account = new Account($email, $password, "student");
+                $account = new Account($email, $password, 3);
 
                 $this->daoAccount->add($account);
+
+                $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
+
+                $this->daoCompany->add($company);
 
                 header("Location: showList");
 
@@ -235,6 +263,10 @@ class AccountController{
 
     public function addStudent($message=''){
         require_once("views/add-student.php");
+    }
+    
+    public function addCompany($message=''){
+        require_once("views/add-company.php");
     }
 
     public function logOff(){
