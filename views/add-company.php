@@ -6,8 +6,8 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">
-            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Company/add" method="POST">
-                <h1>Agregar Empresa</h1>
+            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>account/createCompanyByA" method="POST">
+                <h2>Agregar Empresa: </h2>
                 <div class="form-row">
                     <div class="form-group col-md-6">
 
@@ -39,6 +39,11 @@
                         <div>
                             <label class="text-dark">CUIT:</label>
                             <input type="text" name="cuit" id="cuit" required>
+                        </div>
+
+                        <div>
+                            <label class="text-dark">Contrasenia:</label>
+                            <input type="password" name="password" id="password" required>
                         </div>
 
                     </div>
