@@ -58,9 +58,6 @@ class DaoAccounts{
             $account->setPassword($resultSet[0]['password']);        
             $account->setPrivilegios($resultSet[0]['privilegeName']);
 
-            array_push($objectArray, $account);
-            
-
             return $account;
         }
         catch (\Exception $ex){

@@ -115,11 +115,20 @@ class DaoCareers{
 
             $result = $this->connection->Execute($sql);
 
-            $array = $this->mapeo($result);
+            $array = array();
+
+            foreach($result as $row)
+            {
+                $career = new career();
+
+                $career = $this->mapeo($row);
+
+                array_push($array, $career);
+            }
         
             return $array;
         }
-        catch(Exception $ex){
+        catch(\Exception $ex){
             throw $ex;
         }
     }

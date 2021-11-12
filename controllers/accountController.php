@@ -158,7 +158,7 @@ class AccountController{
 
                 $_SESSION["account"] = $this->daoAccount->getByEmail($email);
                 
-                header("Location: showListCompany");
+                header("Location: viewCompany");
 
             }
             else{

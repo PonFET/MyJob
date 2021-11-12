@@ -189,6 +189,8 @@ class DaoStudents implements Idao{
             throw $ex;
         }
     }
+
+
     
     public function getByEmail($email){
         try{
@@ -208,6 +210,50 @@ class DaoStudents implements Idao{
             throw $ex;
         }
     }
+
+
+    public function getStudentsByAccount()
+    {
+        try
+        {
+            $query = "SELECT s.studentId,
+                             s.careerId,
+                             s.firstName,
+                             s.lastName,
+                             s.dni,
+                             s.fileNumber,
+                             s.gender,
+                             s.birthDate,
+                             s.email,
+                             s.phoneNumber,
+                             s.active,
+                             a.accountId
+                        FROM students s INNER JOIN accounts a ON s.email=a.email;";
+
+            $this->connection = connection::GetInstance();
+            $studentList = $this->connection->Execute($query);
+
+            $array = array();
+
+            foreach($studentList as $row)
+            {
+                $student = $this->mapeo($row);
+                
+                $arrayAux['accountId'] = $row['accountId'];
+                $arrayAux['student'] = $student;
+
+                array_push($array, $arrayAux);
+            }
+
+            return $array;
+        }
+
+        catch(Exception $ex)
+        {
+            throw $ex;
+        }
+    }
+
 
     public function getAll(){
         try{
