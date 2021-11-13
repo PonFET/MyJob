@@ -41,7 +41,7 @@
                 <?php } ?>
 
                 
-                <form action="<?php echo FRONT_ROOT ?>company/showAdd" method="POST">
+                <form action="<?php echo FRONT_ROOT ?>account/addCompany" method="POST">
                     <button type="submit"  name="companyId" class="btn-dark btn-sm">Agregar</button>
                 </form>
                 
