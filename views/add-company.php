@@ -27,11 +27,6 @@
                         </div>
 
                         <div>
-                            <label class="text-dark">Email:</label>
-                            <input type="email" name="email" id="email" required>
-                        </div>
-
-                        <div>
                             <label class="text-dark">Telefono:</label>
                             <input type="number" name="phoneNumber" id="phoneNumber" required>
                         </div>
@@ -40,6 +35,11 @@
                             <label class="text-dark">CUIT:</label>
                             <input type="text" name="cuit" id="cuit" required>
                         </div>
+
+                        <div>
+                            <label class="text-dark">Email:</label>
+                            <input type="email" name="email" id="email" required>
+                        </div> 
 
                         <div>
                             <label class="text-dark">Contrasenia:</label>

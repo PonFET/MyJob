@@ -204,12 +204,14 @@ class AccountController{
         $daoStudent = $this->daoStudent::GetInstance();
 
         if($this->daoAccount->exist($email) == true){
-
-            $this->addStudent($message='El mail ya está registrado en Base de Datos.');
+            
+            $message='El mail ya está registrado en Base de Datos.';
+            $this->addStudent($message);
         }
         else if($this->daoStudent->existAPI($email) == true){
 
-            $this->addStudent($message='El mail no está registrado en API.');
+            $message='El mail no está registrado en API.';
+            $this->addStudent($message);
             
         }
 
@@ -262,6 +264,8 @@ class AccountController{
     }
 
     public function addStudent($message=''){
+
+        $message = $message;
         require_once("views/add-student.php");
     }
     

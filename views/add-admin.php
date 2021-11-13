@@ -1,7 +1,10 @@
 <?php 
     include_once(VIEWS_PATH."nav-bar.php"); 
     {
-        echo '<script>alert(' . $message . ')</script>';
+        if($message != '')
+        {
+            echo '<script>alert(' . $message . ')</script>';
+        }
     }
 
 ?>
