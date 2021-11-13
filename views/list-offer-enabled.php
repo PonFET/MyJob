@@ -36,14 +36,26 @@
 
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <span class="h2 border-text"> <?php echo $jobOffer->getofferDescription(); ?></span>
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getOfferDescription(); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getStartDate(); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getEndDate(); ?></span>
                                 </div>
                             </div>
                             
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
                                     <span class="h2 border-text">Posiciones buscadas:
-                                        <?php foreach($jobOffer->getArrayJobPos() as $jobPos) { echo $jobPos; }?>
+                                    <?php foreach($jobOffer->getArrayJobPos() as $jobPos){ foreach($positionList as $posList){ if($posList->getJobPositionId() == $jobPos){ echo $posList->getDescription(); } } } ?>
                                     </span>
                                 </div>
                             </div>

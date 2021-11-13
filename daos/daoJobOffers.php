@@ -5,9 +5,9 @@
     use Daos\Connection as Connection;
     use models\jobOffer as JobOffer;
     use models\Account as Account;
-    
+    use Models\Company;
 
-    class DaoJobOffers
+class DaoJobOffers
     {
         private $jobOfferList = array();
         private $tableName = 'jobOffers';
@@ -23,10 +23,12 @@
             $resultSet = null;           
             try //Registro nuevo JobOffer
             {
-                $query = 'INSERT INTO ' . $this->tableName . ' (companyId, offerDescription) VALUES (:companyId, :offerDescription);';
+                $query = 'INSERT INTO ' . $this->tableName . ' (companyId, offerDescription, startDate, endDate) VALUES (:companyId, :offerDescription, :startDate, :endDate);';
 
                 $parameters['companyId'] = $jobOffer->getCompanyId();
                 $parameters['offerDescription'] = $jobOffer->getOfferDescription();
+                $parameters['startDate'] = $jobOffer->getStartDate();
+                $parameters['endDate'] = $jobOffer->getEndDate();
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters);
@@ -77,10 +79,12 @@
         {
             try
             {
-                $query = "UPDATE " . $this->tableName . " SET companyId=:companyId, offerDescription=:offerDescription WHERE offerId=:id;";
+                $query = "UPDATE " . $this->tableName . " SET companyId=:companyId, offerDescription=:offerDescription, startDate=:startDate, endDate=:endDate WHERE offerId=:id;";
 
                 $parameters["companyId"] = $offer->getCompanyId();
                 $parameters["offerDescription"] = $offer->getOfferDescription();
+                $parameters['startDate'] = $offer->getStartDate();
+                $parameters['endDate'] = $offer->getEndDate();
                 $parameters["id"] = $offer->getOfferId();
 
                 $this->connection = Connection::GetInstance();
@@ -124,10 +128,10 @@
                 $this->connection->ExecuteNonQuery($query);
 
 
-                $query = 'DELETE FROM offersxposition WHERE (offerId="' . $offer->getOfferId() . '");';
+                $query2 = 'DELETE FROM offersxposition WHERE (offerId="' . $offer->getOfferId() . '");';
 
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query);
+                $this->connection->ExecuteNonQuery($query2);
             }
 
             catch (Exception $ex)
@@ -151,6 +155,12 @@
                 {
                     $aux = $this->parseToObject($fila);
 
+                    $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $aux->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPostion);
+
+                    $aux->setArrayJobPos($positionArray);
+
                     array_push($this->jobOfferList, $aux);
                 }
 
@@ -169,18 +179,39 @@
             {
                 $resultSet = 0;
 
-                $query = 'SELECT * FROM ' . $this->tableName . ' WHERE enable=1';
+                $query = 'SELECT * FROM ' . $this->tableName . ' WHERE enable = 1;';
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
 
-                foreach ($resultSet as $fila)
-                {
-                    $aux = $this->parseToObject($fila);
+                $parsed = array();
 
-                    array_push($this->jobOfferList, $aux);
+                foreach($resultSet as $row)
+                {
+                    $offer = new JobOffer();
+
+                    $offer->setOfferId($row['offerId']);
+                    $offer->setCompanyId($row['companyId']);
+                    $offer->setOfferDescription($row['offerDescription']);
+                    $offer->setStartDate($row['startDate']);
+                    $offer->setEndDate($row["endDate"]);
+
+                    $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPostion);
+
+                    $arrayAux = array();
+
+                    foreach($positionArray as $posRow)
+                    {
+                        array_push($arrayAux, $posRow['jobPositionId']);
+                    }
+
+                    $offer->setArrayJobPos($arrayAux);
+
+                    array_push($parsed, $offer);
                 }
 
-                return $this->jobOfferList;
+                return $parsed;
             }
 
             catch (Exception $ex)
@@ -233,7 +264,26 @@
         }
 
 
-        public function getAllOffersbyPosition()
+        public function getAllJXA()
+        {
+            try
+            {
+                $query = 'SELECT * FROM jobxacc;';
+
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                return $resultSet;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
+        public function getAllOffersbyPosition() //Cambiar a un Query que llame a todo junto
         {
             try
             {
@@ -253,32 +303,102 @@
         }
 
 
-        public function getAllOffersByStudent(Account $account)
+        public function getCompanyOffers(Company $company)
         {
             try
             {
-                $resultSet = 0;
+                $query = "SELECT * FROM " . $this->tableName . " WHERE companyId = " . $company->getCompanyId() . ";";
 
-                $query = 'SELECT * FROM jobxacc WHERE accountId=' . $account->getId() . ';';
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
 
-                return $resultSet;
+                $offerList = array();
+
+                foreach($resultSet as $row)
+                {
+                    $offer = $this->parseToObject($row);
+
+                    $queryPosition = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPosition);
+
+                    $arrayAux = array();
+
+                    foreach($positionArray as $posRow)
+                    {
+                        array_push($arrayAux, $posRow['jobPositionId']);
+                    }
+
+                    $offer->setArrayJobPos($arrayAux);
+
+                    array_push($offerList, $offer);
+                }
+
+                return $offerList;
             }
 
-            catch (Exception $ex)
+            catch(Exception $ex)
             {
                 throw $ex;
             }
         }
 
 
+        public function getAllOffersByStudent(Account $account)
+        {
+            try
+            {
+                $resultSet = 0;
+
+                $query = 'SELECT off.offerId, off.companyId, off.offerDescription, off.startDate, off.endDate, off.enable FROM jobxacc jxa LEFT JOIN joboffers off ON jxa.offerId = off.offerId WHERE jxa.accountId=' . $account->getId() . ';';
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                $parsed = array();
+
+                foreach($resultSet as $row)
+                {
+                    $offer = new JobOffer();
+
+                    $offer->setOfferId($row['offerId']);
+                    $offer->setCompanyId($row['companyId']);
+                    $offer->setOfferDescription($row['offerDescription']);
+                    $offer->setStartDate($row['startDate']);
+                    $offer->setEndDate($row['endDate']);
+
+                    $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
+                    $this->connection = Connection::GetInstance();
+                    $positionArray = $this->connection->Execute($queryPostion);
+
+                    $arrayAux = array();
+
+                    foreach($positionArray as $posRow)
+                    {
+                        array_push($arrayAux, $posRow['jobPositionId']);
+                    }
+
+                    $offer->setArrayJobPos($arrayAux);
+
+                    array_push($parsed, $offer);
+                }
+
+                return $parsed;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }        
+
         public function parseToObject($value)
         {
             $jobO= new JobOffer(); 
             $jobO->setOfferId($value['offerId']); 
             $jobO->setCompanyId($value['companyId']); 
-            $jobO->setOfferDescription($value['offerDescription']); 
+            $jobO->setOfferDescription($value['offerDescription']);
+            $jobO->setStartDate($value['startDate']);
+            $jobO->setEndDate($value['endDate']);
         
             return $jobO;
         }

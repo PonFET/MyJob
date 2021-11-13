@@ -1,5 +1,8 @@
 <?php
-    include_once(VIEWS_PATH."nav-bar.php");
+    include_once(VIEWS_PATH."nav-bar.php");if($message != '')
+    {
+        echo '<script>alert(' . $message . ')</script>';
+    }
 ?>
 
 <div class="container-fluid">

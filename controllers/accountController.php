@@ -7,20 +7,21 @@ use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
 use Daos\DaoCompanies as DaoCompanies;
 use models\Company as Company;
+use PHPMailer\email as email;
 use PDOException;
-
-
 
 class AccountController{
     private $daoAccount;
     private $daoStudent; 
     private $daoCompany;  
+    private $email;
       
 
     function __construct(){
-        $this->daoAccount = daoAccounts::GetInstance();
+        $this->daoAccount = new DaoAccounts();
         $this->daoStudent = new DaoStudents(); 
         $this->daoCompany = new DaoCompanies(); 
+        $this->email = new email();
         
     }
 
@@ -35,7 +36,20 @@ class AccountController{
             {                
                 $_SESSION["account"] = $accountAux;
                 
-                header("Location: showList");
+                if($accountAux->getPrivilegios() == 'admin')
+                {
+                    header("Location: showList");
+                }
+
+                elseif($accountAux->getPrivilegios() == 'student')
+                {
+                    header("Location: viewAccount");
+                }
+
+                elseif($accountAux->getPrivilegios() == 'company')
+                {
+                    header("Location: viewCompany");
+                }
             }
         }
         else
@@ -45,7 +59,7 @@ class AccountController{
         }
     }
 
-    public function register(){
+    public function register($message=''){
         require_once "views/confirmPriv.php";
     }
 
@@ -70,13 +84,13 @@ class AccountController{
 
     public function registerStudent($email, $privilegios){
 
-        if($this->daoStudent->exist($email) == true){
+        if($this->daoAccount->exist($email) == true){
 
-            $this->tryOtherEmail($message='El mail ya está registrado en Base de Datos.');
+            $this->register($message='El mail ya está registrado en Base de Datos.');
         }
         else if($this->daoStudent->existAPI($email) == true){
 
-            $this->tryOtherEmail($message='El mail no está registrado en API.');
+            $this->register($message='El mail no está registrado en API.');
             
         }
         else{
@@ -89,18 +103,19 @@ class AccountController{
 
     }
 
-    public function tryOtherEmail($message=''){
-        require_once "views/confirmPriv.php";
-    }
-
-    public function create($email,$password, $rPassword, $privilegios){
+    public function create($email, $password, $rPassword, $privilegios){
 
         try{
+            
             if($password == $rPassword){
                                
                 $account = new Account($email, $password, $privilegios);
       
                 $this->daoAccount->add($account);
+                
+               /* $_SESSION["account"] = $account;
+                
+                header("Location: showListStudent");*/
 
                 require_once "views/offer-list.php";
 
@@ -120,68 +135,142 @@ class AccountController{
 
     }
 
-    // Es identico al de arriba, solo que no se inicia sesion cuando se crea la cuenta
-    public function createStudent($email, $password, $rPassword){
+    public function createCompany($companyName, $location, $description, $phoneNumber, $cuit, $email, $password, $rPassword, $privilegios){
+
+        try{
+            if($this->daoCompany->exist($email) == true){
+
+                $this->register($message='El mail ya está registrado en Base de Datos.');
+
+            }
+
+            elseif($password == $rPassword){
+                               
+                $account = new Account($email, $password, $privilegios);
+      
+                $this->daoAccount->add($account);
+
+                $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
+
+                $this->daoCompany->add($company);
+
+                session_start();
+
+                $_SESSION["account"] = $this->daoAccount->getByEmail($email);
+                
+                header("Location: viewCompany");
+
+            }
+            else{
+
+                //la contraseña no coincide
+                $this->register($message='La contraseña no coincide.');
+
+            }
+        }
+
+        catch(PDOException $p){
+        }
+
+    }
+
+    /// Es identico a los de arriba, solo que no se inicia sesion cuando se crea la cuenta ya que Admin los crea ///
+
+    public function createAdminByA($email, $password){
+
+        if($this->daoAccount->exist($email) == true){
+
+            $this->addAdmin($message='El mail ya está registrado en Base de Datos.');
+        }
+
+        else{
+
+            try{
+                $account = new Account($email, $password, 1);
+
+                $this->daoAccount->add($account);
+
+                header("Location: showList");
+
+            }
+            catch(PDOException $p){
+
+            }
+        }
+
+    }
+
+    public function createStudentByA($email, $password){
         $daoStudent = $this->daoStudent::GetInstance();
 
-        // Supongo que esta linea hace la comparacion de los emails que hay en bases de datos
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
-
-        // Aun no funciona
-        $_SESSION['registerValidator']['emailAPI'] = ($this->daoStudent->existAPI($email)) ? 'is-valid' : 'is-invalid';
-        
-        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
-
-        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid' || $_SESSION['registerValidator']['emailAPI'] == 'is-valid'){
-            $this->register();
-        }
-        else{
-            unset($_SESSION['registerValidator']);
-
-            $account = new Account(0, $email, $password, "student");
-
-            $account->setStudent(new Student($studentId, $careerId, $firstName, $lastName, $dni, $fileNumber, $gender, $birthDate, $email, $phoneNumber, $active));
-
-            try{
-                $this->daoAccount->add($account);
-
-            }
-            catch(PDOException $p){
-
-            }
-        }
-    }
-
-    public function createAdmin($email, $password, $rPassword){
-
-        $_SESSION['registerValidator']['email'] = ($this->daoStudent->exist($email)) ? 'is-invalid' : 'is-valid';
-
-        $_SESSION['registerValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
-
-        if($_SESSION['registerValidator']['email'] == 'is-invalid'  || $_SESSION['registerValidator']['password'] == 'is-invalid'){
-            $this->addAdmin();
-        }
-        else{
-            unset($_SESSION['registerValidator']);
+        if($this->daoAccount->exist($email) == true){
             
-            $account = new Account(0, $email, $password, "admin");
+            $message='El mail ya está registrado en Base de Datos.';
+            $this->addStudent($message);
+        }
+        else if($this->daoStudent->existAPI($email) == true){
+
+            $message='El mail no está registrado en API.';
+            $this->addStudent($message);
+            
+        }
+
+        else{
 
             try{
+                $account = new Account($email, $password, 2);
+
                 $this->daoAccount->add($account);
+
+                header("Location: showList");
+
             }
             catch(PDOException $p){
-                
+
+            }
+        }
+    }
+    
+    public function createCompanyByA($companyName, $location, $description, $phoneNumber, $cuit, $email, $password){
+
+        if($this->daoAccount->exist($email) == true){
+
+            $this->addCompany($message='El mail ya está registrado en Base de Datos.');
+        }
+
+        else{
+
+            try{
+                $account = new Account($email, $password, 3);
+
+                $this->daoAccount->add($account);
+
+                $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
+
+                $this->daoCompany->add($company);
+
+                header("Location: showList");
+
+            }
+            catch(PDOException $p){
+
             }
         }
 
     }
 
-    public function addAdmin(){
+    public function addAdmin($message=''){
         require_once("views/add-admin.php");
     }
 
-    public function addStudent(){
+    public function addStudent($message=''){
+
+        $message = $message;
         require_once("views/add-student.php");
+    }
+    
+    public function addCompany($message=''){
+        require_once("views/add-company.php");
     }
 
     public function logOff(){
@@ -198,12 +287,13 @@ class AccountController{
         header("location: " . FRONT_ROOT . "index.php");
     }
 
-    public function viewAccount(){ //Poner en NavBar
-        if(isset($_SESSION['account'])){
-            include ROOT . VIEWS_PATH . "nav-bar.php";
+    public function viewAccount(){
+
+        $student = $this->daoStudent->getStudentByEmailAPI($_SESSION['account']->getEmail());
+        if(isset($_SESSION['account'])){            
             include ROOT . VIEWS_PATH . "view-account.php";
         }else{
-            require_once("views/login.php");
+            header("Location: login");
         }
     }
     
@@ -215,9 +305,9 @@ class AccountController{
         include ROOT . VIEWS_PATH . "update-account.php";
     }
 
-    public function update($password, $rPassword){
+    public function update($password, $rPassword){ //NO ANDA
 
-        $daoStudent = $daoStudent::getInstance();
+        $daoStudent = $this->daoStudent::getInstance();
 
         $accountOriginal = $_SESSION['account'];
         
@@ -244,6 +334,13 @@ class AccountController{
             }
         }
     }
+
+    public function viewCompany()
+    {
+        $company = $this->daoCompany->getByEmail($_SESSION['account']->getEmail());
+
+        require_once (VIEWS_PATH . "view-company.php");
+    }
     
     public function showList(){
 
@@ -251,6 +348,4 @@ class AccountController{
 
         require_once(VIEWS_PATH."list-account.php");
     }
-
-
 }

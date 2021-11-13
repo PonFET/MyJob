@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 10-11-2021 a las 00:56:22
+-- Tiempo de generación: 12-11-2021 a las 21:19:50
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 INSERT INTO `privileges` (`privilegeId`, `privilegeName`, `privilegeDescription`) VALUES
 (1, 'admin', 'Cuenta Administrador global.'),
 (2, 'student', 'Cuenta tipo Estudiante.'),
-(3, 'empresa', 'Cuenta de Empresa, para cargar Ofertas Laborales propias y revisar postulaciones.');
+(3, 'company', 'Cuenta de Empresa, para cargar Ofertas Laborales propias y revisar postulaciones.');
 
 --
 -- Volcado de datos para la tabla `accounts`
@@ -36,7 +36,8 @@ INSERT INTO `privileges` (`privilegeId`, `privilegeName`, `privilegeDescription`
 
 INSERT INTO `accounts` (`accountId`, `email`, `password`, `privilegeId`) VALUES
 (2, 'admin@myjob.com', '1234', 1),
-(3, 'aknowlys17@unicef.org', '1234', 2);
+(4, 'aknowlys17@unicef.org', '1234', 2),
+(6, 'empresa3@mail.com', '1234', 3);
 
 --
 -- Volcado de datos para la tabla `careers`
@@ -58,14 +59,16 @@ INSERT INTO `careers` (`careerId`, `description`, `active`) VALUES
 
 INSERT INTO `companies` (`companyId`, `companyName`, `location`, `description`, `email`, `phoneNumber`, `cuit`) VALUES
 (1, 'TEST', 'TEST LOC', 'TEST DESC', 'test@mail.com', '1234', 'cuit'),
-(3, 'Test mod', 'Loc mod', 'Desc mod', 'mod@mail.com', '123456', '16890000');
+(3, 'TEST 2', 'TEST LOC', 'TEST DESC', 'test@mail.com', '1234', 'cuit'),
+(4, 'TEST 3', 'Mardel', 'Empresa', 'empresa3@mail.com', '1234', 'cuit');
 
 --
 -- Volcado de datos para la tabla `joboffers`
 --
 
-INSERT INTO `joboffers` (`offerId`, `companyId`, `offerDescription`, `enable`) VALUES
-(22, 1, 'Programacion Java', 1);
+INSERT INTO `joboffers` (`offerId`, `companyId`, `offerDescription`, `startDate`, `endDate`, `enable`) VALUES
+(1, 1, 'Programacion Java', '2021-11-11 20:00:00', '2021-11-15 20:00:00', 1),
+(2, 1, 'Pescaditos', '2021-11-11 21:08:00', '2021-11-24 21:08:00', 1);
 
 --
 -- Volcado de datos para la tabla `jobposition`
@@ -97,12 +100,22 @@ INSERT INTO `jobposition` (`jobPositionId`, `careerId`, `description`) VALUES
 (23, 8, 'Received technician');
 
 --
+-- Volcado de datos para la tabla `jobxacc`
+--
+
+INSERT INTO `jobxacc` (`offerId`, `accountId`) VALUES
+(1, 4),
+(2, 4);
+
+--
 -- Volcado de datos para la tabla `offersxposition`
 --
 
 INSERT INTO `offersxposition` (`offerId`, `jobPositionId`) VALUES
-(22, 7);
-
+(1, 7),
+(2, 4),
+(2, 5),
+(2, 6);
 
 --
 -- Volcado de datos para la tabla `students`

@@ -25,7 +25,20 @@
                                     <span class="h2 border-text"> <?php echo $jobOffer->getOfferDescription(); ?></span>
                                 </div>
                             </div>
-                            <form action="<?= FRONT_ROOT ?>jobOffer/postulation" method="POST">
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getStartDate(); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getEndDate(); ?></span>
+                                </div>
+                            </div>
+
+                            <form action="<?= FRONT_ROOT ?>jobOffer/studentPostulationAdd" method="POST">
                                 
                                 <input type="hidden" name="offerId" value='<?php echo $jobOffer->getOfferId(); ?>'>
 

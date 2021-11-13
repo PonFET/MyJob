@@ -1,6 +1,6 @@
 <?php
     require_once(VIEWS_PATH."header.php");
-    include_once(VIEWS_PATH."nav-bar.php");
+    include_once(VIEWS_PATH."nav-bar.php");    
 ?>
 
 <div id="listaUser">
@@ -24,7 +24,7 @@
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
                                     <span class="h2 border-text">Compañía: <?php foreach($companiesList as $company)
-                                                                                 {
+                                                                                 {                                                                                    
                                                                                     if($company->getCompanyId() == $jobOffer->getCompanyId())
                                                                                     {
                                                                                         echo $company->getCompanyName();
@@ -36,14 +36,20 @@
 
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <span class="h2 border-text"> <?php echo $jobOffer->offerDescription(); ?></span>
+                                    <span class="h2 border-text"> <?php echo $jobOffer->getOfferDescription(); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <span class="h2 border-text">Finalización de búsqueda: <?php echo $jobOffer->getEndDate(); ?></span>
                                 </div>
                             </div>
                             
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
                                     <span class="h2 border-text">Posiciones buscadas:
-                                        <?php foreach($jobOffer->getArrayJobPos() as $jobPos) { echo $jobPos; }?>
+                                        <?php foreach($jobOffer->getArrayJobPos() as $jobPos){ foreach($positionList as $posList){ if($posList->getJobPositionId() == $jobPos){ echo $posList->getDescription(); } } } ?>
                                     </span>
                                 </div>
                             </div>
