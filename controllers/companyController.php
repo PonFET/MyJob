@@ -23,10 +23,6 @@
             require_once(VIEWS_PATH . 'view-company.php');
         }
 
-        public function showAdd(){
-            require_once(VIEWS_PATH."add-company.php");
-        }
-
         public function add($companyName, $location, $description, $email, $phoneNumber, $cuit)
         {
             $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
