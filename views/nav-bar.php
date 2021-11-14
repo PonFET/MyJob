@@ -26,6 +26,10 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showAdminPostulations">Ver Todas las Postulaciones</a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link" href="<?php echo FRONT_ROOT ?>account/logOff">Cerrar sesion</a>
         </li>
     </ul>
@@ -71,7 +75,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showPostulations">Ver Postulaciones</a>
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>jobOffer/showCompanyPostulations">Ver Postulaciones</a>
             </li>
     
             <li class="nav-item">

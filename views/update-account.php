@@ -1,12 +1,17 @@
 <?php
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");
+
+    if($message != '')
+        {
+            echo '<script language="javascript">alert("' . $message . '");</script>';
+        }
 ?>
 
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">
-            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/update" method="POST">
+            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/updateStudentAccount" method="POST">
 
                 <h1>Actualizar</h1>
 

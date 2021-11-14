@@ -141,6 +141,26 @@ class DaoJobOffers
         }
 
 
+        public function deletePostulation($offerId, $accountId)
+        {
+            try
+            {
+                $sql = "DELETE FROM jobxacc WHERE offerId=:offerId AND accountId=:accountId";
+
+                $parameters['offerId'] = $offerId;
+                $parameters['accountId'] = $accountId;
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($sql, $parameters);
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
         public function getAllOffers()
         {
             try
@@ -335,6 +355,29 @@ class DaoJobOffers
                 }
 
                 return $offerList;
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+
+        public function getOffersById($offerId)
+        {
+            try
+            {
+                $sql = "SELECT * FROM " . $this->tableName . " WHERE offerId=:offerId";
+                
+                $parameters['offerId'] = $offerId;
+
+                $this->connection = Connection::GetInstance();
+                $result = $this->connection->Execute($sql, $parameters);
+
+                $object = $this->parseToObject($result[0]);
+
+                return $object;
             }
 
             catch(Exception $ex)

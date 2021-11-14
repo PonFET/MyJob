@@ -48,12 +48,12 @@
             {
                 $query = "UPDATE " . $this->tableName . " SET 
                         companyName=:companyName,
-                         location=:location,
-                          description=:description,
-                           email=:email,
-                            phoneNumber=:phoneNumber,
-                             cuit=:cuit
-                             WHERE companyId=:companyId;";
+                        location=:location,
+                        description=:description,
+                        email=:email,
+                        phoneNumber=:phoneNumber,
+                        cuit=:cuit
+                        WHERE companyId=:companyId;";
 
                 $parameters["companyName"] = $company->getCompanyName();
                 $parameters["location"] = $company->getLocation();

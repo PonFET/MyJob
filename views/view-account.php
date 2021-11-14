@@ -45,6 +45,17 @@
                     <th scope="row">Telefono: </th>
                     <td><?= (isset($_SESSION['account'])) ? $student->getPhoneNumber() : 'Vacio'; ?></td>
                 </tr>
+                <?php if($student->getActive() == '1') { ?>
+                    <tr>
+                        <th scope="row">Estado: </th>
+                    <td><h5 style="color:green">ACTIVO</h5></td>
+                </tr>
+                <?php } else{ ?>
+                    <tr>
+                        <th scope="row">Estado: </th>
+                        <td><h5 style="color:red">NO ACTIVO</h5></td>
+                    </tr>
+                    <?php } ?>
         </tbody>
     </table>
     <a href="<?= FRONT_ROOT ?>Account/editAccount" type="button">Editar Cuenta</a>
