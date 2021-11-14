@@ -22,7 +22,14 @@
                         <div class="card-img-top company-card container">
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <span class="h2 border-text"> <?php echo $company->getCompanyName(); ?></span>
+                                    <span class="h2 border-text"> <?php echo $company->getCompanyName(); ?></span><br>
+                                    <br>
+                                    <h4><?php echo '<b><u>Ubicación</u>:</b> ' . $company->getLocation(); ?></h4>
+                                    <h4><?php echo '<b><u>Descripción</u>:</b> ' . $company->getDescription(); ?></h4>                                    
+                                    <h4><?php echo '<b><u>E-mail</u>:</b> ' . $company->getEmail(); ?></h4>
+                                    <h4><?php echo '<b><u>Teléfono</u>:</b> ' . $company->getPhoneNumber(); ?></h4>
+                                    <h4><?php echo '<b><u>CUIT</u>:</b> ' . $company->getCuit(); ?></h4>
+                                    
                                 </div>
                                         
                                 <div class="card-body">

@@ -7,6 +7,8 @@ use Daos\DaoStudents as DaoStudents;
 use models\Student as Student;
 use Daos\DaoCompanies as DaoCompanies;
 use models\Company as Company;
+use models\Career as Career;
+use Daos\DaoCareers as DAOCareer;
 use PHPMailer\email as email;
 use PDOException;
 
@@ -14,6 +16,7 @@ class AccountController{
     private $daoAccount;
     private $daoStudent; 
     private $daoCompany;  
+    private $daoCareer;
     private $email;
       
 
@@ -21,11 +24,12 @@ class AccountController{
         $this->daoAccount = new DaoAccounts();
         $this->daoStudent = new DaoStudents(); 
         $this->daoCompany = new DaoCompanies(); 
+        $this->daoCareer = new DAOCareer();
         $this->email = new email();
         
     }
 
-    public function verify($email='', $password='')
+    public function verify($email, $password) 
     {        
         if($this->daoAccount->exist($email))
         {
@@ -33,7 +37,9 @@ class AccountController{
             $accountAux = $this->daoAccount->getByEmail($email);
 
             if($accountAux->getPassword() == $password)
-            {                
+            {
+                
+                
                 $_SESSION["account"] = $accountAux;
                 
                 if($accountAux->getPrivilegios() == 'admin')
@@ -51,11 +57,15 @@ class AccountController{
                     header("Location: viewCompany");
                 }
             }
+
+            else
+            {
+                $this->login('Contraseña errónea!');
+            }
         }
         else
         {
-            //no existe   
-            require_once(VIEWS_PATH."login.php");
+            $this->login('E-mail inválido!');
         }
     }
 
@@ -103,7 +113,7 @@ class AccountController{
 
     }
 
-    public function create($email, $password, $rPassword, $privilegios){
+    public function create($password, $rPassword, $email, $privilegios){
 
         try{
             
@@ -112,12 +122,14 @@ class AccountController{
                 $account = new Account($email, $password, $privilegios);
       
                 $this->daoAccount->add($account);
-                
-               /* $_SESSION["account"] = $account;
-                
-                header("Location: showListStudent");*/
 
-                require_once "views/offer-list.php";
+                $aux = $this->daoAccount->getByEmail($email);
+
+                $aux->setPrivilegios('student');
+                
+                $_SESSION["account"] = $aux;
+                
+                header("Location: viewAccount");                
 
             }
             else{
@@ -157,6 +169,8 @@ class AccountController{
                 session_start();
 
                 $_SESSION["account"] = $this->daoAccount->getByEmail($email);
+
+                $this->email->sendNewCompany($company);
                 
                 header("Location: viewCompany");
 
@@ -200,9 +214,8 @@ class AccountController{
 
     }
 
-    public function createStudentByA($email, $password){
-        $daoStudent = $this->daoStudent::GetInstance();
-
+    public function adminStudentPreview($email, $message='')
+    {
         if($this->daoAccount->exist($email) == true){
             
             $message='El mail ya está registrado en Base de Datos.';
@@ -215,7 +228,23 @@ class AccountController{
             
         }
 
-        else{
+        else
+        {
+        
+            $student = $this->daoStudent->getStudentByEmailAPI($email);
+
+            $career = $this->daoCareer->getCareerByIdAPI($student->getCareerId());
+        
+            require_once(VIEWS_PATH . 'add-student-admin.php');
+        }
+    }
+
+    public function createStudentByA($password, $rPassword, $email, $privilegios){
+        
+        if($password == $rPassword)
+        {
+        
+            $daoStudent = $this->daoStudent::GetInstance();       
 
             try{
                 $account = new Account($email, $password, 2);
@@ -229,6 +258,12 @@ class AccountController{
 
             }
         }
+
+        else
+        {
+            $this->adminStudentPreview($email, 'Las contraseñas no coinciden!');
+        }
+        
     }
     
     public function createCompanyByA($companyName, $location, $description, $phoneNumber, $cuit, $email, $password){
@@ -274,15 +309,10 @@ class AccountController{
     }
 
     public function logOff(){
-        unset($_SESSION['access_token']);
-        
+                
         unset($_SESSION['account']);
-        
-        unset($_SESSION['loginValidator']);
 
         session_destroy();
-        
-        unset($_SESSION['loginValidator']); 
 
         header("location: " . FRONT_ROOT . "index.php");
     }
@@ -297,41 +327,75 @@ class AccountController{
         }
     }
     
-    public function logIn(){
+    public function logIn($message=''){
         require_once("views/login.php");
     }
 
-    public function editAccount(){
+    public function editAccount($message=''){
         include ROOT . VIEWS_PATH . "update-account.php";
+    }   
+
+    public function showUpdateCompany($message='')
+    {
+        $account = $this->daoAccount->getByEmail($_SESSION['account']->getEmail());
+        $company = $this->daoCompany->getByEmail($_SESSION['account']->getEmail());
+
+        require_once(VIEWS_PATH . 'update-company-account.php');
     }
 
-    public function update($password, $rPassword){ //NO ANDA
+    public function updateCompanyAccount($companyName, $location, $description, $phoneNumber, $cuit, $email, $aPassword, $nPassword, $rNPassword, $companyId)
+    {
+        if($aPassword == $_SESSION['account']->getPassword())
+        {
+            if($nPassword == $rNPassword)
+            {
+                $account = new Account($email, $nPassword, 3);
+                $account->setId($_SESSION['account']->getId());
 
-        $daoStudent = $this->daoStudent::getInstance();
-
-        $accountOriginal = $_SESSION['account'];
-        
-        $_SESSION['updateValidator']['password'] = ($password != $rPassword) ? 'is-invalid' : 'is-valid';
-
-        if($_SESSION['updateValidator']['password'] == 'is-invalid'){
-            $this->editAccount();
-        }
-        else{
-            unset($_SESSION['updateValidator']);
-
-            $accountOriginal->setPassword($password);
-
-            try{
                 $this->daoAccount->update($account);
+                
+                $company = new Company($companyName, $location, $description, $email, $phoneNumber, $cuit);
+                $company->setCompanyId($companyId);
 
-                $_SESSION['account'] = $accountOriginal;
+                $this->daoCompany->update($company);
 
-                $this->viewAccount();
+                $account->setPrivilegios('company');
 
+                unset($_SESSION['account']);
+
+                $_SESSION['account'] = $account;
+                
+                header("Location: viewCompany");
             }
-            catch(PDOException $p){
 
+            else
+            {
+                $this->showUpdateCompany('Las contraseñas nuevas no coinciden.');
             }
+        }
+
+        else
+        {
+            $this->showUpdateCompany('La contraseña actual no coincide con la ingresada.');
+        }
+    }
+
+    public function updateStudentAccount($password, $rPassword)
+    {
+        if($password == $rPassword)
+        {
+            $aux = new Account();
+            $aux = $_SESSION['account'];
+            $aux->setPassword($password);
+
+            $this->daoAccount->update($aux);
+
+            header("Location: viewAccount");
+        }
+
+        else
+        {
+            $this->editAccount('Las contraseñas no coinciden!');
         }
     }
 

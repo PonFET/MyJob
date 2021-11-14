@@ -1,6 +1,13 @@
 <?php
     //var_dump($_POST);
     include_once(VIEWS_PATH."nav-bar.php");
+    if(isset($message))
+    {
+        if($message != '')
+        {
+            echo '<script language="javascript">alert("' . $message . '");</script>';
+        }
+    }
 ?>
 
 <div class="container-fluid">
@@ -10,12 +17,12 @@
                         <h3 class="text-center font-eight-bol">Iniciar Sesion</h3>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" name="email">
+                            <input type="text" class="form-control" id="email" name="email" required>
                             
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control" id="password" name="password" required>
                             <div class="invalid-feedback">
                                 Password incorrecto
                             </div>

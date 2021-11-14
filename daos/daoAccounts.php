@@ -118,39 +118,28 @@ class DaoAccounts{
         }
     }
 
-    public function update($account){ //sacar perfiles
+    public function update($account)
+    { 
         if($account instanceof Account){
-            if($this->exist($account->getEmail())){
+            
                 try{
-                    $sql = "UPDATE accounts set email = :email, password = :password where id = :id";
+                    $sql = "UPDATE accounts set email = :email, password = :password where accountId = :id";
+
                     $parameters['email'] = $account->getEmail();
                     $parameters['password'] = $account->getPassword();
+                    $parameters['id'] = $account->getId();
 
                     $this->connection = Connection::GetInstance();
     
-                    $this->connection->ExecuteNonQuery($query, $parameters);
+                    $this->connection->ExecuteNonQuery($sql, $parameters);
     
                     $daoProfile = DaoAccounts::GetInstance();
-                    $daoProfile->update($cuenta->getProfile());
                 }
-                catch (Exception $ex) {
+                catch (\Exception $ex) {
                     throw $ex;
                 }
-            }
-        }
-    }
-
-    //posiblemente no ande
-    public function toArray($object){
-        $parameters = array();
-
-        if($object instanceof Account){
             
-            $parameters['email'] = $object->getEmail();
-            $parameters['password'] = $object->getPassword();
-            $parameters['privilegios'] = $object->getPrivilegios();
         }
-        return $parameters;
     }
     
     public function getAll(){

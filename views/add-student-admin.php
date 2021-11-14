@@ -2,13 +2,18 @@
 
 include_once(VIEWS_PATH."nav-bar.php"); 
 
+if($message != '')
+{
+    echo '<script language="javascript">alert("' . $message . '");</script>';
+}
+
 ?>
 
 
 <div class="container-fluid">
     <div class="row justify-content-center">
 
-            
+            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/createStudentByA" method="POST">
                 <h2>Verificar Datos:</h2>
                 <div class="row d-flex justify-content-center">
 
@@ -48,8 +53,7 @@ include_once(VIEWS_PATH."nav-bar.php");
                     </div>
 
                 </div>
-                
-                <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>Account/create" method="POST">
+
                 <div class="row d-flex justify-content-center">
 
                     <div class="col-3">

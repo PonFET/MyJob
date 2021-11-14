@@ -2,6 +2,7 @@
     namespace Controllers;
 
     use Daos\DaoJobOffers as DAOJobOffers;
+    use Daos\DaoAccounts as DAOAccounts;
     use Daos\DaoCareers as DAOCareers;
     use Exception;
     use Daos\DaoJobPositions as DAOJobPositions;       
@@ -24,6 +25,7 @@
         private $daoCompanies;
         private $daoStudents;
         private $daoCareers;
+        private $daoAccounts;
         private $email;
 
         public function __construct()
@@ -33,6 +35,7 @@
             $this->daoJobPositions = new DAOJobPositions();
             $this->daoStudents = new DAOStudents();
             $this->daoCareers = new DAOCareers;
+            $this->daoAccounts = new DAOAccounts();
             $this->email = new email();
         }
 
@@ -55,8 +58,6 @@
             $offer->setArrayJobPos($jobPositionIdArray);
             $offer->setStartDate($startDate);
             $offer->setEndDate($endDate);
-
-            var_dump($offer);
 
             $this->daoJobOffers->add($offer);
 
@@ -143,7 +144,7 @@
             }
         }
 
-        public function showPostulations()
+        public function showCompanyPostulations()
         {
             $company = new Company();           
 
@@ -153,8 +154,42 @@
             $positionList = $this->daoJobPositions->getAll();
             $studentList = $this->daoStudents->getStudentsByAccount();
             $careerList = $this->daoCareers->getAll();
-            $jxaList = $this->daoJobOffers->getAllJXA(); 
+            $jxaList = $this->daoJobOffers->getAllJXA();            
 
             require_once(VIEWS_PATH . "company-postulations.php");
         }
+
+        public function deletePostulation($offerId, $email, $companyName)
+        {
+            try
+            {
+                $account = $this->daoAccounts->getByEmail($email);
+
+                $this->daoJobOffers->deletePostulation($offerId, $account->getId());
+
+                $offer = $this->daoJobOffers->getOffersById($offerId);
+
+                $this->email->sendPostulationDelete($email, $offer, $companyName);
+
+                header("Location: showAdminPostulations");
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function showAdminPostulations()
+        {            
+            $companiesList = $this->daoCompanies->getAll();
+            $offerList = $this->daoJobOffers->getAllEnabledOffers();
+            $positionList = $this->daoJobPositions->getAll();
+            $studentList = $this->daoStudents->getStudentsByAccount();
+            $careerList = $this->daoCareers->getAll();
+            $jxaList = $this->daoJobOffers->getAllJXA();            
+
+            require_once(VIEWS_PATH . "admin-postulations.php");
+        }
+
     }
