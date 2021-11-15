@@ -2,7 +2,7 @@
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");
 ?>
-
+<br><br>
 <div class="row justify-content-center">
     <div class="card" style="width: 35rem;">
         <table class="table table-hover">
@@ -58,9 +58,9 @@
                     <?php } ?>
         </tbody>
     </table>
-    <a href="<?= FRONT_ROOT ?>Account/editAccount" type="button">Editar Cuenta</a>
+    <a href="<?= FRONT_ROOT ?>Account/editAccount" class="btn btn-info" type="button">Cambiar Contraseña</a><br>
     </div>
-</div>
+</div><br><br>
 
 <?php
     require_once(VIEWS_PATH."footer.php");

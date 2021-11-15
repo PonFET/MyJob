@@ -5,6 +5,7 @@ namespace Daos;
 use Daos\Connection as Connection;
 use models\Account as Account;
 use Daos\DaoStudents as DaoStudents;
+use Exception;
 use PDOException;
 
 class DaoAccounts{
@@ -141,6 +142,26 @@ class DaoAccounts{
             
         }
     }
+
+
+    public function delete($mail)
+    {
+        try
+        {
+            $query = 'DELETE FROM accounts WHERE email=:email;';
+
+            $parameters['email'] = $mail;
+
+            $this->connection = Connection::GetInstance();
+            $this->connection->ExecuteNonQuery($query, $parameters);
+        }
+
+        catch(Exception $ex)
+        {
+            throw $ex;
+        }
+    }
+
     
     public function getAll(){
         $sql = "SELECT * FROM accounts";

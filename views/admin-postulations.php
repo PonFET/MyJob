@@ -1,7 +1,7 @@
 <?php 
     require_once(VIEWS_PATH . "header.php");
     include_once(VIEWS_PATH . "nav-bar.php");
-
+    
 ?>
 
     <main class="py-5">

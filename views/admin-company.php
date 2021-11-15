@@ -2,9 +2,16 @@
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");    
 ?>
+<br><br>
+
+
 
 <div>
     <div class ="container"> 
+    <form action="<?php echo FRONT_ROOT ?>account/addCompany" method="POST">
+        <button type="submit"  name="companyId" class="btn btn-success">Agregar Empresa</button>
+    </form>
+<br><br>
         <div>
             <div class="row">
                 <div class="col-9">
@@ -33,12 +40,12 @@
                                 </div>
                                         
                                 <div class="card-body">
-                                    <form class="" action="<?php echo FRONT_ROOT ?>company/delete" method="POST">
-                                        <button type="submit" name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Eliminar</button>
-                                    </form>
                                     <form action="<?php echo FRONT_ROOT ?>company/showModify" method="POST">
-                                        <button type="submit"  name="companyId" class="btn-dark btn-sm" value="<?php echo $company->getCompanyId(); ?>">Actualizar</button>
-                                    </form>
+                                        <button type="submit"  name="companyId" class="btn-dark btn" value="<?php echo $company->getCompanyId(); ?>">Modificar</button>
+                                    </form><br>
+                                    <form class="" action="<?php echo FRONT_ROOT ?>company/delete" method="POST">
+                                        <button type="submit" name="companyId" class="btn btn-danger" value="<?php echo $company->getCompanyId(); ?>">Eliminar</button>
+                                    </form>                                    
                                 </div>
                             </div>
                         </div>
@@ -48,9 +55,7 @@
                 <?php } ?>
 
                 
-                <form action="<?php echo FRONT_ROOT ?>account/addCompany" method="POST">
-                    <button type="submit"  name="companyId" class="btn-dark btn-sm">Agregar</button>
-                </form>
+                
                 
             </div>
         </div>
