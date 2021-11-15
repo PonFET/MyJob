@@ -2,7 +2,7 @@
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");
 ?>
-
+<br><br>
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 col-md-3">
@@ -38,7 +38,7 @@
 
                     </div>
                 </div>
-
+<br>
                 <h2>Datos de la Cuenta:</h2>
 
                 <div class="form-row">
@@ -73,5 +73,5 @@
         </div>
     </div>
 </div>
-
+<br><br>
 <?php require_once(VIEWS_PATH."footer.php");?>

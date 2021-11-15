@@ -1,6 +1,6 @@
 <?php
     require_once(VIEWS_PATH."header.php");
-    include_once(VIEWS_PATH."nav-bar.php");    
+    include_once(VIEWS_PATH."nav-bar.php"); 
 ?>
 
 <div class="row justify-content-center">
@@ -32,7 +32,7 @@
                 </tr>
         </tbody>
     </table>
-    <a href="<?= FRONT_ROOT ?>Account/edit" type="button">Editar Cuenta</a>
+    <a href="<?= FRONT_ROOT ?>Account/showUpdateCompany" type="button">Editar Cuenta</a>
     </div>
 </div>
 
