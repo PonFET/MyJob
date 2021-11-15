@@ -36,7 +36,7 @@
                 $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above//25//587
             
                 //Recipients
-                $mail->setFrom(EMAIL, 'Admin');     // $email, 'Admin'
+                $mail->setFrom(EMAIL, 'MyJob Admin');     // $email, 'Admin'
                 $mail->addAddress($email);    // "youremail@gmail.com" // Add a recipient//usuario
             
             
@@ -46,12 +46,12 @@
             
                 // Content
                 $mail->isHTML(true);                                  // Set email format to HTML
-                $mail->Subject = 'Postulacion finalizada';
+                $mail->Subject = 'Oferta finalizada';
             
-                $mail->Body= "Se le comunica que esta oferta laboral ha expirado:" . $jobOffer->getOfferDescription();
+                $mail->Body= "Se le comunica que la oferta laboral: '" . $jobOffer->getOfferDescription() . "' de la empresa: '" . $companyName . "' ha llegado a su fecha de fin, le agradecemos su postulacion, y le deseamos suerte!";
 
                 $mail->send();
-                echo 'Message has been sent';
+                
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
@@ -76,7 +76,7 @@
                 $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above//25//587
             
                 //Recipients
-                $mail->setFrom(EMAIL, 'Admin');     // $email, 'Admin'
+                $mail->setFrom(EMAIL, 'MyJob Admin');     // $email, 'Admin'
                 $mail->addAddress($email);    // "youremail@gmail.com" // Add a recipient//usuario
             
             
@@ -94,7 +94,7 @@
                                   para saber los motivos o para realizar una apelacion.";
 
                 $mail->send();
-                echo 'Message has been sent';
+                
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
@@ -119,7 +119,7 @@
                 $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above//25//587
             
                 //Recipients
-                $mail->setFrom(EMAIL, 'Admin');     // $email, 'Admin'
+                $mail->setFrom(EMAIL, 'MyJob Admin');     // $email, 'Admin'
                 $mail->addAddress($company->getEmail());    // "youremail@gmail.com" // Add a recipient//usuario
             
             
@@ -139,7 +139,7 @@
                             "\r CUIT: " . $company->getCuit();
 
                 $mail->send();
-                echo 'Message has been sent';
+                
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }

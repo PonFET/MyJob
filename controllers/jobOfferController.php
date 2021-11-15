@@ -8,7 +8,8 @@
     use Daos\DaoJobPositions as DAOJobPositions;       
     use Daos\DaoCompanies as DAOCompanies;
     use Daos\DaoStudents as DAOStudents;
-    use models\Career as Career;
+use DateTime;
+use models\Career as Career;
     use models\Student as Student;
     use models\Account as Account;
     use Models\Company as Company;
@@ -41,27 +42,34 @@
 
 
 
-        public function showOfferView($message='')
+        public function showOfferView($message='') //Estudiante. Mostrar solamente Offers de su carrera y solamente activas.
         {
-            $offerList = $this->daoJobOffers->getAllOffers();
-            $offXposList = $this->daoJobOffers->getAllOffersbyPosition();
-            $positionList = $this->daoJobPositions->getAll();   //Armar array de jobpositions desde DAO.
+            $this->checkOfferExpiration();
+            
+            $offerList = $this->daoJobOffers->getAllEnabledOffers();            
+            $positionList = $this->daoJobPositions->getAll();
+            $careerList = $this->daoCareers->getAll();
+            $student = $this->daoStudents->getStudentByEmailAPI($_SESSION['account']->getEmail());
+            $companiesList = $this->daoCompanies->getAll();
+            $jxaList = $this->daoJobOffers->getAllJXA();
 
             require_once(VIEWS_PATH . 'offer-list.php');
         }
 
-        public function add($companyId, $offerDescription, $startDate, $endDate, $jobPositionIdArray) //Recibe desde la vista un array con los JobPosition que va a pedir la JobOffer.
+        public function add($companyId, $offerDescription, $endDate, $jobPositionIdArray) //Recibe desde la vista un array con los JobPosition que va a pedir la JobOffer.
         {
             $offer = new JobOffer();
             $offer->setCompanyId($companyId);
             $offer->setOfferDescription($offerDescription);
             $offer->setArrayJobPos($jobPositionIdArray);
-            $offer->setStartDate($startDate);
+            $now = new DateTime();
+            $now->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+            $offer->setStartDate($now->format("Y-m-d H:i:s"));
             $offer->setEndDate($endDate);
 
             $this->daoJobOffers->add($offer);
 
-            $this->showOfferView($message = "");
+            header("Location: ShowListActive");
         }
         
         public function ShowAddOfferView()
@@ -74,6 +82,8 @@
 
         public function ShowListActive()
         {
+            $this->checkOfferExpiration();
+            
             $offerList = $this->daoJobOffers->getAllEnabledOffers();
             $companiesList = $this->daoCompanies->getAll();
             $positionList = $this->daoJobPositions->getAll();
@@ -112,11 +122,12 @@
             
         }
 
-        public function studentPostulationHistory()
+        public function studentPostulationHistory() //Mostrar todas las Offer pero indicar si están expiradas.
         {
             $accountAux = new Account();            
             $accountAux->setId($_SESSION['account']->getId());
 
+            $this->checkOfferExpiration();
 
             $companiesList = $this->daoCompanies->getAll();
             $positionList = $this->daoJobPositions->getAll();
@@ -144,11 +155,13 @@
             }
         }
 
-        public function showCompanyPostulations()
+        public function showCompanyPostulations() //Mostrar todas las offer igualmente
         {
             $company = new Company();           
 
             $company = $this->daoCompanies->getByEmail($_SESSION['account']->getEmail());
+
+            $this->checkOfferExpiration();
 
             $offerList = $this->daoJobOffers->getCompanyOffers($company);
             $positionList = $this->daoJobPositions->getAll();
@@ -180,10 +193,12 @@
             }
         }
 
-        public function showAdminPostulations()
-        {            
+        public function showAdminPostulations() //Mostrar todas las Offer igual.
+        {
+            $this->checkOfferExpiration();
+            
             $companiesList = $this->daoCompanies->getAll();
-            $offerList = $this->daoJobOffers->getAllEnabledOffers();
+            $offerList = $this->daoJobOffers->getAllOffers();
             $positionList = $this->daoJobPositions->getAll();
             $studentList = $this->daoStudents->getStudentsByAccount();
             $careerList = $this->daoCareers->getAll();
@@ -191,5 +206,46 @@
 
             require_once(VIEWS_PATH . "admin-postulations.php");
         }
+
+        public function checkOfferExpiration()
+        {
+            try
+            {
+                $offerList = $this->daoJobOffers->checkExpiration();
+
+                $companiesList = $this->daoCompanies->getAll();
+                //$offerList = $this->daoJobOffers->getAllDisabledOffers();
+                $jxaList = $this->daoJobOffers->getAllJXA();
+                $accountList = $this->daoAccounts->getAll();
+
+                foreach($jxaList as $jxa)
+                {
+                    foreach($accountList as $account)
+                    {
+                        if($account->getId() == $jxa['accountId'])
+                        {
+                            foreach($offerList as $offer)
+                            {
+                                if($offer->getOfferId() == $jxa['offerId'])
+                                {
+                                    foreach($companiesList as $company)
+                                    {
+                                        if($company->getCompanyId() == $offer->getCompanyId())
+                                        {
+                                            $this->email->sendExpirationOffer($account->getEmail(), $offer, $company->getCompanyName());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }            
+        }       
 
     }

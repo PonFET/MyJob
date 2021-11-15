@@ -3,7 +3,9 @@
 
     use \Exception as Exception;    
     use Daos\Connection as Connection;
-    use models\jobOffer as JobOffer;
+use DateTime;
+use DateTimeZone;
+use models\jobOffer as JobOffer;
     use models\Account as Account;
     use Models\Company;
 
@@ -179,7 +181,14 @@ class DaoJobOffers
                     $this->connection = Connection::GetInstance();
                     $positionArray = $this->connection->Execute($queryPostion);
 
-                    $aux->setArrayJobPos($positionArray);
+                    $arrayAux = array();
+
+                    foreach($positionArray as $posRow)
+                    {
+                        array_push($arrayAux, $posRow['jobPositionId']);
+                    }
+
+                    $aux->setArrayJobPos($arrayAux);
 
                     array_push($this->jobOfferList, $aux);
                 }
@@ -227,6 +236,40 @@ class DaoJobOffers
                     }
 
                     $offer->setArrayJobPos($arrayAux);
+
+                    array_push($parsed, $offer);
+                }
+
+                return $parsed;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
+        public function getAllDisabledOffers()
+        {
+            try
+            {
+                $resultSet = 0;
+
+                $query = 'SELECT * FROM ' . $this->tableName . ' WHERE enable = 0;';
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+
+                $parsed = array();
+
+                foreach($resultSet as $row)
+                {
+                    $offer = new JobOffer();
+
+                    $offer->setOfferId($row['offerId']);
+                    $offer->setCompanyId($row['companyId']);
+                    $offer->setOfferDescription($row['offerDescription']);
+                    $offer->setStartDate($row['startDate']);
+                    $offer->setEndDate($row["endDate"]);                                        
 
                     array_push($parsed, $offer);
                 }
@@ -288,10 +331,12 @@ class DaoJobOffers
         {
             try
             {
+                $resultSet = null;
+                
                 $query = 'SELECT * FROM jobxacc;';
 
                 $this->connection = Connection::GetInstance();
-                $resultSet = $this->connection->Execute($query);
+                $resultSet = $this->connection->Execute($query);                
 
                 return $resultSet;
             }
@@ -408,6 +453,7 @@ class DaoJobOffers
                     $offer->setOfferDescription($row['offerDescription']);
                     $offer->setStartDate($row['startDate']);
                     $offer->setEndDate($row['endDate']);
+                    $offer->setEnable($row['enable']);
 
                     $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
                     $this->connection = Connection::GetInstance();
@@ -432,7 +478,45 @@ class DaoJobOffers
             {
                 throw $ex;
             }
-        }        
+        } 
+        
+
+        public function checkExpiration()
+        {
+            try
+            {
+                $query = "SELECT * FROM jobOffers WHERE enable = 1 AND (STR_TO_DATE(endDate, '%Y-%m-%d %H:%i:%s') < STR_TO_DATE(:now, '%Y-%m-%d %H:%i:%s'));";
+
+                $now = new DateTime();
+                $now->setTimezone(new DateTimeZone('America/Argentina/Buenos_Aires'));
+                $parameters['now'] = $now->format("Y-m-d H:i:s");
+
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query, $parameters);
+
+                $offerList = array();
+
+                foreach($resultSet as $row)
+                {
+                    $offer = $this->parseToObject($row);
+
+                    array_push($offerList, $offer);
+                }
+                
+                $query2 = "UPDATE jobOffers SET enable = 0 WHERE (STR_TO_DATE(endDate, '%Y-%m-%d %H:%i:%s') < STR_TO_DATE(:now, '%Y-%m-%d %H:%i:%s'));";
+
+                $this->connection = Connection::GetInstance();
+                $this->connection->ExecuteNonQuery($query2, $parameters);
+
+                return $offerList;
+            }
+
+            catch (Exception $ex)
+            {
+                throw $ex;
+            }
+        }
+
 
         public function parseToObject($value)
         {
@@ -442,6 +526,7 @@ class DaoJobOffers
             $jobO->setOfferDescription($value['offerDescription']);
             $jobO->setStartDate($value['startDate']);
             $jobO->setEndDate($value['endDate']);
+            $jobO->setEnable($value['enable']);
         
             return $jobO;
         }

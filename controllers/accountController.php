@@ -9,6 +9,7 @@ use Daos\DaoCompanies as DaoCompanies;
 use models\Company as Company;
 use models\Career as Career;
 use Daos\DaoCareers as DAOCareer;
+use DateTime;
 use PHPMailer\email as email;
 use PDOException;
 
@@ -408,7 +409,7 @@ class AccountController{
     
     public function showList(){
 
-        $arrayAccount = $this->daoAccount->getAll();
+        $arrayAccount = $this->daoAccount->getAll();        
 
         require_once(VIEWS_PATH."list-account.php");
     }
