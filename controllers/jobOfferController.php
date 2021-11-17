@@ -251,7 +251,7 @@
             }            
         }       
 
-        public function postulationsPDF($companyName, $offerDescription, $positionList, $studentList)
+        public function postulationsPDF(/*$companyName, $offerDescription, $positionList, $studentList*/)
         {
             if(isset($this->fpdf))
             {
