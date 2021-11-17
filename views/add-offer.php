@@ -48,6 +48,10 @@
                                         </tr>
                                     <?php } ?>
                         </div>
+
+                        <div>
+                            <input type="file" name="offerImg">
+                        </div>
                         
 
                     </div>

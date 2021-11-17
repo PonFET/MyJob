@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `joboffers` (
   `offerDescription` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
   `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `endDate` datetime DEFAULT NULL,
+  `offerImg` varchar(1000),
   `enable` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`offerId`),
   KEY `offerId` (`offerId`,`companyId`),

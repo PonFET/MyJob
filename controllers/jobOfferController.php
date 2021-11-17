@@ -59,7 +59,7 @@
             require_once(VIEWS_PATH . 'offer-list.php');
         }
 
-        public function add($companyId, $offerDescription, $endDate, $jobPositionIdArray) //Recibe desde la vista un array con los JobPosition que va a pedir la JobOffer.
+        public function add($companyId, $offerDescription, $endDate, $jobPositionIdArray, $offerImg) //Recibe desde la vista un array con los JobPosition que va a pedir la JobOffer.
         {
             $offer = new JobOffer();
             $offer->setCompanyId($companyId);
@@ -69,10 +69,55 @@
             $now->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
             $offer->setStartDate($now->format("Y-m-d H:i:s"));
             $offer->setEndDate($endDate);
+            $offerImg == $this->uploadImg($offerImg);
+            $offer->setOfferImg($offerImg);
 
             $this->daoJobOffers->add($offer);
 
             header("Location: ShowListActive");
+        }
+
+        public function uploadImg($offerImg){
+            if($offerImg == NULL){
+                return $fileDestination = 'views/image/No-image-available.png';
+            }
+            else{
+                $file = $_FILES['file'];
+
+                $fileName = $_FILES['file']['name'];
+                $fileTmpName = $_FILES['file']['tmp_name'];
+                $fileSize = $_FILES['file']['size'];
+                $fileError = $_FILES['file']['error'];
+                $fileType = $_FILES['file']['type'];
+
+                $fileExt = explode('.', $fileName);
+                $fileActualExt = strtolower(end($fileExt));
+
+                $allowed = array('jpg','png','jpeg','pnf');
+
+                if(in_array($fileActualExt, $allowed)){
+                    if($fileError === 0){
+                        if($fileSize < 1000000){
+                            $fileNewName = uniquid('',true) . "." . $fileActualExt;
+
+                            // Si lo queremos guardar en una carpeta de nuestro proyecto
+                             $fileDestination  = 'views/image/' . $fileNewName;
+                             return $fileDestination;
+                        }
+                        else{
+                            echo "El archivo es demasiado pesado";
+                        }
+                    }
+                    else{
+                        echo "Hubo un error subiendo el archivo";
+                    }
+                }
+                else{
+                    echo "No puedes subir este tipo de archivo.";
+                }
+
+            }
+
         }
         
         public function ShowAddOfferView()
