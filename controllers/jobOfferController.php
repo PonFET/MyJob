@@ -8,14 +8,15 @@
     use Daos\DaoJobPositions as DAOJobPositions;       
     use Daos\DaoCompanies as DAOCompanies;
     use Daos\DaoStudents as DAOStudents;
-use DateTime;
-use models\Career as Career;
+    use DateTime;
+    use models\Career as Career;
     use models\Student as Student;
     use models\Account as Account;
     use Models\Company as Company;
     use models\jobOffer as JobOffer;
     use models\jobPosition as JobPosition;
     use PHPMailer\email as email;
+    use FPDF\FPDF as FPDF;
 
     // agregar esta linea cuando se ejecute el eliminar jobOffer por expiracion: $this->email->sendMail("hiperknife@gmail.com",$ticket);
 
@@ -28,6 +29,7 @@ use models\Career as Career;
         private $daoCareers;
         private $daoAccounts;
         private $email;
+        private $fpdf;
 
         public function __construct()
         {
@@ -38,6 +40,7 @@ use models\Career as Career;
             $this->daoCareers = new DAOCareers;
             $this->daoAccounts = new DAOAccounts();
             $this->email = new email();
+            $this->fpdf = new FPDF();
         }
 
 
@@ -109,9 +112,9 @@ use models\Career as Career;
             $this->showOfferView($message = "");
         }
 
-        public function studentPostulationAdd($jobOfferId)
+        public function studentPostulationAdd($jobOfferId) //controlar las condiciones en los metodos nuevamente, no dejarle todo a vistas.
         {
-            //Verificar primero si el alumno ya está postulado.
+            
             $accountAux = new Account();
             $jobOfferAux = new JobOffer();
             $accountAux->setId($_SESSION['account']->getId());
@@ -207,7 +210,7 @@ use models\Career as Career;
             require_once(VIEWS_PATH . "admin-postulations.php");
         }
 
-        public function checkOfferExpiration()
+        private function checkOfferExpiration()
         {
             try
             {
@@ -247,5 +250,27 @@ use models\Career as Career;
                 throw $ex;
             }            
         }       
+
+        public function postulationsPDF($companyName, $offerDescription, $positionList, $studentList)
+        {
+            if(isset($this->fpdf))
+            {
+                unset($this->fpdf);
+                $this->fpdf = new FPDF();
+            }
+            
+            // CELLS
+            // Diseño con FPDF: $this->fpdf->Cell($ancho, $alto, $texto, $borde, $saltoLinea, $alineacion, $fondo, $vinculo);
+            //                                      px      px    string   int       int      'L' 'C' 'R'     
+
+            ob_start();
+            $this->fpdf->AddPage();
+            $this->fpdf->SetFont('Arial', 'B', 12);
+            $this->fpdf->Cell(50, 10, 'Probanding', 1, 0, 'C');
+            $this->fpdf->Output();
+            ob_end_flush();            
+        }
+
+            
 
     }
