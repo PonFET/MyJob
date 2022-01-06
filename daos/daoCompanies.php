@@ -48,12 +48,12 @@
             {
                 $query = "UPDATE " . $this->tableName . " SET 
                         companyName=:companyName,
-                         location=:location,
-                          description=:description,
-                           email=:email,
-                            phoneNumber=:phoneNumber,
-                             cuit=:cuit
-                             WHERE companyId=:companyId;";
+                        location=:location,
+                        description=:description,
+                        email=:email,
+                        phoneNumber=:phoneNumber,
+                        cuit=:cuit
+                        WHERE companyId=:companyId;";
 
                 $parameters["companyName"] = $company->getCompanyName();
                 $parameters["location"] = $company->getLocation();
@@ -77,16 +77,25 @@
 
         public function exist($email){
             try{
-                $sql = "SELECT exists ( SELECT * from companies where email = :email);";
-    
+
+                $result = null;
+                
+                $query = "SELECT * FROM companies WHERE email=:email;";
+
+                $parameters["email"] = $email;
+
                 $this->connection = connection::GetInstance();
-    
-                $result = $this->connection->Execute($sql);
-    
-                $rta = ($result[0][0] != 1)? false : true;
-    
-                return $rta;
+
+                $result = $this->connection->Execute($query, $parameters);
+
+                if($result != null)
+                {
+                    return true;
+                }
+
+                else return false;
             }
+
             catch(Exception $ex){
                 throw $ex;
             }
@@ -96,16 +105,24 @@
         public function getByEmail($email){
             try{
                 $sql = "SELECT * from companies where email = :email;";
+
+                $parameters['email'] = $email;
     
                 $this->connection = connection::GetInstance();
     
-                $result = $this->connection->Execute($sql);
+                $value = $this->connection->Execute($sql, $parameters);
     
-                $array = $this->mapeo($result);
+                $company = new Company();                
+
+                $company->setCompanyId($value[0]["companyId"]);
+                $company->setCompanyName($value[0]["companyName"]);
+                $company->setLocation($value[0]["location"]);
+                $company->setDescription($value[0]["description"]);
+                $company->setEmail($value[0]["email"]);
+                $company->setPhoneNumber($value[0]["phoneNumber"]);
+                $company->setCuit($value[0]['cuit']);
     
-                $object = !empty($array) ? $array[0] : [];
-    
-                return $object;
+                return $company;
             }
             catch(Exception $ex){
                 throw $ex;
@@ -144,7 +161,7 @@
     
                 $result = $this->connection->Execute($sql);
     
-                $array = $this->mapeo($result);
+                $array = $this->mapeo($result);               
             
                 return $array;
             }

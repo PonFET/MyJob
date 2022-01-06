@@ -2,6 +2,38 @@
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");
 ?>
+<br><br>
+<div class="container" id="crearUser">
+
+    <div class="row">
+        <div class="col-9">
+            <h3> Agregar Cuenta Nueva: </h3>
+        </div>
+    </div>
+
+    <div>
+
+        <form  action="<?php echo FRONT_ROOT ?>account/addAdmin" method="POST">
+            <button type="submit" name="" class="btn btn-warning" value="">Admin</button>
+        </form>
+
+        <br>
+
+        <form class="col-3" action="<?php echo FRONT_ROOT ?>account/addStudent" method="POST">
+            <button type="submit" name="" class="btn btn-info" value="">Estudiante</button>
+        </form>
+
+        <br>
+
+        <form class="col-3" action="<?php echo FRONT_ROOT ?>account/addCompany" method="POST">
+            <button type="submit" name="" class="btn btn-success" value="">Compañia</button>
+        </form>
+
+        <br>
+        
+    </div>
+</div><br>
+
 
 <div id="listaUser">
     <div class ="container"> 
@@ -34,6 +66,7 @@
         </div>
     </div>
 </div>
+
 
 <?php
     require_once(VIEWS_PATH."footer.php");

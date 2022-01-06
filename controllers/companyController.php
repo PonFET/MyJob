@@ -3,15 +3,18 @@
 
     use Daos\DaoCompanies as DAOCompanies;
     use models\Company as Company;
+    use Daos\DaoAccounts as DAOAccounts;
     use PDOException;
 
     class CompanyController
     {
-        private $daoCompany;        
+        private $daoCompany;
+        private $daoAccount;        
 
         public function __construct()
         {
             $this->daoCompany = new DAOCompanies();
+            $this->daoAccount = new DAOAccounts();
         }
 
 
@@ -21,10 +24,6 @@
             $companyList = $this->daoCompany->getAll();
 
             require_once(VIEWS_PATH . 'view-company.php');
-        }
-
-        public function showAdd(){
-            require_once(VIEWS_PATH."add-company.php");
         }
 
         public function add($companyName, $location, $description, $email, $phoneNumber, $cuit)
@@ -63,18 +62,22 @@
             $companyList = $this->daoCompany->getAll();
             
             $company = new Company();
+            $mail = null;
 
             foreach($companyList as $key)
             {
                 if($key->getCompanyId() == $id)
                 {
                     $company = $key;
+                    $mail = $key->getEmail();
                 }
-            }
+            }            
 
             $this->daoCompany->delete($company);
 
-            $this->showList();
+            $this->daoAccount->delete($mail);
+
+            header("Location: adminList");
         }   
         
         public function showList(){
@@ -82,6 +85,11 @@
             $arrayCompany = $this->daoCompany->getAll();
     
             require_once(VIEWS_PATH."list-company.php");
+        }
+
+        public function viewCompany(){
+
+            require_once(VIEWS_PATH."view-company.php");
         }
 
         public function adminList(){

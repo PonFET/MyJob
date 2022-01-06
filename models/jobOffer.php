@@ -1,20 +1,26 @@
 <?php
     namespace models;
 
-    class jobOffer
+use DateTime;
+
+class jobOffer
     {
         private $offerId;
         private $companyId;        
         private $offerDescription;
         private $arrayJobPos;
+        private $startDate;
+        private $endDate;
         private $enable;
 
-        function __construct($offerId = 0, $companyId = 0, $offerDescription = '', $arrayJobPos = array())
+        function __construct($offerId = 0, $companyId = 0, $offerDescription = '', $arrayJobPos = array(), $startDate='', $endDate='')
         {
             $this->offerId = $offerId;
             $this->companyId = $companyId;            
             $this->offerDescription = $offerDescription;
-            $this->arrayJobPos = $arrayJobPos;            
+            $this->arrayJobPos = $arrayJobPos;
+            $this->startDate = $startDate;
+            $this->endDate = $endDate;            
         }
 
         /**
@@ -113,6 +119,46 @@
         public function setEnable($enable)
         {
                 $this->enable = $enable;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of startDate
+         */ 
+        public function getStartDate()
+        {
+                return $this->startDate;
+        }
+
+        /**
+         * Set the value of startDate
+         *
+         * @return  self
+         */ 
+        public function setStartDate($startDate)
+        {
+                $this->startDate = $startDate;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of endDate
+         */ 
+        public function getEndDate()
+        {
+                return $this->endDate;
+        }
+
+        /**
+         * Set the value of endDate
+         *
+         * @return  self
+         */ 
+        public function setEndDate($endDate)
+        {
+                $this->endDate = $endDate;
 
                 return $this;
         }

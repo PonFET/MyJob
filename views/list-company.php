@@ -1,17 +1,16 @@
 <?php
     require_once(VIEWS_PATH."header.php");
-    include_once(VIEWS_PATH."nav-bar.php");
-    //var_dump($_SESSION['account']);
+    include_once(VIEWS_PATH."nav-bar.php");    
 ?>
-
+<br>
 <div>
     <div class ="container"> 
         <div>
             <div class="row">
                 <div class="col-9">
                     <h2> Empresas
-                </div>
-            </div>
+                </div><hr>
+            </div><br>
             <div class="row">
                 <?php 
                 foreach($arrayCompany as $company)

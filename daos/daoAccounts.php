@@ -5,6 +5,7 @@ namespace Daos;
 use Daos\Connection as Connection;
 use models\Account as Account;
 use Daos\DaoStudents as DaoStudents;
+use Exception;
 use PDOException;
 
 class DaoAccounts{
@@ -25,23 +26,15 @@ class DaoAccounts{
     public function add($account){
         if($account instanceof Account){
             try{
-                $sql = "INSERT into accounts (email, password, privilegios) values (:email, :password, :privilegios);";
+                $sql = "INSERT into accounts (email, password, privilegeId) values (:email, :password, :privilegeId);";
                 $parameters['email'] =  $account->getEmail();
                 $parameters['password'] =  $account->getPassword();
-                $parameters['privilegios'] =  $account->getPrivilegios();
+                $parameters['privilegeId'] =  $account->getPrivilegios();
                 $this->connection = Connection::GetInstance();
 
+                var_dump($parameters);
+
                 $this->connection->ExecuteNonQuery($sql,$parameters);
-
-                //el id se genera en la base de datos, por eso tengo que pedir nuevamente el objeto.
-                $object = $this->getByEmail($account->getEmail());
-
-                $account->setId($object->getId());
-            
-                $daoStudent = DaoStudents::GetInstance();
-
-                $daoStudent->add($account);
-
             }
             catch(PDOException $ex){
                 throw $ex;
@@ -57,13 +50,16 @@ class DaoAccounts{
 
             $this->connection = Connection::GetInstance();
             
-            $resultSet = $this->connection->Execute($sql, $parameters);
+            $resultSet = $this->connection->Execute($sql, $parameters); 
+            
+            $account = new Account();
 
-            var_dump($resultSet);
+            $account->setId($resultSet[0]['accountId']);
+            $account->setEmail($resultSet[0]['email']);
+            $account->setPassword($resultSet[0]['password']);        
+            $account->setPrivilegios($resultSet[0]['privilegeName']);
 
-            $object = $this->mapeo($resultSet);            
-
-            return $object;
+            return $account;
         }
         catch (\Exception $ex){
             throw $ex;
@@ -76,8 +72,7 @@ class DaoAccounts{
 
         $account->setId($value[0]['accountId']);
         $account->setEmail($value[0]['email']);
-        $account->setPassword($value[0]['password']);
-        $account->setStudentId($value[0]['studentId']);
+        $account->setPassword($value[0]['password']);        
         $account->setPrivilegios($value[0]['privilegeName']); 
 
         return $account;
@@ -124,40 +119,49 @@ class DaoAccounts{
         }
     }
 
-    public function update($account){ //sacar perfiles
+    public function update($account)
+    { 
         if($account instanceof Account){
-            if($this->exist($account->getEmail())){
+            
                 try{
-                    $sql = "UPDATE accounts set email = :email, password = :password where id = :id";
+                    $sql = "UPDATE accounts set email = :email, password = :password where accountId = :id";
+
                     $parameters['email'] = $account->getEmail();
                     $parameters['password'] = $account->getPassword();
+                    $parameters['id'] = $account->getId();
 
                     $this->connection = Connection::GetInstance();
     
-                    $this->connection->ExecuteNonQuery($query, $parameters);
+                    $this->connection->ExecuteNonQuery($sql, $parameters);
     
                     $daoProfile = DaoAccounts::GetInstance();
-                    $daoProfile->update($cuenta->getProfile());
                 }
-                catch (Exception $ex) {
+                catch (\Exception $ex) {
                     throw $ex;
                 }
-            }
-        }
-    }
-
-    //posiblemente no ande
-    public function toArray($object){
-        $parameters = array();
-
-        if($object instanceof Account){
             
-            $parameters['email'] = $object->getEmail();
-            $parameters['password'] = $object->getPassword();
-            $parameters['privilegios'] = $object->getPrivilegios();
         }
-        return $parameters;
     }
+
+
+    public function delete($mail)
+    {
+        try
+        {
+            $query = 'DELETE FROM accounts WHERE email=:email;';
+
+            $parameters['email'] = $mail;
+
+            $this->connection = Connection::GetInstance();
+            $this->connection->ExecuteNonQuery($query, $parameters);
+        }
+
+        catch(Exception $ex)
+        {
+            throw $ex;
+        }
+    }
+
     
     public function getAll(){
         $sql = "SELECT * FROM accounts";
@@ -173,8 +177,7 @@ class DaoAccounts{
                 $account = new Account();
                 $account->setId($row["accountId"]);
                 $account->setEmail($row["email"]);
-                $account->setPassword($row["password"]);
-                $account->setStudentId($row["studentId"]);
+                $account->setPassword($row["password"]);                
                 $account->setPrivilegios($row["privilegeId"]);
                 array_push($accountList,$account);
             }  

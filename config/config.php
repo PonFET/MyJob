@@ -17,8 +17,8 @@ define("DB_USER", "root");
 define("DB_PASS", "");
 
 //phpmailer  
-define("EMAIL","MyJob@gmail.com"); 
-define("EMAIL_PASS","1MyJob1"); 
+define("EMAIL","utntest666@gmail.com"); 
+define("EMAIL_PASS","A_123456"); 
 define("MAILER_PATH",FRONT_ROOT."PHPMailer/");
 
 ?>
