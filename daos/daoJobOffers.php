@@ -75,6 +75,45 @@ class DaoJobOffers
             //hacer un solo try/catch
         }
 
+        public function addImg($offerImg){
+                try{
+                    $sql = "INSERT into images (offerId) values (:offerId);";
+
+                    $parameters['offerId'] =  $account->getEmail();
+
+                    $this->connection = Connection::GetInstance();
+    
+                    var_dump($parameters);
+    
+                    $this->connection->ExecuteNonQuery($sql,$parameters);
+                }
+                catch(PDOException $ex){
+                    throw $ex;
+                }
+        }
+
+        //seguir mañana, creo que tengo que hacerlo todo desde vista por que no tengo un model Image para crear un objeto de tal y mostrarlo por view.
+        public function getImg($offerId)
+        {
+            try
+            {
+                $sql = "SELECT * FROM images WHERE offerId=:offerId";
+                
+                $parameters['offerId'] = $offerId;
+
+                $this->connection = Connection::GetInstance();
+                $result = $this->connection->Execute($sql, $parameters);
+
+                $object = $this->parseToObject($result[0]);
+
+                return $object;
+            }
+
+            catch(Exception $ex)
+            {
+                throw $ex;
+            }
+        }
 
         public function update(JobOffer $offer)
         //PositionChange es una variable donde TRUE significa que las JobPosition hay que updatearlas, si es FALSE son las mismas y no hay que modificar

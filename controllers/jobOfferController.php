@@ -66,23 +66,30 @@ use models\Career as Career;
             $now->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
             $offer->setStartDate($now->format("Y-m-d H:i:s"));
             $offer->setEndDate($endDate);
-            $offerImg == $this->uploadImg($offerImg);
-            $offer->setOfferImg($offerImg);
+
+            $this->uploadImg($offerImg);
 
             $this->daoJobOffers->add($offer);
+            $this->daoJobOffers->addImg($offerImg);
 
             header("Location: ShowListActive");
         }
 
         public function uploadImg($offerImg){
+
+            $fileTmpName = $_FILES['file']['tmp_name'];
+            
             if($offerImg == NULL){
-                return $fileDestination = 'views/image/No-image-available.png';
+
+                // Quizas no sea necesario guardar la imagen, simplemente cuando se muestra la imagen se pregunta si es null mostrar esta imagen desde base de datos
+                //$fileDestination = 'views/image/No-image-available.png';
+                //move_uploaded_file($fileTmpName, $fileDestination);
+
             }
             else{
                 $file = $_FILES['file'];
 
                 $fileName = $_FILES['file']['name'];
-                $fileTmpName = $_FILES['file']['tmp_name'];
                 $fileSize = $_FILES['file']['size'];
                 $fileError = $_FILES['file']['error'];
                 $fileType = $_FILES['file']['type'];
@@ -95,29 +102,33 @@ use models\Career as Career;
                 if(in_array($fileActualExt, $allowed)){
                     if($fileError === 0){
                         if($fileSize < 1000000){
-                            $fileNewName = uniquid('',true) . "." . $fileActualExt;
+                            $fileNewName = uniqid('',true) . "." . $fileActualExt;
 
                             // Si lo queremos guardar en una carpeta de nuestro proyecto
-                             $fileDestination  = 'views/image/' . $fileNewName;
-                             return $fileDestination;
+                            $fileDestination  = 'views/image/' . $fileNewName;
+
+                            move_uploaded_file($fileTmpName, $fileDestination);
                         }
                         else{
-                            echo "El archivo es demasiado pesado";
+                            $this->ShowAddOfferView("El archivo es demasiado pesado.");
                         }
                     }
                     else{
-                        echo "Hubo un error subiendo el archivo";
+                        $this->ShowAddOfferView("Hubo un error subiendo el archivo.");
                     }
                 }
                 else{
-                    echo "No puedes subir este tipo de archivo.";
+                    $this->ShowAddOfferView("No puedes subir este tipo de archivo.");
                 }
-
             }
+        }
 
+        public function ShowImg($offerId)
+        {
+            $this->daoJobOffers->getImg($offerId);
         }
         
-        public function ShowAddOfferView()
+        public function ShowAddOfferView($message='')
         {
             $positionList = $this->daoJobPositions->getAll();            
             $companiesList = $this->daoCompanies->getAll();

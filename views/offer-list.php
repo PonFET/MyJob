@@ -30,6 +30,29 @@
                             </div>
 
                             <hr style="height: 2px;">
+
+                            <div class="row" style="height:inherit">
+                                <div class="col align-self-center">
+                                    <?php
+                                    $rowImg = 
+                                    $jobOffer->getOfferId();
+                                    while($rowImg = mysqli_fetch_assoc($resultImg)){
+                                        //la muestra
+                                        echo "<div>";
+
+                                            if($rowImg['status'] == 0){
+                                                echo "<img src='uploads/profile".$id.".jpg?'".mt_rand().">";
+                                            }
+                                            else{
+                                                echo "<img src='uploads/No-image-available.png'>";
+                                            }
+                                            echo "<p>" . $row['username'] . "</p>";
+
+                                        echo "</div>";
+                                    }
+                                    ?>
+                                </div>
+                            </div><br><br>
                         
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">

@@ -1,6 +1,13 @@
 <?php
     require_once(VIEWS_PATH."header.php");
-    include_once(VIEWS_PATH."nav-bar.php");    
+    include_once(VIEWS_PATH."nav-bar.php");
+    if(isset($message))
+    {
+        if($message != '')
+        {
+            echo '<script language="javascript">alert("' . $message . '");</script>';
+        }
+    }   
 ?>
 
 <div class="container-fluid">
