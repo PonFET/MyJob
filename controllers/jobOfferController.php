@@ -67,10 +67,11 @@ use models\Career as Career;
             $offer->setStartDate($now->format("Y-m-d H:i:s"));
             $offer->setEndDate($endDate);
 
-            $this->uploadImg($offerImg);
+            $finalImg = $this->uploadImg($offerImg);
+
+            $offer->setOfferImg($finalImg);
 
             $this->daoJobOffers->add($offer);
-            $this->daoJobOffers->addImg($offerImg);
 
             header("Location: ShowListActive");
         }
@@ -79,11 +80,13 @@ use models\Career as Career;
 
             $fileTmpName = $_FILES['file']['tmp_name'];
             
+            // Esto funcionaba sin el enctype="multipart/form-data", pero es obligatorio asique no se.
             if($offerImg == NULL){
 
-                // Quizas no sea necesario guardar la imagen, simplemente cuando se muestra la imagen se pregunta si es null mostrar esta imagen desde base de datos
-                //$fileDestination = 'views/image/No-image-available.png';
-                //move_uploaded_file($fileTmpName, $fileDestination);
+                $fileDestination = 'views/image/No-image-available.png';
+                move_uploaded_file($fileTmpName, $fileDestination);
+
+                return $fileDestination;
 
             }
             else{
@@ -99,15 +102,17 @@ use models\Career as Career;
 
                 $allowed = array('jpg','png','jpeg','pnf');
 
+                // Aunque se active uno de estos errores y cargue de vuelta a la pagina carga la oferta laboral con una imagen NULL.
                 if(in_array($fileActualExt, $allowed)){
                     if($fileError === 0){
                         if($fileSize < 1000000){
                             $fileNewName = uniqid('',true) . "." . $fileActualExt;
 
-                            // Si lo queremos guardar en una carpeta de nuestro proyecto
                             $fileDestination  = 'views/image/' . $fileNewName;
 
                             move_uploaded_file($fileTmpName, $fileDestination);
+
+                            return $fileDestination;
                         }
                         else{
                             $this->ShowAddOfferView("El archivo es demasiado pesado.");

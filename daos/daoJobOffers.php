@@ -25,12 +25,13 @@ class DaoJobOffers
             $resultSet = null;           
             try //Registro nuevo JobOffer
             {
-                $query = 'INSERT INTO ' . $this->tableName . ' (companyId, offerDescription, startDate, endDate) VALUES (:companyId, :offerDescription, :startDate, :endDate);';
+                $query = 'INSERT INTO ' . $this->tableName . ' (companyId, offerDescription, startDate, endDate, offerImg) VALUES (:companyId, :offerDescription, :startDate, :endDate, :offerImg);';
 
                 $parameters['companyId'] = $jobOffer->getCompanyId();
                 $parameters['offerDescription'] = $jobOffer->getOfferDescription();
                 $parameters['startDate'] = $jobOffer->getStartDate();
                 $parameters['endDate'] = $jobOffer->getEndDate();
+                $parameters['offerImg'] = $jobOffer->getOfferImg();
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters);
@@ -73,46 +74,6 @@ class DaoJobOffers
                 throw $ex;
             }
             //hacer un solo try/catch
-        }
-
-        public function addImg($offerImg){
-                try{
-                    $sql = "INSERT into images (offerId) values (:offerId);";
-
-                    $parameters['offerId'] =  $account->getEmail();
-
-                    $this->connection = Connection::GetInstance();
-    
-                    var_dump($parameters);
-    
-                    $this->connection->ExecuteNonQuery($sql,$parameters);
-                }
-                catch(PDOException $ex){
-                    throw $ex;
-                }
-        }
-
-        //seguir mañana, creo que tengo que hacerlo todo desde vista por que no tengo un model Image para crear un objeto de tal y mostrarlo por view.
-        public function getImg($offerId)
-        {
-            try
-            {
-                $sql = "SELECT * FROM images WHERE offerId=:offerId";
-                
-                $parameters['offerId'] = $offerId;
-
-                $this->connection = Connection::GetInstance();
-                $result = $this->connection->Execute($sql, $parameters);
-
-                $object = $this->parseToObject($result[0]);
-
-                return $object;
-            }
-
-            catch(Exception $ex)
-            {
-                throw $ex;
-            }
         }
 
         public function update(JobOffer $offer)

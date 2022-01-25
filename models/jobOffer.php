@@ -11,16 +11,18 @@ class jobOffer
         private $arrayJobPos;
         private $startDate;
         private $endDate;
+        private $offerImg;
         private $enable;
 
-        function __construct($offerId = 0, $companyId = 0, $offerDescription = '', $arrayJobPos = array(), $startDate='', $endDate='')
+        function __construct($offerId = 0, $companyId = 0, $offerDescription = '', $arrayJobPos = array(), $startDate='', $endDate='', $offerImg='')
         {
             $this->offerId = $offerId;
             $this->companyId = $companyId;            
             $this->offerDescription = $offerDescription;
             $this->arrayJobPos = $arrayJobPos;
             $this->startDate = $startDate;
-            $this->endDate = $endDate;            
+            $this->endDate = $endDate;
+            $this->offerImg = $offerImg;            
         }
 
         /**
@@ -162,4 +164,25 @@ class jobOffer
 
                 return $this;
         }
+
+        /**
+         * Get the value of offerImg
+         */ 
+        public function getOfferImg()
+        {
+                return $this->offerImg;
+        }
+
+        /**
+         * Set the value of offerImg
+         *
+         * @return  self
+         */ 
+        public function setOfferImg($offerImg)
+        {
+                $this->offerImg = $offerImg;
+
+                return $this;
+        }
+        
     }

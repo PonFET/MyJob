@@ -23,6 +23,13 @@
                                         echo "· " . $jobPos->getDescription() . '<br>';
                             } } }   ?>
                         <br><br>
+
+                        <div class="row" style="height:inherit">
+                            <div class="col align-self-center">
+                                <img src="<?php echo $offer->getOfferImg(); ?>" height="60">
+                            </div>
+                        </div><br><br>
+
                         <table class="table bg-light-alpha table-striped">
                             <thead>
                                 <th>Nombre Completo</th>

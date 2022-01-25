@@ -13,7 +13,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-6 "><br>
-            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>JobOffer/add" method="POST">
+            <form class="form-container border rounded-lg" action="<?= FRONT_ROOT ?>JobOffer/add" method="POST" enctype="multipart/form-data">
                 <h1>Agregar Oferta Laboral</h1>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -35,8 +35,6 @@
                             <input type="text" name="offerDescription" id="offerDescription" required>
                         </div><br>
 
-                        
-
                         <div>
                             <label class="text-dark">Fecha de Finalización:</label>
                             <input type="datetime-local" name="endDate" id="endDate" required>
@@ -57,10 +55,10 @@
                         </div>
 
                         <div>
-                            <input type="file" name="offerImg">
-                        </div>
+                            <label class="text-dark">Photo</label>
+                            <input type="file" name="file">
+                        </div><br>
                         
-
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Agregar</button>
