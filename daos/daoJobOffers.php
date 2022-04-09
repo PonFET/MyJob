@@ -223,6 +223,7 @@ class DaoJobOffers
                     $offer->setOfferDescription($row['offerDescription']);
                     $offer->setStartDate($row['startDate']);
                     $offer->setEndDate($row["endDate"]);
+                    $offer->setOfferImg($row["offerImg"]);
 
                     $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
                     $this->connection = Connection::GetInstance();
@@ -454,6 +455,7 @@ class DaoJobOffers
                     $offer->setStartDate($row['startDate']);
                     $offer->setEndDate($row['endDate']);
                     $offer->setEnable($row['enable']);
+                    $offer->setOfferImg($row['offerImg']);
 
                     $queryPostion = 'SELECT jobPositionId FROM offersxposition WHERE offerId = ' . $offer->getOfferId() . ';';
                     $this->connection = Connection::GetInstance();
@@ -526,6 +528,7 @@ class DaoJobOffers
             $jobO->setOfferDescription($value['offerDescription']);
             $jobO->setStartDate($value['startDate']);
             $jobO->setEndDate($value['endDate']);
+            $jobO->setOfferImg($value['offerImg']);
             $jobO->setEnable($value['enable']);
         
             return $jobO;

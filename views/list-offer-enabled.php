@@ -1,6 +1,7 @@
 <?php
     require_once(VIEWS_PATH."header.php");
     include_once(VIEWS_PATH."nav-bar.php");
+    $upload_dir = 'views/image/';
 ?>
 
 <div id="listaUser">
@@ -59,7 +60,7 @@
                             
                             <div class="row" style="height:inherit">
                                 <div class="col align-self-center">
-                                    <img src="<?php echo $jobOffer->getOfferImg(); ?>" height="60">
+                                    <img src="<?php echo $upload_dir.$jobOffer->getOfferImg(); ?>" height="60">
                                 </div>
                             </div><br><br>
                             

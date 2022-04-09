@@ -108,11 +108,11 @@ use models\Career as Career;
                         if($fileSize < 1000000){
                             $fileNewName = uniqid('',true) . "." . $fileActualExt;
 
-                            $fileDestination  = 'views/image/' . $fileNewName;
+                            $upload_dir = 'views/image/';
 
-                            move_uploaded_file($fileTmpName, $fileDestination);
+                            move_uploaded_file($fileTmpName, $upload_dir.$fileNewName);
 
-                            return $fileDestination;
+                            return $fileNewName;
                         }
                         else{
                             $this->ShowAddOfferView("El archivo es demasiado pesado.");
